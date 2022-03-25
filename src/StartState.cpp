@@ -43,7 +43,7 @@ void StartState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 
 	// Exit btn
 	pContext->drawBackgroundRectangle(550, 610, 750, 660, 0x52B69A);
-	pContext->drawBackgroundString(650 - 25, 615, "Exit", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawBackgroundString(650 - 28, 615, "Exit", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 }
 
 void StartState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
@@ -75,7 +75,7 @@ void StartState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, in
 				pContext->changeState("high_score");
 			}
 			else if (iY > 610 && iY < 660) {
-				//pContext->setExitWithCode(0);
+				pContext->setExitWithCode(0);
 			}
 		}
 	}

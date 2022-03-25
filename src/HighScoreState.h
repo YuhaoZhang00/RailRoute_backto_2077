@@ -7,12 +7,12 @@ class HighScoreState :
     public State
 {
 private:
-	//TestObject* m_oBall;
+	TestObject* m_oBall;
 
 public:
-	//HighScoreState() :
-	//	m_oBall(NULL)
-	//{}
+	HighScoreState() :
+		m_oBall(NULL)
+	{}
 
 	void virtSetupBackgroundBuffer(Scyyz12Engine2* pContext) override;
 	void virtDrawStringsOnTop(Scyyz12Engine2* pContext) override;
