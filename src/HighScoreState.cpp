@@ -17,12 +17,12 @@ void HighScoreState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 
 int HighScoreState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 {
-	/*pContext->drawableObjectsChanged();
-	pContext->destroyOldObjects(true);
-	pContext->createObjectArray(1);
-	m_oBall = new TestObject(pContext);
-	pContext->storeObjectInArray(0, m_oBall);
-	return 0;*/
+	//pContext->drawableObjectsChanged();
+	//pContext->destroyOldObjects(true);
+	//pContext->createObjectArray(1);
+	//m_oBall = new TestObject(pContext);
+	//pContext->storeObjectInArray(0, m_oBall);
+	//return 0;
 	return pContext->BaseEngine::virtInitialiseObjects();
 }
 

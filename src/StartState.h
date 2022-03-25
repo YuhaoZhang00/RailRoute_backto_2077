@@ -10,9 +10,9 @@ private:
 	//TestObject* m_oBall;
 
 public:
-	/*StartState() :
-		m_oBall(NULL)
-	{}*/
+	//StartState() :
+	//	m_oBall(NULL)
+	//{}
 
 	void virtSetupBackgroundBuffer(Scyyz12Engine2* pContext) override;
 	void virtDrawStringsOnTop(Scyyz12Engine2* pContext) override;

@@ -16,6 +16,7 @@ void Scyyz12Engine2::changeState(std::string strState)
 		printf("!! Error @ Scyyz12Engine2.cpp changeState() - state not found\n");
 		m_pState = m_mAllState.at("start");
 	}
+	redrawDisplay();
 	lockAndSetupBackground();
 	virtInitialiseObjects();
 }

@@ -5,17 +5,17 @@
 void StartState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 {
 	// background
-	//pContext->fillBackground(0xffffff);
+	pContext->fillBackground(0xffffff);
 	SimpleImage image = ImageManager::loadImage("resources/bg-route-1300-800.png", true);
-	image.renderImage(pContext->getBackgroundSurface(), 0, 0, 0, 0, image.getWidth(), image.getHeight());
-	ImagePixelMappingRotateAndColour mapping(0, image.getWidth() / 2, image.getHeight() / 2);
-	mapping.setNthPixelColours(0xffffff);
-	image.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 0, 0, image.getWidth(), image.getHeight(), &mapping);
+	image.renderImageWithMaskAndTransparency(pContext->getBackgroundSurface(), 0, 0, 0, 0, image.getWidth(), image.getHeight(), 0xffffff, 30);
 
-	SimpleImage image2 = ImageManager::loadImage("resources/arrow-ini-50-50.png", true);
+
+	//arrows before btns
+	SimpleImage image2 = ImageManager::loadImage("resources/arrow-right-50-50.png", true);
+	image2.renderImageWithMask(pContext->getBackgroundSurface(), 0, 0, 480, 400, image2.getWidth(), image2.getHeight());
 	ImagePixelMappingRotateAndColour mapping2(0, image2.getWidth() / 2, image2.getHeight() / 2);
 	mapping2.setTransparencyColour(0xffffff);
-	image2.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 480, 400, image2.getWidth(), image2.getHeight(), &mapping2);
+	//image2.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 480, 400, image2.getWidth(), image2.getHeight(), &mapping2);
 
 	mapping2.setRotation(M_PI / 4);
 	image2.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 480, 470, image2.getWidth(), image2.getHeight(), &mapping2);
@@ -25,6 +25,7 @@ void StartState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 
 	mapping2.setRotation(M_PI);
 	image2.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 480, 610, image2.getWidth(), image2.getHeight(), &mapping2);
+
 
 	// title (should be an image later)
 	pContext->drawBackgroundString(650 - 210, 200, "RailRoute <- 2077", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 55));
