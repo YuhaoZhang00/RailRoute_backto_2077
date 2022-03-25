@@ -4,6 +4,8 @@
 #include "MyTileManager.h"
 #include "MyObjectB.h"
 
+#include "ImagePixelMapping.h"
+
 
 void MyDemoA::virtSetupBackgroundBuffer()
 {

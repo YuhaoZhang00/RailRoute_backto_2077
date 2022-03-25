@@ -35,7 +35,6 @@ void HighScoreState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX
 			if (iY > 610 && iY < 660) {
 				pContext->changeState("start");
 			}
-
 		}
 	}
 }

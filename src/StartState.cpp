@@ -7,6 +7,7 @@ void StartState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 	// background
 	//pContext->fillBackground(0xffffff);
 	SimpleImage image = ImageManager::loadImage("resources/bg-route-1300-800.png", true);
+	image.renderImage(pContext->getBackgroundSurface(), 0, 0, 0, 0, image.getWidth(), image.getHeight());
 	ImagePixelMappingRotateAndColour mapping(0, image.getWidth() / 2, image.getHeight() / 2);
 	mapping.setNthPixelColours(0xffffff);
 	image.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 0, 0, image.getWidth(), image.getHeight(), &mapping);
