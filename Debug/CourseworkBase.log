@@ -1,5 +1,33 @@
 ﻿  HighScoreState.cpp
-  StartState.cpp
+  Scyyz12Engine2.cpp
+  Part1Object.cpp
+  DraggingDemo.cpp
+  DrawingSurface.cpp
+  FlashingDemo.cpp
+  ImageMappingDemo.cpp
   mainfunction.cpp
+  BaseEngine.cpp
+  DisplayableObject.cpp
+  FontManager.cpp
+  Scyyz12Engine.cpp
+  MyDemoA.cpp
+  MyObjectB.cpp
+  MyTileManager.cpp
+  Scyyz12TileManager.cpp
+  SimpleImage.cpp
+  SimpleDemo.cpp
+  StarfieldDemo.cpp
+  StartState.cpp
+  Generating Code...
+  Compiling...
+  TestObject.cpp
+  TileManager.cpp
+  BouncingBall.cpp
+  BouncingBallMain.cpp
+  ZoomingDemo.cpp
+  Generating Code...
+  MazeDemoMain.cpp
+  MazeDemoObject.cpp
+  MazeDemoTileManager.cpp
   Generating Code...
   CourseworkBase.vcxproj -> E:\Desktop\CPPCoursework2021-v101\Debug\CourseworkBase2020.exe

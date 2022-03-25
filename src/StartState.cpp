@@ -11,7 +11,6 @@ void StartState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 	mapping.setNthPixelColours(0xffffff);
 	image.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 0, 0, image.getWidth(), image.getHeight(), &mapping);
 
-
 	SimpleImage image2 = ImageManager::loadImage("resources/arrow-ini-50-50.png", true);
 	ImagePixelMappingRotateAndColour mapping2(0, image2.getWidth() / 2, image2.getHeight() / 2);
 	mapping2.setTransparencyColour(0xffffff);
