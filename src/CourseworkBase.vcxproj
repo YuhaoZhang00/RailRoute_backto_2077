@@ -98,6 +98,7 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="HighScoreState.h" />
     <ClInclude Include="InstructionState.h" />
+    <ClInclude Include="Rail.h" />
     <ClInclude Include="Scyyz12Engine2.h" />
     <ClInclude Include="Part1Object.h" />
     <ClInclude Include="DraggingDemo.h" />
@@ -147,6 +148,7 @@
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="HighScoreState.cpp" />
     <ClCompile Include="InstructionState.cpp" />
+    <ClCompile Include="Rail.cpp" />
     <ClCompile Include="Scyyz12Engine2.cpp" />
     <ClCompile Include="Part1Object.cpp" />
     <ClCompile Include="DraggingDemo.cpp" />

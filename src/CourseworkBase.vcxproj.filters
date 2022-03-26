@@ -49,6 +49,12 @@
     <Filter Include="Header Files\Utils">
       <UniqueIdentifier>{e1a845b2-5a71-480e-97f9-38383c16ecaf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Object">
+      <UniqueIdentifier>{0b6612d5-0cb3-41d2-9c51-e4080a9b5ae1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Object">
+      <UniqueIdentifier>{36a004c1-a6e5-4444-a6d5-2690b179cdb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header.h">
@@ -192,6 +198,9 @@
     <ClInclude Include="ChooseLevelState.h">
       <Filter>Header Files\State</Filter>
     </ClInclude>
+    <ClInclude Include="Rail.h">
+      <Filter>Header Files\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mainfunction.cpp">
@@ -289,6 +298,9 @@
     </ClCompile>
     <ClCompile Include="ChooseLevelState.cpp">
       <Filter>Source Files\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Rail.cpp">
+      <Filter>Source Files\Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

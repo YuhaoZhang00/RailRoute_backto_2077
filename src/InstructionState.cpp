@@ -5,8 +5,6 @@ void InstructionState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 {
 	pContext->fillBackground(0xffffff);
 
-	pContext->drawBackgroundThickLine(200, 0, 0, 200, 0xF9C74F, 10);
-	pContext->drawBackgroundThickLine(100, 0, 100, 800, 0x52B69A, 10);
 	pContext->drawBackgroundOval(80, 80, 120, 120, 0x000000);
 	pContext->drawBackgroundOval(85, 85, 115, 115, 0xFFFFFF);
 	pContext->drawBackgroundRectangle(84, 484, 116, 516, 0x000000);
@@ -44,7 +42,24 @@ void InstructionState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 
 int InstructionState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 {
-	return pContext->BaseEngine::virtInitialiseObjects();
+	pContext->drawableObjectsChanged();
+	pContext->destroyOldObjects(true);
+	pContext->createObjectArray(1);
+	m_line1 = new RailLine(pContext, 100, 0, false, 0x52B69A, 800);
+	pContext->storeObjectInArray(0, m_line1);
+	m_line2 = new RailLineDiagonal(pContext, 0, 200, 0, 0xF9C74F, 200);
+	pContext->appendObjectToArray(m_line2);
+	/*m_line3_1 = new RailLine(pContext, 0, 100, true, 0xF94144, 1100);
+	pContext->appendObjectToArray(m_line3_1);
+	m_line3_2 = new RailLineDiagonal(pContext, 1100, 100, 1, 0xF94144, 200);
+	pContext->appendObjectToArray(m_line3_2);*/
+	/*m_line4_1 = new RailLineDiagonal(pContext, 220, 200, true, 0xF94144, 100);
+	pContext->appendObjectToArray(m_line4_1);
+	m_line4_2 = new RailLineDiagonal(pContext, 205, 215, false, 0xF94144, 85);
+	pContext->appendObjectToArray(m_line4_2);
+	m_linelink4 = new RailLink90Diagonal(pContext, 200, 195, 3, 0xF94144);
+	pContext->appendObjectToArray(m_linelink4);*/
+	return 0;
 }
 
 void InstructionState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int iY)
