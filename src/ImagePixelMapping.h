@@ -16,7 +16,7 @@ public:
 	// Most implementations will not change this, so just return true, but it allows colour modification if needed.
 	virtual bool changePixelColour(int x, int y, int& colour, DrawingSurface* pTarget)
 	{ 
-		return true; 
+		return true;
 	}
 };
 

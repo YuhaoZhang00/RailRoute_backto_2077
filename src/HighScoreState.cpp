@@ -6,8 +6,8 @@ void HighScoreState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 	pContext->fillBackground(0xffffff);
 
 	// Exit btn
-	pContext->drawBackgroundRectangle(550, 610, 750, 660, 0xF94144);
-	pContext->drawBackgroundString(650 - 25, 615, "Exit", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawBackgroundRectangle(550, 680, 750, 730, 0xF94144);
+	pContext->drawBackgroundString(650 - 28, 685, "Exit", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 }
 
 void HighScoreState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
@@ -17,12 +17,6 @@ void HighScoreState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 
 int HighScoreState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 {
-	//pContext->drawableObjectsChanged();
-	//pContext->destroyOldObjects(true);
-	//pContext->createObjectArray(1);
-	//m_oBall = new TestObject(pContext);
-	//pContext->storeObjectInArray(0, m_oBall);
-	//return 0;
 	return pContext->BaseEngine::virtInitialiseObjects();
 }
 
@@ -32,7 +26,7 @@ void HighScoreState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX
 	if (iButton == SDL_BUTTON_LEFT)
 	{
 		if (iX > 550 && iX < 750) {
-			if (iY > 610 && iY < 660) {
+			if (iY > 680 && iY < 730) {
 				pContext->changeState("start");
 			}
 		}

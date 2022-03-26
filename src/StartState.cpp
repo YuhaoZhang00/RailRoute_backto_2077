@@ -10,9 +10,14 @@ void StartState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 	image.renderImageWithMaskAndTransparency(pContext->getBackgroundSurface(), 0, 0, 0, 0, image.getWidth(), image.getHeight(), 0xffffff, 30);
 
 
+	// title (should be an image later)
+	pContext->drawBackgroundString(650 - 210, 200, "RailRoute <- 2077", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 55));
+
+
 	//arrows before btns
 	SimpleImage image2 = ImageManager::loadImage("resources/arrow-right-50-50.png", true);
 	image2.renderImageWithMask(pContext->getBackgroundSurface(), 0, 0, 480, 400, image2.getWidth(), image2.getHeight());
+	
 	ImagePixelMappingRotateAndColour mapping2(0, image2.getWidth() / 2, image2.getHeight() / 2);
 	mapping2.setTransparencyColour(0xffffff);
 	//image2.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 480, 400, image2.getWidth(), image2.getHeight(), &mapping2);
@@ -20,31 +25,31 @@ void StartState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 	mapping2.setRotation(M_PI / 4);
 	image2.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 480, 470, image2.getWidth(), image2.getHeight(), &mapping2);
 
-	mapping2.setRotation(M_PI * 7 / 4);
+	mapping2.setRotation(M_PI * 3 / 2);
 	image2.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 480, 540, image2.getWidth(), image2.getHeight(), &mapping2);
 
-	mapping2.setRotation(M_PI);
+	mapping2.setRotation(M_PI * 7 / 4);
 	image2.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 480, 610, image2.getWidth(), image2.getHeight(), &mapping2);
 
+	mapping2.setRotation(M_PI);
+	image2.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 480, 680, image2.getWidth(), image2.getHeight(), &mapping2);
 
-	// title (should be an image later)
-	pContext->drawBackgroundString(650 - 210, 200, "RailRoute <- 2077", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 55));
 
-	// Play btn
+	// buttons
 	pContext->drawBackgroundRectangle(550, 400, 750, 450, 0xF94144);
-	pContext->drawBackgroundString(650 - 30, 405, "Play", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawBackgroundString(650 - 72, 405, "New Game", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 
-	// Continue btn
 	pContext->drawBackgroundRectangle(550, 470, 750, 520, 0xF9C74F);
 	pContext->drawBackgroundString(650 - 65, 475, "Continue", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 
-	// High Score btn
 	pContext->drawBackgroundRectangle(550, 540, 750, 590, 0x4361EE);
-	pContext->drawBackgroundString(650 - 75, 545, "High Score", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawBackgroundString(650 - 85, 545, "How to Play", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 
-	// Exit btn
-	pContext->drawBackgroundRectangle(550, 610, 750, 660, 0x52B69A);
-	pContext->drawBackgroundString(650 - 28, 615, "Exit", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawBackgroundRectangle(550, 610, 750, 660, 0xF19C79);
+	pContext->drawBackgroundString(650 - 75, 615, "High Score", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
+
+	pContext->drawBackgroundRectangle(550, 680, 750, 730, 0x52B69A);
+	pContext->drawBackgroundString(650 - 28, 685, "Exit", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 }
 
 void StartState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
@@ -67,15 +72,18 @@ void StartState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, in
 	{
 		if (iX > 550 && iX < 750) {
 			if (iY > 400 && iY < 450) {
-				//pContext->changeState("high_score");
+				pContext->changeState("choose_level");
 			}
 			else if (iY > 470 && iY < 520) {
-				//pContext->changeState("high_score");
+				pContext->changeState("gaming");
 			}
 			else if (iY > 540 && iY < 590) {
-				pContext->changeState("high_score");
+				pContext->changeState("instruction");
 			}
 			else if (iY > 610 && iY < 660) {
+				pContext->changeState("high_score");
+			}
+			else if (iY > 680 && iY < 730) {
 				pContext->setExitWithCode(0);
 			}
 		}

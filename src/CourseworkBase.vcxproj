@@ -93,7 +93,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ChooseLevelState.h" />
+    <ClInclude Include="GameOverState.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="HighScoreState.h" />
+    <ClInclude Include="InstructionState.h" />
     <ClInclude Include="Scyyz12Engine2.h" />
     <ClInclude Include="Part1Object.h" />
     <ClInclude Include="DraggingDemo.h" />
@@ -103,6 +107,7 @@
     <ClInclude Include="MyDemoA.h" />
     <ClInclude Include="MyObjectB.h" />
     <ClInclude Include="MyTileManager.h" />
+    <ClInclude Include="Scyyz12ImagePixelMapping.h" />
     <ClInclude Include="Scyyz12TileManager.h" />
     <ClInclude Include="SimpleFlashingDragableImageObject.h" />
     <ClInclude Include="StarfieldDemo.h" />
@@ -137,7 +142,11 @@
     <ClInclude Include="ZoomingDemo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ChooseLevelState.cpp" />
+    <ClCompile Include="GameOverState.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="HighScoreState.cpp" />
+    <ClCompile Include="InstructionState.cpp" />
     <ClCompile Include="Scyyz12Engine2.cpp" />
     <ClCompile Include="Part1Object.cpp" />
     <ClCompile Include="DraggingDemo.cpp" />
