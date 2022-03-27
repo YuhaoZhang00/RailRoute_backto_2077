@@ -6,10 +6,8 @@
 void Station::addPassenger(PassengerCollection* oPassenger)
 {
 	if (m_iPassengerCount < MAX_PASSENGERS_IN_STATION) {
-		oPassenger->getPassenger()->setPosition(
-			m_iCurrentScreenX + 25 + m_iPassengerCount % 6 * 10,
-			m_iCurrentScreenY - 15 + m_iPassengerCount / 6 * 10
-		);
+		oPassenger->getPassenger()->setXCenter(m_iCurrentScreenX + 30 + m_iPassengerCount % PASSENGER_IN_STATION_X * 10);
+		oPassenger->getPassenger()->setYCenter(m_iCurrentScreenY - 10 + m_iPassengerCount / PASSENGER_IN_STATION_X * 10);
 		m_vecPassenger.emplace_back(oPassenger);
 		m_iPassengerCount++;
 		if (m_iPassengerCount > MAX_PASSENGERS_IN_STATION_BEFORE_ANGER) {
@@ -22,15 +20,14 @@ void Station::addPassenger(PassengerCollection* oPassenger)
 
 }
 
-std::vector<int> Station::findPassengerByType(short sType)
+int Station::findFirstPassengerOfType(short sType)
 {
-	std::vector<int> vecPassenger;
 	for (int i = 0; i < m_iPassengerCount; i++) {
 		if (m_vecPassenger[i]->getType() == sType) {
-			vecPassenger.emplace_back(i);
+			return i;
 		}
 	}
-	return vecPassenger;
+	return -1;
 }
 
 void Station::removePassenger(int iIndex)
@@ -39,7 +36,13 @@ void Station::removePassenger(int iIndex)
 		printf("!! Error @ Station.cpp removePassenger() - invalid remove of passenger from station\n");
 	}
 	else {
+		delete m_vecPassenger[iIndex];
 		m_vecPassenger.erase(m_vecPassenger.begin() + iIndex);
+		m_iPassengerCount--;
+		for (int i = iIndex; i < m_iPassengerCount; i++) {
+			m_vecPassenger[i]->getPassenger()->setXCenter(m_iCurrentScreenX + 30 + i % PASSENGER_IN_STATION_X * 10);
+			m_vecPassenger[i]->getPassenger()->setYCenter(m_iCurrentScreenY - 10 + i / PASSENGER_IN_STATION_X * 10);
+		}
 	}
 }
 

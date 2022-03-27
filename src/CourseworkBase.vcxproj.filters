@@ -207,6 +207,9 @@
     <ClInclude Include="Constant.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Train.h">
+      <Filter>Header Files\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mainfunction.cpp">
@@ -309,6 +312,9 @@
       <Filter>Source Files\Object</Filter>
     </ClCompile>
     <ClCompile Include="Passenger.cpp">
+      <Filter>Source Files\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Train.cpp">
       <Filter>Source Files\Object</Filter>
     </ClCompile>
   </ItemGroup>

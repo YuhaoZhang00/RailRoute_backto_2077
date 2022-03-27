@@ -23,11 +23,19 @@ public:
 		m_uiInnerColor(uiInnerColor), m_uiColor(uiColor), m_iBorderWidth(iBorderWidth), m_iSize(iSize)
 	{}
 
+	~Station()
+	{
+		for (int i = 0; i < m_iPassengerCount; i++) {
+			delete m_vecPassenger[i];
+		}
+	}
+
 	virtual void virtDraw() override = 0;
 	//virtual void virtDoUpdate(int iCurrentTime) override = 0;
 
 	void addPassenger(PassengerCollection* oPassenger);
-	std::vector<int> findPassengerByType(short sType);
+	// returns the index of the first passenger of given type; return -1 if not found
+	int findFirstPassengerOfType(short sType);
 	void removePassenger(int iIndex);
 };
 

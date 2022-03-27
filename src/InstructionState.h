@@ -4,6 +4,7 @@
 #include "Rail.h"
 #include "Station.h"
 #include "Passenger.h"
+#include "Train.h"
 
 class InstructionState :
     public State
@@ -17,9 +18,7 @@ private:
 	//RailLineDiagonal* m_line4_2;
 	//RailLink90Diagonal* m_linelink4;
 
-	std::vector<StationCollection*> m_stationls;
-
-	//std::vector<PassengerCollection*> m_passengerls;
+	std::vector<StationCollection*> m_stationls; // TODO: delete for such a syntax???
 
 public:
 	void virtSetupBackgroundBuffer(Scyyz12Engine2* pContext) override;

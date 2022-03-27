@@ -5,20 +5,6 @@ void InstructionState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 {
 	pContext->fillBackground(0xffffff);
 
-	pContext->drawBackgroundRectangle(88, 597, 112, 639, 0x52B69A);
-	pContext->drawBackgroundOval(88, 590, 112, 604, 0x52B69A);
-
-	int iR = (0xff & (0x52B69A >> 16)) * 50 + (0xff & (0xFFFFFF >> 16)) * 50;
-	int iG = (0xff & (0x52B69A >> 8)) * 50 + (0xff & (0xFFFFFF >> 8)) * 50;
-	int iB = (0xff & 0x52B69A) * 50 + (0xff & 0xFFFFFF) * 50;
-	int color2 = (((iR / 100) & 0xff) << 16) | (((iG / 100) & 0xff) << 8) | ((iB / 100) & 0xff);
-
-	pContext->drawBackgroundRectangle(90, 601, 99, 610, color2);
-	pContext->drawBackgroundOval(101, 600, 112, 611, color2);
-	pContext->drawBackgroundOval(88, 612, 99, 623, color2);
-	pContext->drawBackgroundRectangle(102, 613, 111, 622, color2);
-	pContext->drawBackgroundTriangle(94, 625, 89, 634, 99, 634, color2);
-
 	pContext->drawBackgroundString(650 - 28, 640, "Idea from: Mini Metro by Dinosaur Polo Club", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 20));
 
 	// Exit btn
@@ -62,14 +48,26 @@ int InstructionState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 		temp->getStation()->addPassenger(new PassengerCollection(4, pContext));
 		temp->getStation()->addPassenger(new PassengerCollection(2, pContext));
 		temp->getStation()->addPassenger(new PassengerCollection(0, pContext));
+		temp->getStation()->removePassenger(1);
 		m_stationls.emplace_back(temp);
 		pContext->appendObjectToArray(m_stationls[i]->getStation());
 	}
 
-	//for (int i = 0; i < 6; i++) {
-	//	m_passengerls.emplace_back(new PassengerCollection(i, pContext, 300 + 20 * i, 300));
-	//	pContext->appendObjectToArray(m_passengerls[i]->getPassenger());
-	//}
+	//CarriageCollection* temp = new CarriageCollection(0, pContext, 500, 600, 0x52B69A);
+	//CarriageCollection* temp = new CarriageCollection(1, pContext, 500, 600, 0x52B69A,4,20,20);
+	//CarriageCollection* temp = new CarriageCollection(2, pContext, 500, 600, 0xFFD700,8,20,40);
+	CarriageCollection* temp = new CarriageCollection(3, pContext, 500, 600, 0x52B69A);
+	temp->getCarriage()->addPassenger(new PassengerCollection(0, pContext));
+	temp->getCarriage()->addPassenger(new PassengerCollection(1, pContext));
+	temp->getCarriage()->addPassenger(new PassengerCollection(2, pContext));
+	temp->getCarriage()->addPassenger(new PassengerCollection(3, pContext));
+	temp->getCarriage()->addPassenger(new PassengerCollection(3, pContext));
+	temp->getCarriage()->addPassenger(new PassengerCollection(4, pContext));
+	for (int idx : temp->getCarriage()->findPassengerByType(3)) {
+		temp->getCarriage()->removePassenger(idx);
+	}
+	temp->getCarriage()->addPassenger(new PassengerCollection(5, pContext));
+	pContext->appendObjectToArray(temp->getCarriage());
 
 	return 0;
 }

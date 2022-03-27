@@ -2,6 +2,21 @@
 #include "Passenger.h"
 #include "BaseEngine.h"
 
+void Passenger::setColor(unsigned int uiColor)
+{
+	m_uiColor = uiColor;
+}
+
+void Passenger::setXCenter(int iXCenter)
+{
+	m_iCurrentScreenX = iXCenter;
+}
+
+void Passenger::setYCenter(int iYCenter)
+{
+	m_iCurrentScreenY = iYCenter;
+}
+
 void PassengerCircle::virtDraw()
 {
 	getEngine()->drawForegroundOval(
@@ -86,5 +101,4 @@ short PassengerCollection::getType()
 {
 	return m_sType;
 }
-
 

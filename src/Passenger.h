@@ -15,6 +15,9 @@ public:
 	{}
 
 	virtual void virtDraw() override = 0;
+	void setColor(unsigned int uiColor);
+	void setXCenter(int iXCenter);
+	void setYCenter(int iYCenter);
 };
 
 class PassengerCircle :
