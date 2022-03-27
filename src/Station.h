@@ -1,6 +1,8 @@
 #pragma once
 #include "header.h"
 #include "DisplayableObject.h"
+#include "Passenger.h"
+#include <vector>
 
 class Station :
 	public DisplayableObject
@@ -11,6 +13,9 @@ protected:
 	unsigned int m_uiInnerColor;
 	unsigned int m_uiColor;
 
+	int m_iPassengerCount = 0;
+	std::vector<PassengerCollection*> m_vecPassenger;
+
 public:
 	Station(BaseEngine* pEngine, int iXCenter, int iYCenter,
 		unsigned int uiInnerColor = 0xFFFFFF, unsigned int uiColor = 0x000000, int iBorderWidth = 5, int iSize = 40)
@@ -19,6 +24,11 @@ public:
 	{}
 
 	virtual void virtDraw() override = 0;
+	//virtual void virtDoUpdate(int iCurrentTime) override = 0;
+
+	void addPassenger(PassengerCollection* oPassenger);
+	std::vector<int> findPassengerByType(short sType);
+	void removePassenger(int iIndex);
 };
 
 class StationCircle :
@@ -45,17 +55,17 @@ public:
 	void virtDraw() override;
 };
 
-class StationHexagon :
-	public Station
-{
-public:
-	StationHexagon(BaseEngine* pEngine, int iXCenter, int iYCenter,
-		unsigned int uiInnerColor = 0xFFFFFF, unsigned int uiColor = 0x000000, int iBorderWidth = 5, int iSize = 40)
-		: Station(pEngine, iXCenter, iYCenter, uiInnerColor, uiColor, iBorderWidth, iSize)
-	{}
-
-	void virtDraw() override;
-};
+//class StationHexagon :
+//	public Station
+//{
+//public:
+//	StationHexagon(BaseEngine* pEngine, int iXCenter, int iYCenter,
+//		unsigned int uiInnerColor = 0xFFFFFF, unsigned int uiColor = 0x000000, int iBorderWidth = 5, int iSize = 40)
+//		: Station(pEngine, iXCenter, iYCenter, uiInnerColor, uiColor, iBorderWidth, iSize)
+//	{}
+//
+//	void virtDraw() override;
+//};
 
 class StationDiamond :
 	public Station
@@ -93,20 +103,35 @@ public:
 	void virtDraw() override;
 };
 
+class StationFlower :
+	public Station
+{
+private:
+	int dist(int x1, int y1, int x2, int y2);
+
+public:
+	StationFlower(BaseEngine* pEngine, int iXCenter, int iYCenter,
+		unsigned int uiInnerColor = 0xFFFFFF, unsigned int uiColor = 0x000000, int iBorderWidth = 5, int iSize = 40)
+		: Station(pEngine, iXCenter, iYCenter, uiInnerColor, uiColor, iBorderWidth, iSize)
+	{}
+
+	void virtDraw() override;
+};
+
 class StationCollection {
 private:
 	Station* m_oStation;
 
 public:
-	/* sIndex - a short number between [0,5] for different shape of station
+	/* sType - a short number between [0,5] for different shape of station
 	* 0 - circle  1 - square  2 - triangle
-	* 3 - invert triangle  4 - hexagon  5 - diamond
+	* 3 - invert triangle  4 - diamond  5 - flower
 	*/
-	StationCollection(short sIndex, BaseEngine* pEngine, int iXCenter, int iYCenter,
+	StationCollection(short sType, BaseEngine* pEngine, int iXCenter, int iYCenter,
 		unsigned int uiInnerColor = 0xFFFFFF, unsigned int uiColor = 0x000000, int iBorderWidth = 5, int iSize = 40)
 		: m_oStation(NULL)
 	{
-		switch (sIndex) {
+		switch (sType) {
 		case 0:
 			m_oStation = new StationCircle(pEngine, iXCenter, iYCenter, uiInnerColor, uiColor, iBorderWidth, iSize);
 			break;
@@ -120,10 +145,10 @@ public:
 			m_oStation = new StationInvTriangle(pEngine, iXCenter, iYCenter, uiInnerColor, uiColor, iBorderWidth, iSize);
 			break;
 		case 4:
-			m_oStation = new StationHexagon(pEngine, iXCenter, iYCenter, uiInnerColor, uiColor, iBorderWidth, iSize);
+			m_oStation = new StationDiamond(pEngine, iXCenter, iYCenter, uiInnerColor, uiColor, iBorderWidth, iSize);
 			break;
 		case 5:
-			m_oStation = new StationDiamond(pEngine, iXCenter, iYCenter, uiInnerColor, uiColor, iBorderWidth, iSize);
+			m_oStation = new StationFlower(pEngine, iXCenter, iYCenter, uiInnerColor, uiColor, iBorderWidth, iSize);
 			break;
 		default:
 			printf("!! Error @ Station.h StationCollection Constructor - invalid sIndex\n");

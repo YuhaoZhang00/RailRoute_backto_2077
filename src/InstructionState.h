@@ -3,6 +3,7 @@
 #include "State.h"
 #include "Rail.h"
 #include "Station.h"
+#include "Passenger.h"
 
 class InstructionState :
     public State
@@ -16,12 +17,9 @@ private:
 	//RailLineDiagonal* m_line4_2;
 	//RailLink90Diagonal* m_linelink4;
 
-	StationCollection* m_station1;
-	//StationCollection* m_station2;
-	//StationCollection* m_station3;
-	StationCollection* m_station4;
-	//StationCollection* m_station5;
-	//StationCollection* m_station6;
+	std::vector<StationCollection*> m_stationls;
+
+	//std::vector<PassengerCollection*> m_passengerls;
 
 public:
 	void virtSetupBackgroundBuffer(Scyyz12Engine2* pContext) override;

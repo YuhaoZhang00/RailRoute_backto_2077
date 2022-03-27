@@ -5,10 +5,6 @@ void InstructionState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 {
 	pContext->fillBackground(0xffffff);
 
-	pContext->drawBackgroundRectangle(125, 480, 135, 490, 0x000000);
-	pContext->drawBackgroundOval(140, 480, 151, 491, 0x000000);
-	pContext->drawBackgroundTriangle(160, 481, 165, 490, 155, 490, 0x000000);
-
 	pContext->drawBackgroundRectangle(88, 597, 112, 639, 0x52B69A);
 	pContext->drawBackgroundOval(88, 590, 112, 604, 0x52B69A);
 
@@ -55,18 +51,25 @@ int InstructionState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 	m_linelink4 = new RailLink90Diagonal(pContext, 200, 195, 3, 0xF94144);
 	pContext->appendObjectToArray(m_linelink4);*/
 
-	m_station1 = new StationCollection(0, pContext, 100, 100);
-	pContext->appendObjectToArray(m_station1->getStation());
-	/*m_station2 = new StationCollection(1, pContext, 100, 300);
-	pContext->appendObjectToArray(m_station2->getStation());
-	m_station3 = new StationCollection(2, pContext, 100, 400);
-	pContext->appendObjectToArray(m_station3->getStation());*/
-	m_station4 = new StationCollection(3, pContext, 100, 500);
-	pContext->appendObjectToArray(m_station4->getStation());
-	/*m_station5 = new StationCollection(4, pContext, 100, 600);
-	pContext->appendObjectToArray(m_station5->getStation());
-	m_station6 = new StationCollection(5, pContext, 100, 700);
-	pContext->appendObjectToArray(m_station6->getStation());*/
+	for (int i = 0; i < 6; i++) {
+		StationCollection* temp = new StationCollection(i, pContext, 100, 100 + 100 * i);
+		temp->getStation()->addPassenger(new PassengerCollection(0, pContext));
+		temp->getStation()->addPassenger(new PassengerCollection(1, pContext));
+		temp->getStation()->addPassenger(new PassengerCollection(2, pContext));
+		temp->getStation()->addPassenger(new PassengerCollection(3, pContext));
+		temp->getStation()->addPassenger(new PassengerCollection(4, pContext));
+		temp->getStation()->addPassenger(new PassengerCollection(5, pContext));
+		temp->getStation()->addPassenger(new PassengerCollection(4, pContext));
+		temp->getStation()->addPassenger(new PassengerCollection(2, pContext));
+		temp->getStation()->addPassenger(new PassengerCollection(0, pContext));
+		m_stationls.emplace_back(temp);
+		pContext->appendObjectToArray(m_stationls[i]->getStation());
+	}
+
+	//for (int i = 0; i < 6; i++) {
+	//	m_passengerls.emplace_back(new PassengerCollection(i, pContext, 300 + 20 * i, 300));
+	//	pContext->appendObjectToArray(m_passengerls[i]->getPassenger());
+	//}
 
 	return 0;
 }
