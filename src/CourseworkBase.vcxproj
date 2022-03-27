@@ -98,6 +98,7 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="HighScoreState.h" />
     <ClInclude Include="InstructionState.h" />
+    <ClInclude Include="Passenger.h" />
     <ClInclude Include="Rail.h" />
     <ClInclude Include="Scyyz12Engine2.h" />
     <ClInclude Include="Part1Object.h" />
@@ -115,7 +116,6 @@
     <ClInclude Include="StartState.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Station.h" />
-    <ClInclude Include="TestObject.h" />
     <ClInclude Include="UtilCollisionDetection.h" />
     <ClInclude Include="DisplayableObjectContainer.h" />
     <ClInclude Include="ExampleDragableObjects.h" />
@@ -149,6 +149,7 @@
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="HighScoreState.cpp" />
     <ClCompile Include="InstructionState.cpp" />
+    <ClCompile Include="Passenger.cpp" />
     <ClCompile Include="Rail.cpp" />
     <ClCompile Include="Scyyz12Engine2.cpp" />
     <ClCompile Include="Part1Object.cpp" />
@@ -170,7 +171,6 @@
     <ClCompile Include="StarfieldDemo.cpp" />
     <ClCompile Include="StartState.cpp" />
     <ClCompile Include="Station.cpp" />
-    <ClCompile Include="TestObject.cpp" />
     <ClCompile Include="TileManager.cpp" />
     <ClCompile Include="BouncingBall.cpp" />
     <ClCompile Include="BouncingBallMain.cpp" />

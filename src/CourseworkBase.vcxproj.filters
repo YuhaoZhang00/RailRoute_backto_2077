@@ -180,9 +180,6 @@
     <ClInclude Include="HighScoreState.h">
       <Filter>Header Files\State</Filter>
     </ClInclude>
-    <ClInclude Include="TestObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Scyyz12ImagePixelMapping.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
@@ -202,6 +199,9 @@
       <Filter>Header Files\Object</Filter>
     </ClInclude>
     <ClInclude Include="Station.h">
+      <Filter>Header Files\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Passenger.h">
       <Filter>Header Files\Object</Filter>
     </ClInclude>
   </ItemGroup>
@@ -287,9 +287,6 @@
     <ClCompile Include="HighScoreState.cpp">
       <Filter>Source Files\State</Filter>
     </ClCompile>
-    <ClCompile Include="TestObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameOverState.cpp">
       <Filter>Source Files\State</Filter>
     </ClCompile>
@@ -306,6 +303,9 @@
       <Filter>Source Files\Object</Filter>
     </ClCompile>
     <ClCompile Include="Station.cpp">
+      <Filter>Source Files\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Passenger.cpp">
       <Filter>Source Files\Object</Filter>
     </ClCompile>
   </ItemGroup>
