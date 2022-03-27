@@ -34,10 +34,10 @@ class RailLineDiagonal :
 {
 private:
 	/* a number between [0,3] showing the direction of the rail
-	0: to upper-right
-	1: to lower-right
-	2: to lower-left
-	3: to upper-left */
+	* 0: to upper-right
+	* 1: to lower-right
+	* 2: to lower-left
+	* 3: to upper-left */
 	short m_sDirection;
 	int m_iLineWidth;
 	unsigned int m_uiColor;
@@ -87,10 +87,10 @@ class RailLink90 :
 {
 private:
 	/* a number between [0,3] showing the center point of the arc
-	0: center at upper-right
-	1: center at lower-right
-	2: center at lower-left
-	3: center at upper-left */
+	* 0: center at upper-right
+	* 1: center at lower-right
+	* 2: center at lower-left
+	* 3: center at upper-left */
 	short m_sDirection;
 	int m_iRadius;
 	int m_iLineWidth;
@@ -115,10 +115,10 @@ class RailLink90Diagonal :
 {
 private:
 	/* a number between [0,3] showing the center point of the arc
-	0: center at right
-	1: center at bottom
-	2: center at left
-	3: center at top */
+	* 0: center at right
+	* 1: center at bottom
+	* 2: center at left
+	* 3: center at top */
 	short m_sDirection;
 	int m_iRadius;
 	int m_iLineWidth;

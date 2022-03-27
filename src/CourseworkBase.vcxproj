@@ -114,6 +114,7 @@
     <ClInclude Include="StarfieldDemo.h" />
     <ClInclude Include="StartState.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="Station.h" />
     <ClInclude Include="TestObject.h" />
     <ClInclude Include="UtilCollisionDetection.h" />
     <ClInclude Include="DisplayableObjectContainer.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="SimpleDemo.cpp" />
     <ClCompile Include="StarfieldDemo.cpp" />
     <ClCompile Include="StartState.cpp" />
+    <ClCompile Include="Station.cpp" />
     <ClCompile Include="TestObject.cpp" />
     <ClCompile Include="TileManager.cpp" />
     <ClCompile Include="BouncingBall.cpp" />

@@ -201,6 +201,9 @@
     <ClInclude Include="Rail.h">
       <Filter>Header Files\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Station.h">
+      <Filter>Header Files\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mainfunction.cpp">
@@ -300,6 +303,9 @@
       <Filter>Source Files\State</Filter>
     </ClCompile>
     <ClCompile Include="Rail.cpp">
+      <Filter>Source Files\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Station.cpp">
       <Filter>Source Files\Object</Filter>
     </ClCompile>
   </ItemGroup>
