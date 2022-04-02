@@ -210,6 +210,9 @@
     <ClInclude Include="Train.h">
       <Filter>Header Files\Object</Filter>
     </ClInclude>
+    <ClInclude Include="PauseState.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mainfunction.cpp">
@@ -316,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="Train.cpp">
       <Filter>Source Files\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseState.cpp">
+      <Filter>Source Files\State</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

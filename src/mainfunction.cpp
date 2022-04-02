@@ -23,6 +23,7 @@
 #include "HighScoreState.h"
 #include "InstructionState.h"
 #include "StartState.h"
+#include "PauseState.h"
 
 // These are passed to initialise to determine the window size
 const int BaseScreenWidth = 1300;
@@ -44,6 +45,7 @@ int doProgram(int argc, char* argv[])
 	State* highScoreState = new HighScoreState();
 	State* instructionState = new InstructionState();
 	State* startState = new StartState();
+	State* pauseState = new PauseState();
 	std::unordered_map<std::string, State*> states;
 	states.emplace("choose_level", chooseLevelState);
 	states.emplace("game_over", gameOverState);
@@ -51,6 +53,7 @@ int doProgram(int argc, char* argv[])
 	states.emplace("high_score", highScoreState);
 	states.emplace("instruction", instructionState);
 	states.emplace("start", startState);
+	states.emplace("pause", pauseState);
 	Scyyz12Engine2 oMainDemoObject(startState, states);
 
 	// Uncomment only ONE of the following lines - to choose which object to create - ENSURE ONLY ONE IS CREATED.

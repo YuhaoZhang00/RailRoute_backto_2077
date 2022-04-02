@@ -14,6 +14,7 @@ void GameState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 	mapping.setRotation(M_PI);
 	backArrow.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 30, 30, backArrow.getWidth(), backArrow.getHeight(), &mapping);
 
+	pContext->drawBackgroundString(650 - 80, 640, "test pause", 0x777777, pContext->getFont("Ubuntu-Medium.ttf", 20));
 	pContext->drawBackgroundString(650 - 80, 690, "test game over", 0x777777, pContext->getFont("Ubuntu-Medium.ttf", 20));
 }
 
@@ -33,10 +34,14 @@ void GameState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int
 	if (iButton == SDL_BUTTON_LEFT)
 	{
 		if (iX > 550 && iX < 750) {
-			if (iY > 680 && iY < 730) {
+			if (iY > 630 && iY < 680) {
+				pContext->changeState("pause");
+			}
+			else if (iY > 680 && iY < 730) {
 				pContext->changeState("game_over");
 			}
-		} else if (iX > 30 && iX < 80) {
+		}
+		else if (iX > 30 && iX < 80) {
 			if (iY > 30 && iY < 80) {
 				pContext->changeState("start");
 			}
