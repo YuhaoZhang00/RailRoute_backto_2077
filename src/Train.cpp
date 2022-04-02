@@ -268,3 +268,8 @@ void TrainIntelli::addHead(int iMaxNumberOfPassengers, int iLength)
 		m_iMaxNumOfPassengers += oCarriage->getCarriage()->getMaxNumOfPassengers();
 	}
 }
+
+Train* TrainCollection::getTrain()
+{
+	return m_oTrain;
+}

@@ -216,39 +216,34 @@ public:
 	void addHead(int iMaxNumberOfPassengers = -1, int iLength = -1) override;
 };
 
-//class TrainCollection
-//{
-//private:
-//	Train* m_oTrain;
-//
-//public:
-//	/* sType - a short number between [0,2] for different type of train
-//	* 0 - normal train  1 - fast train  2 - intelligent train
-//	* `uiBorderColor` is only useful for type 2 carriage
-//	* set `iMaxNumOfPassengers` and `iLength` (i.e. default setting) will generate default train
-//	*/
-//	TrainCollection(short sType, BaseEngine* pEngine, int iXCenter, int iYCenter, unsigned int uiColor, unsigned int uiSpecialColor = 0xCD9B1D,
-//		int iMaxNumOfPassengers = -1, int iWidth = 20, int iLength = -1)
-//		: m_oTrain(NULL)
-//	{
-//		switch (sType) {
-//		case 0:
-//			m_oTrain = new TrainNormal(pEngine, iXCenter, iYCenter, uiColor, (iMaxNumOfPassengers == -1) ? 6 : iMaxNumOfPassengers, iWidth,
-//				(iLength == -1) ? 30 : iLength);
-//			break;
-//		case 1:
-//			m_oTrain = new TrainFast(pEngine, iXCenter, iYCenter, uiColor, (iMaxNumOfPassengers == -1) ? 4 : iMaxNumOfPassengers, iWidth,
-//				(iLength == -1) ? 20 : iLength);
-//			break;
-//		case 2:
-//			m_oTrain = new TrainIntelli(pEngine, iXCenter, iYCenter, uiColor, uiSpecialColor,
-//				(iMaxNumOfPassengers == -1) ? 8 : iMaxNumOfPassengers, iWidth, (iLength == -1) ? 40 : iLength);
-//			break;
-//		default:
-//			printf("!! Error @ Train.h TrainCollection Constructor - invalid sIndex\n");
-//			break;
-//		}
-//	}
-//
-//	Train* getTrain();
-//};
+class TrainCollection
+{
+private:
+	Train* m_oTrain;
+
+public:
+	/* sType - a short number between [0,2] for different type of train
+	* 0 - normal train  1 - fast train  2 - intelligent train
+	* `uiBorderColor` is only useful for type 2 train
+	*/
+	TrainCollection(short sType, BaseEngine* pEngine, int iXCenterHead, int iYCenterHead, unsigned int uiColor, int iDist = 5, unsigned int uiSpecialColor = 0xCD9B1D)
+		: m_oTrain(NULL)
+	{
+		switch (sType) {
+		case 0:
+			m_oTrain = new TrainNormal(pEngine, iXCenterHead, iYCenterHead, uiColor, iDist);
+			break;
+		case 1:
+			m_oTrain = new TrainFast(pEngine, iXCenterHead, iYCenterHead, uiColor, iDist);
+			break;
+		case 2:
+			m_oTrain = new TrainIntelli(pEngine, iXCenterHead, iYCenterHead, uiColor, iDist, uiSpecialColor);
+			break;
+		default:
+			printf("!! Error @ Train.h TrainCollection Constructor - invalid sIndex\n");
+			break;
+		}
+	}
+
+	Train* getTrain();
+};
