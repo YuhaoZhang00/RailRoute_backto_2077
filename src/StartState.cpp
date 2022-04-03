@@ -6,12 +6,13 @@ void StartState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 {
 	// background
 	pContext->fillBackground(0xffffff);
-	SimpleImage image = ImageManager::loadImage("resources/bg-route-1300-800.png", true);
-	image.renderImageWithMaskAndTransparency(pContext->getBackgroundSurface(), 0, 0, 0, 0, image.getWidth(), image.getHeight(), 0xffffff, 30);
+	SimpleImage background = ImageManager::loadImage("resources/bg-route-1300-800.png", true);
+	background.renderImageWithMaskAndTransparency(pContext->getBackgroundSurface(), 0, 0, 0, 0, background.getWidth(), background.getHeight(), 0xffffff, 30);
 
 
-	// title (should be an image later)
-	pContext->drawBackgroundString(650 - 210, 200, "RailRoute <- 2077", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 55));
+	// title
+	SimpleImage title = ImageManager::loadImage("resources/title-ver1-800-235.png", true);
+	title.renderImageWithMaskAndTransparency(pContext->getBackgroundSurface(), 0, 0, 250, 80, title.getWidth(), title.getHeight(), 0xffffff, 90);
 
 
 	//arrows before btns

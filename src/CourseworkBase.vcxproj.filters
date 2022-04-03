@@ -55,6 +55,12 @@
     <Filter Include="Source Files\Object">
       <UniqueIdentifier>{36a004c1-a6e5-4444-a6d5-2690b179cdb0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\TileManager">
+      <UniqueIdentifier>{c37c453d-406c-48a2-a417-2b3f2e618efd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TileManager">
+      <UniqueIdentifier>{17f6afa8-aef5-4f2e-a755-3b77f6bf904e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header.h">
@@ -213,6 +219,9 @@
     <ClInclude Include="PauseState.h">
       <Filter>Header Files\State</Filter>
     </ClInclude>
+    <ClInclude Include="SelectionArea.h">
+      <Filter>Header Files\TileManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mainfunction.cpp">
@@ -322,6 +331,9 @@
     </ClCompile>
     <ClCompile Include="PauseState.cpp">
       <Filter>Source Files\State</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectionArea.cpp">
+      <Filter>Source Files\TileManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

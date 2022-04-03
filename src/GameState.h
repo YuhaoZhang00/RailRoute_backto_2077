@@ -1,10 +1,14 @@
 #pragma once
 #include "header.h"
 #include "State.h"
+#include "SelectionArea.h"
 
 class GameState :
-    public State
+	public State
 {
+private:
+	SelectionArea* m_tSelectionArea;
+
 public:
 	void virtSetupBackgroundBuffer(Scyyz12Engine2* pContext) override;
 	void virtDrawStringsOnTop(Scyyz12Engine2* pContext) override;

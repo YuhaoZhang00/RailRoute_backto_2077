@@ -45,6 +45,7 @@ public:
 	int getLength();
 	int getMaxNumOfPassengers();
 
+	// please check isFull() before ading passenger to carriage
 	void addPassenger(PassengerCollection* oPassenger);
 	std::vector<int> findPassengerByType(short sType);
 	void removePassenger(int iIndex);
@@ -171,10 +172,13 @@ public:
 	//virtual void virtDoUpdate(int iCurrentTime) override = 0;
 
 	virtual void addHead(int iMaxNumberOfPassengers = -1, int iLength = -1) = 0;
-	void addCarriage(int iMaxNumberOfPassengers = -1, int iLength = -1);
+	// returns false if already reaches max number of carriages and the current carriage not added
+	bool addCarriage(int iMaxNumberOfPassengers = -1, int iLength = -1);
 	void removeCarriageAfterN(int iIndex);
 	std::vector<CarriageCollection*> getCarriageList();
+	// please check isFull() before ading passenger to train
 	void addPassenger(PassengerCollection* oPassenger);
+	// TODO: addPassengers function which accepts a list of passengers
 	std::vector<int> findPassengerByType(short sType);
 	void removePassenger(int iIndex);
 	bool isFull();

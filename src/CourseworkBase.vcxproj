@@ -113,6 +113,7 @@
     <ClInclude Include="MyTileManager.h" />
     <ClInclude Include="Scyyz12ImagePixelMapping.h" />
     <ClInclude Include="Scyyz12TileManager.h" />
+    <ClInclude Include="SelectionArea.h" />
     <ClInclude Include="SimpleFlashingDragableImageObject.h" />
     <ClInclude Include="StarfieldDemo.h" />
     <ClInclude Include="StartState.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="MyObjectB.cpp" />
     <ClCompile Include="MyTileManager.cpp" />
     <ClCompile Include="Scyyz12TileManager.cpp" />
+    <ClCompile Include="SelectionArea.cpp" />
     <ClCompile Include="SimpleImage.cpp" />
     <ClCompile Include="SimpleDemo.cpp" />
     <ClCompile Include="StarfieldDemo.cpp" />

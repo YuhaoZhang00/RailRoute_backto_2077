@@ -16,7 +16,7 @@ int Carriage::getMaxNumOfPassengers()
 void Carriage::addPassenger(PassengerCollection* oPassenger)
 {
 	if (isFull()) {
-		printf("## Debug - carriage is full\n");
+		printf("!! Error @ Train.cpp Carriage::addPassenger - carriage is full, please check isFull() before adding passenger to carriage\n");
 	}
 	else {
 		for (int i = 0; i < m_iMaxNumOfPassengers; i++) {
@@ -132,10 +132,11 @@ Carriage* CarriageCollection::getCarriage() {
 	return m_oCarriage;
 }
 
-void Train::addCarriage(int iMaxNumberOfPassengers, int iLength)
+bool Train::addCarriage(int iMaxNumberOfPassengers, int iLength)
 {
 	if (m_iCarriageCount >= MAX_CARRIAGES_IN_TRAIN) {
 		printf("## Debug - a train can only have %d carriages in max\n", MAX_CARRIAGES_IN_TRAIN);
+		return false;
 	}
 	else {
 		int iXCenter = m_iXCenterHead;
@@ -145,6 +146,7 @@ void Train::addCarriage(int iMaxNumberOfPassengers, int iLength)
 		m_vecCarriage.emplace_back(oCarriage);
 		m_iCarriageCount++;
 		m_iMaxNumOfPassengers += oCarriage->getCarriage()->getMaxNumOfPassengers();
+		return true;
 	}
 }
 
@@ -174,7 +176,7 @@ std::vector<CarriageCollection*> Train::getCarriageList()
 void Train::addPassenger(PassengerCollection* oPassenger)
 {
 	if (isFull()) {
-		printf("## Debug - all carriages are full\n");
+		printf("!! Error @ Train.cpp Train::addPassenger - all carriages are full, please check isFull() before adding passenger to train\n");
 	}
 	else {
 		for (CarriageCollection* oCarriage : m_vecCarriage) {

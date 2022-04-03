@@ -9,10 +9,9 @@ public:
     void virtSetupBackgroundBuffer();
     void virtMouseDown(int iButton, int iX, int iY);
     void virtKeyDown(int iKeyCode);
+    int virtInitialiseObjects();
 
 protected:
     MyTileManager tm;
-public:
-    int virtInitialiseObjects();
 };
 

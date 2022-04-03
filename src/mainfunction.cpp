@@ -84,6 +84,7 @@ int doProgram(int argc, char* argv[])
 	delete highScoreState;
 	delete instructionState;
 	delete startState;
+	delete pauseState;
 
 	return iResult;
 } // Main object (created on the stack) gets destroyed at this point, so it will free its memory
