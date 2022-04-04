@@ -32,3 +32,13 @@ void HighScoreState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX
 		}
 	}
 }
+
+void HighScoreState::virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext)
+{
+	pContext->BaseEngine::virtMainLoopDoBeforeUpdate();
+}
+
+void HighScoreState::copyAllBackgroundBuffer(Scyyz12Engine2* pContext)
+{
+	pContext->BaseEngine::copyAllBackgroundBuffer();
+}

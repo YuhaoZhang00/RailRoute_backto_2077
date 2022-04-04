@@ -6,13 +6,16 @@ void StartState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 {
 	// background
 	pContext->fillBackground(0xffffff);
-	SimpleImage background = ImageManager::loadImage("resources/bg-route-1300-800.png", true);
-	background.renderImageWithMaskAndTransparency(pContext->getBackgroundSurface(), 0, 0, 0, 0, background.getWidth(), background.getHeight(), 0xffffff, 30);
+	//SimpleImage background = ImageManager::loadImage("resources/bg-route-1300-800.png", true);
+	//background.renderImageWithMaskAndTransparency(pContext->getBackgroundSurface(), 0, 0, 0, 0, background.getWidth(), background.getHeight(), 0xffffff, 30);
 
 
 	// title
 	SimpleImage title = ImageManager::loadImage("resources/title-ver1-800-235.png", true);
-	title.renderImageWithMaskAndTransparency(pContext->getBackgroundSurface(), 0, 0, 250, 80, title.getWidth(), title.getHeight(), 0xffffff, 90);
+	//title.renderImageWithMaskAndTransparency(pContext->getBackgroundSurface(), 0, 0, 250, 80, title.getWidth(), title.getHeight(), 0xffffff, 90);
+	title.renderImageBlit(pContext, pContext->getBackgroundSurface(),
+		450, 100, 400, 117,
+		0, 0, title.getWidth(), title.getHeight());
 
 
 	//arrows before btns
@@ -89,4 +92,14 @@ void StartState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, in
 			}
 		}
 	}
+}
+
+void StartState::virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext)
+{
+	pContext->BaseEngine::virtMainLoopDoBeforeUpdate();
+}
+
+void StartState::copyAllBackgroundBuffer(Scyyz12Engine2* pContext)
+{
+	pContext->BaseEngine::copyAllBackgroundBuffer();
 }

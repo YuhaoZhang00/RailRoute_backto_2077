@@ -121,3 +121,13 @@ void InstructionState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int 
 		}
 	}
 }
+
+void InstructionState::virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext)
+{
+	pContext->BaseEngine::virtMainLoopDoBeforeUpdate();
+}
+
+void InstructionState::copyAllBackgroundBuffer(Scyyz12Engine2* pContext)
+{
+	pContext->BaseEngine::copyAllBackgroundBuffer();
+}

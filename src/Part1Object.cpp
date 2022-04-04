@@ -63,7 +63,7 @@ void Part1Object::virtDoUpdate(int iCurrentTime)
 		m_dSpeedY = 0 - m_dSpeedY;
 	}
 		
-	redrawDisplay();
+	//redrawDisplay();
 
 	if (m_pTileManager->isValidTilePosition(m_iCurrentScreenX, m_iCurrentScreenY))
 	{

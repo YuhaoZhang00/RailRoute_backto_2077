@@ -10,5 +10,7 @@ public:
 	void virtDrawStringsOnTop(Scyyz12Engine2* pContext) override;
 	int virtInitialiseObjects(Scyyz12Engine2* pContext) override;
 	void virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int iY) override;
+	void virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext) override;
+	void copyAllBackgroundBuffer(Scyyz12Engine2* pContext) override;
 };
 

@@ -41,3 +41,13 @@ void Scyyz12Engine2::virtMouseDown(int iButton, int iX, int iY)
 {
 	m_pState->virtMouseDown(this, iButton, iX, iY);
 }
+
+void Scyyz12Engine2::virtMainLoopDoBeforeUpdate()
+{
+	m_pState->virtMainLoopDoBeforeUpdate(this);
+}
+
+void Scyyz12Engine2::copyAllBackgroundBuffer()
+{
+	m_pState->copyAllBackgroundBuffer(this);
+}

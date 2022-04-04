@@ -71,3 +71,13 @@ void GameState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int
 		}
 	}
 }
+
+void GameState::virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext)
+{
+	pContext->BaseEngine::virtMainLoopDoBeforeUpdate();
+}
+
+void GameState::copyAllBackgroundBuffer(Scyyz12Engine2* pContext)
+{
+	pContext->BaseEngine::copyAllBackgroundBuffer();
+}

@@ -29,5 +29,7 @@ public:
 	void virtDrawStringsOnTop() override;
 	int virtInitialiseObjects() override;
 	void virtMouseDown(int iButton, int iX, int iY) override;
+	void virtMainLoopDoBeforeUpdate() override;
+	void copyAllBackgroundBuffer() override;
 };
 

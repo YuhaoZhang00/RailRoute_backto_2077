@@ -54,10 +54,10 @@ bool SimpleImage::exists() const { return theData != nullptr; }
 
 // NOTE: this is a static method! It needs no object to work on.
 // Modify the size and position of image to draw to fit onto target
-bool SimpleImage::adjustXYWidthHeight( DrawingSurface* pTarget,
+bool SimpleImage::adjustXYWidthHeight(DrawingSurface* pTarget,
 	int& iXSource, int& iYSource,
 	int& iXTargetVirtual, int& iYTargetVirtual,
-	int& iSourceWidth, int& iSourceHeight) 
+	int& iSourceWidth, int& iSourceHeight)
 {
 	//std::cout << "Image draw src x " << iXSource << " y " << iYSource
 	//	<< " size " << iSourceWidth << "," << iSourceHeight << " dest " << iXTargetVirtual << "," << iYTargetVirtual << std::endl;
@@ -69,20 +69,20 @@ bool SimpleImage::adjustXYWidthHeight( DrawingSurface* pTarget,
 	int iXTargetReal = pTarget->convertVirtualToRealXPosition(iXTargetVirtual);
 	int iYTargetReal = pTarget->convertVirtualToRealYPosition(iYTargetVirtual);
 
-// Set this to restrict drawing only to redraw window - which is faster when there are a lot of images, or for image drag
-// but bad for student CW as they then need to understand that they need to set redraw bounds before image draw
+	// Set this to restrict drawing only to redraw window - which is faster when there are a lot of images, or for image drag
+	// but bad for student CW as they then need to understand that they need to set redraw bounds before image draw
 #if RESTRICT_TO_REDRAW_WINDOW
-	int minTargetX = pTarget->getRealRedrawMinX(); 
-	int maxTargetX = pTarget->getRealRedrawMaxX(); 
+	int minTargetX = pTarget->getRealRedrawMinX();
+	int maxTargetX = pTarget->getRealRedrawMaxX();
 #else
 	int minTargetX = 0;
 	int maxTargetX = pTarget->getSurfaceWidth();
 #endif
 
-	int currentRHS = iXTargetReal +  pTarget->convertVirtualToRealXPosition( iSourceWidth ) - pTarget->convertVirtualToRealXPosition(0);
-	if (currentRHS < minTargetX ) // Off the left of screen
+	int currentRHS = iXTargetReal + pTarget->convertVirtualToRealXPosition(iSourceWidth) - pTarget->convertVirtualToRealXPosition(0);
+	if (currentRHS < minTargetX) // Off the left of screen
 		return false;
-	if (iXTargetReal >= maxTargetX ) // Off the right of screen
+	if (iXTargetReal >= maxTargetX) // Off the right of screen
 		return false;
 	//std::cout << "Image RHS x " << currentRHS << " with max " << maxTargetX << std::endl;
 
@@ -92,7 +92,7 @@ bool SimpleImage::adjustXYWidthHeight( DrawingSurface* pTarget,
 
 #if RESTRICT_TO_REDRAW_WINDOW
 	int minTargetY = pTarget->getRealRedrawMinY();
-	int maxTargetY = pTarget->getRealRedrawMaxY(); 
+	int maxTargetY = pTarget->getRealRedrawMaxY();
 #else
 	int minTargetY = 0;
 	int maxTargetY = pTarget->getSurfaceHeight();
@@ -139,7 +139,7 @@ bool SimpleImage::adjustXYWidthHeight( DrawingSurface* pTarget,
 	{
 		int iRealTrim = minTargetY - iYTargetReal;
 		int iVirtualTrim = pTarget->convertRealToVirtualYPosition(minTargetY)
-					- pTarget->convertRealToVirtualYPosition(iYTargetReal);
+			- pTarget->convertRealToVirtualYPosition(iYTargetReal);
 		iYTargetVirtual += iVirtualTrim;
 		iYSource += iVirtualTrim;
 		iSourceHeight -= iVirtualTrim;
@@ -150,7 +150,7 @@ bool SimpleImage::adjustXYWidthHeight( DrawingSurface* pTarget,
 	{
 		int iRealTrim = currentBottom - maxTargetY;
 		int iVirtualTrim = pTarget->convertRealToVirtualYPosition(currentBottom)
-					- pTarget->convertRealToVirtualYPosition(maxTargetY);
+			- pTarget->convertRealToVirtualYPosition(maxTargetY);
 		iSourceHeight -= iVirtualTrim;
 		//std::cout << "Trim bottom by real " << iRealTrim << " : virtual " << iVirtualTrim << std::endl;
 	}
@@ -162,30 +162,30 @@ bool SimpleImage::adjustXYWidthHeight( DrawingSurface* pTarget,
 
 
 
-void SimpleImage::renderImage( DrawingSurface* pTarget, 
-							int iXSource, int iYSource, 
-							int iXTarget, int iYTarget, 
-							int iWidth, int iHeight ) const
+void SimpleImage::renderImage(DrawingSurface* pTarget,
+	int iXSource, int iYSource,
+	int iXTarget, int iYTarget,
+	int iWidth, int iHeight) const
 {
 	if (!adjustXYWidthHeight(pTarget, iXSource, iYSource, iXTarget, iYTarget, iWidth, iHeight))
 		return; // No need - off the screen
 
 	int iXS, iYS = iYSource, iXT, iYT = iYTarget;
 
-	for ( int iYOffset = 0 ; iYOffset < iHeight ; iYOffset++ )
+	for (int iYOffset = 0; iYOffset < iHeight; iYOffset++)
 	{
-		iXS = iXSource; 
+		iXS = iXSource;
 		iXT = iXTarget;
-		for ( int iXOffset = 0 ; iXOffset < iWidth ; iXOffset++ )
+		for (int iXOffset = 0; iXOffset < iWidth; iXOffset++)
 		{
 			// Draw pixel unless it matches the transparency colour
-			if ( ( m_iTransparencyColour == -1 ) || (theData->getRawPixelColour(iXS, iYS) != m_iTransparencyColour) )
+			if ((m_iTransparencyColour == -1) || (theData->getRawPixelColour(iXS, iYS) != m_iTransparencyColour))
 				pTarget->setPixel(iXT, iYT, theData->getRawPixelColour(iXS, iYS));
 			//((unsigned int *)pTarget->pixels)[iXT + iYT * iIntsPerScreenRow] = theData->getPixelColour( iXS, iYS );
 			iXS++;
 			iXT++;
 		}
-		iYS++; 
+		iYS++;
 		iYT++;
 	}
 }
@@ -201,7 +201,7 @@ void SimpleImage::renderImageWithMask(DrawingSurface* pTarget,
 	int iXSource, int iYSource,
 	int iXTarget, int iYTarget,
 	int iWidth, int iHeight,
-	int iMaskColor ) const
+	int iMaskColor) const
 {
 	if (!adjustXYWidthHeight(pTarget, iXSource, iYSource, iXTarget, iYTarget, iWidth, iHeight))
 		return; // No need - off the screen
@@ -213,19 +213,19 @@ void SimpleImage::renderImageWithMask(DrawingSurface* pTarget,
 
 	int iXS, iYS = iYSource, iXT, iYT = iYTarget;
 
-	for ( int iYOffset = 0 ; iYOffset < iHeight ; iYOffset++ )
+	for (int iYOffset = 0; iYOffset < iHeight; iYOffset++)
 	{
-		iXS = iXSource; 
+		iXS = iXSource;
 		iXT = iXTarget;
-		for ( int iXOffset = 0 ; iXOffset < iWidth ; iXOffset++ )
+		for (int iXOffset = 0; iXOffset < iWidth; iXOffset++)
 		{
 			int iPixel = theData->getRawPixelColour(iXS, iYS);
-			if ( iPixel != iMaskColor)
+			if (iPixel != iMaskColor)
 				pTarget->setPixel(iXT, iYT, iPixel);
 			iXS++;
 			iXT++;
 		}
-		iYS++; 
+		iYS++;
 		iYT++;
 	}
 }
@@ -259,7 +259,7 @@ void SimpleImage::renderImageWithMaskAndTransparency(DrawingSurface* pTarget,
 				int iB = (0xff & iPixel) * opacityPercentage + (0xff & iBackground) * (100 - opacityPercentage);
 				//std::cout << "R " << iR << " G " << iG << " B " << iB << std::endl;
 				//std::cout << "R " << (iR / 100) << " G " << (iG / 100) << " B " << (iB / 100) << std::endl;
- 				pTarget->setPixel(iXT, iYT, (((iR/100)&0xff)<<16) | (((iG/100) & 0xff) <<8) | ((iB/100)&0xff));
+				pTarget->setPixel(iXT, iYT, (((iR / 100) & 0xff) << 16) | (((iG / 100) & 0xff) << 8) | ((iB / 100) & 0xff));
 			}
 			iXS++;
 			iXT++;
@@ -285,7 +285,7 @@ void SimpleImage::renderImageBlit(BaseEngine* pEngine, DrawingSurface* pTarget,
 	int iLeftInImage, int iTopInImage, int iWidthInImage, int iHeightInImage)
 {
 #if AVOID_BLIT
-	renderImageWithMask( pTarget,
+	renderImageWithMask(pTarget,
 		iXDrawLocation, iYDrawLocation,
 		iLeftInImage, iTopInImage,
 		iWidthInImage, iHeightInImage);
@@ -485,7 +485,7 @@ void SimpleImage::renderImageApplyingMapping(BaseEngine* pEngine, DrawingSurface
 				int iColour = 0xffffff & theData->getRawPixelColour((int)(dx + 0.5), (int)(dy + 0.5));
 				if (mapping->changePixelColour(iXDrawLocation + iXOffset, iYDrawLocation + iYOffset, iColour, pTarget))
 				{ // If changePixelColour returns false it means we should not draw the pixel
-					pTarget->setPixel(iXDrawLocation + iXOffset, iYDrawLocation + iYOffset, iColour );
+					pTarget->setPixel(iXDrawLocation + iXOffset, iYDrawLocation + iYOffset, iColour);
 				}
 			}
 		}
