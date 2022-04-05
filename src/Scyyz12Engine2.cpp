@@ -51,3 +51,8 @@ void Scyyz12Engine2::copyAllBackgroundBuffer()
 {
 	m_pState->copyAllBackgroundBuffer(this);
 }
+
+void Scyyz12Engine2::virtKeyDown(int iKeyCode)
+{
+	m_pState->virtKeyDown(this, iKeyCode);
+}

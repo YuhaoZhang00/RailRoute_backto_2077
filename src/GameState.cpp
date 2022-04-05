@@ -81,3 +81,8 @@ void GameState::copyAllBackgroundBuffer(Scyyz12Engine2* pContext)
 {
 	pContext->BaseEngine::copyAllBackgroundBuffer();
 }
+
+void GameState::virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode)
+{
+	pContext->BaseEngine::virtKeyDown(iKeyCode);
+}

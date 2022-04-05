@@ -16,5 +16,6 @@ public:
 	void virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int iY) override;
 	void virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext) override;
 	void copyAllBackgroundBuffer(Scyyz12Engine2* pContext) override;
+	void virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode) override;
 };
 

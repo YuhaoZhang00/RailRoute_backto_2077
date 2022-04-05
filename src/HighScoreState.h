@@ -3,8 +3,11 @@
 #include "State.h"
 
 class HighScoreState :
-    public State
+	public State
 {
+private:
+	std::vector<std::string> m_vecHighScore;
+
 public:
 	void virtSetupBackgroundBuffer(Scyyz12Engine2* pContext) override;
 	void virtDrawStringsOnTop(Scyyz12Engine2* pContext) override;
@@ -12,5 +15,6 @@ public:
 	void virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int iY) override;
 	void virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext) override;
 	void copyAllBackgroundBuffer(Scyyz12Engine2* pContext) override;
+	void virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode) override;
 };
 

@@ -95,6 +95,7 @@
   <ItemGroup>
     <ClInclude Include="ChooseLevelState.h" />
     <ClInclude Include="Constant.h" />
+    <ClInclude Include="FileHandler.h" />
     <ClInclude Include="GameOverState.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="HighScoreState.h" />

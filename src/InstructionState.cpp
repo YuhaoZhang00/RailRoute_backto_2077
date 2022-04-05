@@ -131,3 +131,8 @@ void InstructionState::copyAllBackgroundBuffer(Scyyz12Engine2* pContext)
 {
 	pContext->BaseEngine::copyAllBackgroundBuffer();
 }
+
+void InstructionState::virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode)
+{
+	pContext->BaseEngine::virtKeyDown(iKeyCode);
+}

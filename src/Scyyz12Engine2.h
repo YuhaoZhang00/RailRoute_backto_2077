@@ -31,5 +31,6 @@ public:
 	void virtMouseDown(int iButton, int iX, int iY) override;
 	void virtMainLoopDoBeforeUpdate() override;
 	void copyAllBackgroundBuffer() override;
+	void virtKeyDown(int iKeyCode) override;
 };
 

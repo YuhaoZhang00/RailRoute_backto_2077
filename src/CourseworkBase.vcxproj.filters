@@ -222,6 +222,9 @@
     <ClInclude Include="SelectionArea.h">
       <Filter>Header Files\TileManager</Filter>
     </ClInclude>
+    <ClInclude Include="FileHandler.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mainfunction.cpp">

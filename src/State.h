@@ -13,5 +13,6 @@ public:
     virtual void virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int iY) = 0;
     virtual void virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext) = 0;
     virtual void copyAllBackgroundBuffer(Scyyz12Engine2* pContext) = 0;
+    virtual void virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode)  = 0;
 };
 
