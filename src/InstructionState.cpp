@@ -1,8 +1,15 @@
 #include "header.h"
 #include "InstructionState.h"
 
+int InstructionState::virtInitialise(Scyyz12Engine2* pContext)
+{
+	return pContext->BaseEngine::virtInitialise();
+}
+
 void InstructionState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 {
+	pContext->getForegroundSurface()->setDrawPointsFilter(pContext);
+
 	pContext->fillBackground(0xffffff);
 
 	pContext->drawBackgroundString(650 - 28, 640, "Idea from: Mini Metro by Dinosaur Polo Club", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 20));

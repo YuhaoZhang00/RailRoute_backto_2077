@@ -62,13 +62,6 @@ int ZoomingDemo::virtInitialiseObjects()
 }
 
 
-
-
-
-
-
-
-
 /* Draw the string that moving objects should be drawn on top of */
 void ZoomingDemo::virtDrawStringsUnderneath()
 {

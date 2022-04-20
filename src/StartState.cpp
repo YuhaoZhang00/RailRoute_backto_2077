@@ -2,8 +2,15 @@
 #include "StartState.h"
 #include "ImagePixelMapping.h"
 
+int StartState::virtInitialise(Scyyz12Engine2* pContext)
+{
+	return pContext->BaseEngine::virtInitialise();
+}
+
 void StartState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 {
+	pContext->getForegroundSurface()->setDrawPointsFilter(pContext);
+
 	// background
 	pContext->fillBackground(0xffffff);
 	//SimpleImage background = ImageManager::loadImage("resources/bg-route-1300-800.png", true);

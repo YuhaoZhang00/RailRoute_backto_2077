@@ -2,8 +2,15 @@
 #include "ChooseLevelState.h"
 #include "ImagePixelMapping.h"
 
+int ChooseLevelState::virtInitialise(Scyyz12Engine2* pContext)
+{
+	return pContext->BaseEngine::virtInitialise();
+}
+
 void ChooseLevelState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 {
+	pContext->getForegroundSurface()->setDrawPointsFilter(pContext);
+
 	// Backgournd (Sea)
 	pContext->fillBackground(0xffffff);
 	SimpleImage sea = ImageManager::loadImage("resources/sea.png", true);

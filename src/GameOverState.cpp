@@ -62,8 +62,14 @@ void GameOverState::deleteUserName()
 	}
 }
 
+int GameOverState::virtInitialise(Scyyz12Engine2* pContext)
+{
+	return pContext->BaseEngine::virtInitialise();
+}
+
 void GameOverState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 {
+	pContext->getForegroundSurface()->setDrawPointsFilter(pContext);
 	m_strUserName = "<Name>";
 
 	pContext->fillBackground(0xffffff);

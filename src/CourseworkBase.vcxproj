@@ -112,6 +112,7 @@
     <ClInclude Include="MyDemoA.h" />
     <ClInclude Include="MyObjectB.h" />
     <ClInclude Include="MyTileManager.h" />
+    <ClInclude Include="Scyyz12FilterPoints.h" />
     <ClInclude Include="Scyyz12ImagePixelMapping.h" />
     <ClInclude Include="Scyyz12TileManager.h" />
     <ClInclude Include="SelectionArea.h" />

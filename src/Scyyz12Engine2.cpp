@@ -22,6 +22,11 @@ void Scyyz12Engine2::changeState(std::string strState)
 }
 
 
+int Scyyz12Engine2::virtInitialise()
+{
+	return m_pState->virtInitialise(this);
+}
+
 void Scyyz12Engine2::virtSetupBackgroundBuffer()
 {
 	m_pState->virtSetupBackgroundBuffer(this);

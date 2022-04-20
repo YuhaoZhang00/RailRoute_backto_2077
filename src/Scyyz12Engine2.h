@@ -25,6 +25,7 @@ public:
 	// changes to the state of given string, if fail changes to start state
 	void changeState(std::string strState);
 
+	int virtInitialise() override;
 	void virtSetupBackgroundBuffer() override;
 	void virtDrawStringsOnTop() override;
 	int virtInitialiseObjects() override;

@@ -4,8 +4,15 @@
 #include "Constant.h"
 #include "FileHandler.h"
 
+int HighScoreState::virtInitialise(Scyyz12Engine2* pContext)
+{
+	return pContext->BaseEngine::virtInitialise();
+}
+
 void HighScoreState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 {
+	pContext->getForegroundSurface()->setDrawPointsFilter(pContext);
+
 	pContext->fillBackground(0xffffff);
 
 	// Title
@@ -37,7 +44,7 @@ void HighScoreState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 		else {
 			pContext->drawBackgroundString(350, 170 + 16 * i, "-", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 20));
 			pContext->drawBackgroundString(680, 170 + 16 * i, "-", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 20));
-			pContext->drawBackgroundString(840, 170 + 16 * i, "-", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 20));
+			pContext->drawBackgroundString(840, 170 + 16 * i, "    -", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 20));
 		}
 	}
 

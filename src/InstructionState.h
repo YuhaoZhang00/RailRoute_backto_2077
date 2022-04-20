@@ -18,9 +18,16 @@ private:
 	//RailLineDiagonal* m_line4_2;
 	//RailLink90Diagonal* m_linelink4;
 
-	std::vector<StationCollection*> m_stationls; // TODO: delete for such a syntax???
+	std::vector<StationCollection*> m_stationls;
+
+	~InstructionState() {
+		delete m_line1;
+		delete m_line2;
+		// TODO: delete for `m_stationls`
+	}
 
 public:
+	int virtInitialise(Scyyz12Engine2* pContext) override;
 	void virtSetupBackgroundBuffer(Scyyz12Engine2* pContext) override;
 	void virtDrawStringsOnTop(Scyyz12Engine2* pContext) override;
 	int virtInitialiseObjects(Scyyz12Engine2* pContext) override;

@@ -2,25 +2,31 @@
 #include "GameState.h"
 #include "ImagePixelMapping.h"
 
+int GameState::virtInitialise(Scyyz12Engine2* pContext)
+{
+	return pContext->BaseEngine::virtInitialise();
+}
+
 void GameState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 {
+	m_filterScaling = Scyyz12FilterPointsScaling(0, pContext);
+	m_filterTranslation = Scyyz12FilterPointsTranslation(0, 0, &m_filterScaling);
+	pContext->getForegroundSurface()->setDrawPointsFilter(&m_filterTranslation);
+
 	pContext->fillBackground(0xffffff);
 
-	pContext->drawBackgroundString(650 - 40, 100, "game", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 40));
-
+	// Exit btn
 	SimpleImage backArrow = ImageManager::loadImage("resources/arrow-right-50-50.png", true);
 	ImagePixelMappingRotateAndColour mapping(0, backArrow.getWidth() / 2, backArrow.getHeight() / 2);
 	mapping.setTransparencyColour(0xffffff);
 	mapping.setRotation(M_PI);
 	backArrow.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 30, 30, backArrow.getWidth(), backArrow.getHeight(), &mapping);
 
-	pContext->drawBackgroundString(650 - 80, 600, "test pause", 0x777777, pContext->getFont("Ubuntu-Medium.ttf", 20));
-	pContext->drawBackgroundString(650 - 80, 650, "test game over", 0x777777, pContext->getFont("Ubuntu-Medium.ttf", 20));
-
+	// Selection area
 	pContext->drawBackgroundRectangle(280, 710, 1020, 800, 0xeeeeee);
 	pContext->drawBackgroundThickLine(280, 710, 1020, 710, 0xaaaaaa, 2);
 
-	m_tSelectionArea = new SelectionArea({ 0x52B69A, 0xF9C74F, 0xF94144 ,0x4361EE ,0xF19C79 ,0x90BE6D }, 0xAAAAAA, true,true,true,true,false);
+	m_tSelectionArea = new SelectionArea({ 0x52B69A, 0xF9C74F, 0xF94144 ,0x4361EE ,0xF19C79 ,0x90BE6D }, 0xAAAAAA, true, true, true, true, false);
 	m_tSelectionArea->setProperty(-5, 5);
 	m_tSelectionArea->setProperty(-4, 3);
 	m_tSelectionArea->setProperty(-3, 1);
@@ -43,19 +49,25 @@ void GameState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 
 void GameState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 {
-	pContext->BaseEngine::virtDrawStringsOnTop();
+	char buf[128];
+	sprintf(buf, "Time %6d", rand());
+	pContext->drawForegroundString(150, 40, buf, 0xff00ff, NULL);
+
+	pContext->drawForegroundString(650 - 40, 100, "game", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 40));
+
+	pContext->drawForegroundString(650 - 80, 600, "test pause", 0x777777, pContext->getFont("Ubuntu-Medium.ttf", 20));
+	pContext->drawForegroundString(650 - 80, 650, "test game over", 0x777777, pContext->getFont("Ubuntu-Medium.ttf", 20));
 }
 
 int GameState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 {
-	return pContext->BaseEngine::virtInitialiseObjects();
+	return 0;
 }
 
 void GameState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int iY)
 {
 	printf("## Debug - click at %d %d\n", iX, iY);
-	if (iButton == SDL_BUTTON_LEFT)
-	{
+	if (iButton == SDL_BUTTON_LEFT) {
 		if (iX > 550 && iX < 750) {
 			if (iY > 590 && iY < 640) {
 				pContext->changeState("pause");
@@ -69,6 +81,14 @@ void GameState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int
 				pContext->changeState("start");
 			}
 		}
+	}
+	else if (iButton == SDL_BUTTON_MIDDLE) { // TODO: 修改鼠标缩放的监听，增加滚轮的监听，增加键盘移动的监听，增加拖拽移动的监听（参考ZoomingDemo.cpp）
+		m_filterScaling.compress();
+		pContext->redrawDisplay();
+	}
+	else if (iButton == SDL_BUTTON_RIGHT) {
+		m_filterScaling.stretch();
+		pContext->redrawDisplay();
 	}
 }
 

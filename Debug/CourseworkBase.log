@@ -1,2 +1,23 @@
-﻿  HighScoreState.cpp
+﻿  InstructionState.cpp
+  Passenger.cpp
+E:\Desktop\CPPCoursework2021\src\Passenger.cpp(63,71): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\Passenger.cpp(62,71): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\Passenger.cpp(72,71): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\Passenger.cpp(71,71): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  mainfunction.cpp
+  Station.cpp
+E:\Desktop\CPPCoursework2021\src\Station.cpp(126,54): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\Station.cpp(125,54): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\Station.cpp(131,97): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\Station.cpp(131,35): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\Station.cpp(130,97): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\Station.cpp(130,35): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\Station.cpp(144,54): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\Station.cpp(143,54): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\Station.cpp(149,97): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\Station.cpp(149,35): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\Station.cpp(148,97): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\Station.cpp(148,35): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  Train.cpp
+  Generating Code...
   CourseworkBase.vcxproj -> E:\Desktop\CPPCoursework2021\Debug\CourseworkBase2020.exe

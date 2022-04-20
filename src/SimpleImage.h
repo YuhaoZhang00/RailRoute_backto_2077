@@ -85,11 +85,12 @@ public:
 	iTargetWidth, iTargetHeight : size of target rectangle
 	iLeftInImage, iTopInImage : position in image
 	iWidthInImage, iHeightInImage : size of source rectangle
+	bClipToRedrawArea - normally set this to true (as per the default) and it will trim the drawing to the visible redraw area. If drawing to something like background where you don't want it trimmed, pass false.
 	Transparency colour (i.e. alpha values) must have been set before calling this method if you need it. See setTransparencyColour()
 	*/
 	void renderImageBlit(BaseEngine* pEngine, DrawingSurface* pTarget,
 		int iXDrawLocation, int iYDrawLocation, int iTargetWidth, int iTargetHeight,
-		int iLeftInImage, int iTopInImage, int iWidthInImage, int iHeightInImage);
+		int iLeftInImage, int iTopInImage, int iWidthInImage, int iHeightInImage, bool bClipToRedrawArea = true );
 
 
 	// Modify the size and position of image to draw to fit onto target

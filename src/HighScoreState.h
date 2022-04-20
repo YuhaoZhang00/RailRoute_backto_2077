@@ -9,6 +9,7 @@ private:
 	std::vector<std::string> m_vecHighScore;
 
 public:
+	int virtInitialise(Scyyz12Engine2* pContext) override;
 	void virtSetupBackgroundBuffer(Scyyz12Engine2* pContext) override;
 	void virtDrawStringsOnTop(Scyyz12Engine2* pContext) override;
 	int virtInitialiseObjects(Scyyz12Engine2* pContext) override;

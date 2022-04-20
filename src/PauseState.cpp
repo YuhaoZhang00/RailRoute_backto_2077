@@ -1,7 +1,14 @@
 #include "PauseState.h"
 
+int PauseState::virtInitialise(Scyyz12Engine2* pContext)
+{
+	return pContext->BaseEngine::virtInitialise();
+}
+
 void PauseState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 {
+	pContext->getForegroundSurface()->setDrawPointsFilter(pContext);
+
 	pContext->fillBackground(0xffffff);
 
 	pContext->drawBackgroundString(650 - 40, 100, "pause", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 40));
