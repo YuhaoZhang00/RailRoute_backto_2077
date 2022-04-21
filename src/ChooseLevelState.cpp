@@ -101,3 +101,8 @@ void ChooseLevelState::virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode)
 {
 	pContext->BaseEngine::virtKeyDown(iKeyCode);
 }
+
+void ChooseLevelState::virtCreateSurfaces(Scyyz12Engine2* pContext)
+{
+	pContext->BaseEngine::virtCreateSurfaces();
+}

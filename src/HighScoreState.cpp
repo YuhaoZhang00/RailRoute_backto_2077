@@ -108,4 +108,9 @@ void HighScoreState::virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode)
 	pContext->BaseEngine::virtKeyDown(iKeyCode);
 }
 
+void HighScoreState::virtCreateSurfaces(Scyyz12Engine2* pContext)
+{
+	pContext->BaseEngine::virtCreateSurfaces();
+}
+
 

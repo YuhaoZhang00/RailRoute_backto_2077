@@ -135,3 +135,8 @@ void InstructionState::virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode)
 {
 	pContext->BaseEngine::virtKeyDown(iKeyCode);
 }
+
+void InstructionState::virtCreateSurfaces(Scyyz12Engine2* pContext)
+{
+	pContext->BaseEngine::virtCreateSurfaces();
+}

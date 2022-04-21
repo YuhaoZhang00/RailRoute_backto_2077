@@ -13,62 +13,87 @@ void StartState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 
 	// background
 	pContext->fillBackground(0xffffff);
+	m_oTheExtraSurface1->fillSurface(0xffffff);
+	m_oTheExtraSurface2->fillSurface(0xffffff);
+	m_oTheExtraSurface3->fillSurface(0xffffff);
+	m_oTheExtraSurface4->fillSurface(0xffffff);
+	m_oTheExtraSurface5->fillSurface(0xffffff);
+
+	// ---------------------------------------------------
+	m_oTheExtraSurface1->mySDLLockSurface();
+	m_oTheExtraSurface2->mySDLLockSurface();
+	m_oTheExtraSurface3->mySDLLockSurface();
+	m_oTheExtraSurface4->mySDLLockSurface();
+	m_oTheExtraSurface5->mySDLLockSurface();
+	// ---------------------------------------------------
+
+	// TODO : beautify them
+
+	pContext->drawBackgroundRectangle(200, 200, 300, 400, 0x404040);
+	m_oTheExtraSurface1->drawOval(100, 100, 200, 200, 0x400000);
+	m_oTheExtraSurface2->drawOval(100, 100, 200, 200, 0x004000);
+	m_oTheExtraSurface3->drawOval(100, 100, 200, 200, 0x000040);
+	m_oTheExtraSurface4->drawOval(100, 100, 200, 200, 0x004040);
+	m_oTheExtraSurface5->drawOval(100, 100, 200, 200, 0x400040);
+
 	//SimpleImage background = ImageManager::loadImage("resources/bg-route-1300-800.png", true);
 	//background.renderImageWithMaskAndTransparency(pContext->getBackgroundSurface(), 0, 0, 0, 0, background.getWidth(), background.getHeight(), 0xffffff, 30);
 
+	// ---------------------------------------------------
+	m_oTheExtraSurface1->mySDLUnlockSurface();
+	m_oTheExtraSurface2->mySDLUnlockSurface();
+	m_oTheExtraSurface3->mySDLUnlockSurface();
+	m_oTheExtraSurface4->mySDLUnlockSurface();
+	m_oTheExtraSurface5->mySDLUnlockSurface();
+	// ---------------------------------------------------
+}
 
+void StartState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
+{
 	// title
 	SimpleImage title = ImageManager::loadImage("resources/title-ver1-800-235.png", true);
 	//title.renderImageWithMaskAndTransparency(pContext->getBackgroundSurface(), 0, 0, 250, 80, title.getWidth(), title.getHeight(), 0xffffff, 90);
-	title.renderImageBlit(pContext, pContext->getBackgroundSurface(),
+	title.renderImageBlit(pContext, pContext->getForegroundSurface(),
 		450, 100, 400, 117,
 		0, 0, title.getWidth(), title.getHeight());
 
 
 	//arrows before btns
 	SimpleImage image2 = ImageManager::loadImage("resources/arrow-right-50-50.png", true);
-	image2.renderImageWithMask(pContext->getBackgroundSurface(), 0, 0, 480, 400, image2.getWidth(), image2.getHeight());
-	
+	image2.renderImageWithMask(pContext->getForegroundSurface(), 0, 0, 480, 400, image2.getWidth(), image2.getHeight());
+
 	ImagePixelMappingRotateAndColour mapping2(0, image2.getWidth() / 2, image2.getHeight() / 2);
 	mapping2.setTransparencyColour(0xffffff);
 	//image2.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 480, 400, image2.getWidth(), image2.getHeight(), &mapping2);
 
 	mapping2.setRotation(M_PI / 4);
-	image2.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 480, 470, image2.getWidth(), image2.getHeight(), &mapping2);
+	image2.renderImageApplyingMapping(pContext, pContext->getForegroundSurface(), 480, 470, image2.getWidth(), image2.getHeight(), &mapping2);
 
 	mapping2.setRotation(M_PI * 3 / 2);
-	image2.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 480, 540, image2.getWidth(), image2.getHeight(), &mapping2);
+	image2.renderImageApplyingMapping(pContext, pContext->getForegroundSurface(), 480, 540, image2.getWidth(), image2.getHeight(), &mapping2);
 
 	mapping2.setRotation(M_PI * 7 / 4);
-	image2.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 480, 610, image2.getWidth(), image2.getHeight(), &mapping2);
+	image2.renderImageApplyingMapping(pContext, pContext->getForegroundSurface(), 480, 610, image2.getWidth(), image2.getHeight(), &mapping2);
 
 	mapping2.setRotation(M_PI);
-	image2.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 480, 680, image2.getWidth(), image2.getHeight(), &mapping2);
+	image2.renderImageApplyingMapping(pContext, pContext->getForegroundSurface(), 480, 680, image2.getWidth(), image2.getHeight(), &mapping2);
 
 
 	// buttons
-	pContext->drawBackgroundRectangle(550, 400, 750, 450, 0xF94144);
-	pContext->drawBackgroundString(650 - 72, 405, "New Game", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawForegroundRectangle(550, 400, 750, 450, 0xF94144);
+	pContext->drawForegroundString(650 - 72, 405, "New Game", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 
-	pContext->drawBackgroundRectangle(550, 470, 750, 520, 0xF9C74F);
-	pContext->drawBackgroundString(650 - 65, 475, "Continue", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawForegroundRectangle(550, 470, 750, 520, 0xF9C74F);
+	pContext->drawForegroundString(650 - 65, 475, "Continue", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 
-	pContext->drawBackgroundRectangle(550, 540, 750, 590, 0x4361EE);
-	pContext->drawBackgroundString(650 - 85, 545, "How to Play", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawForegroundRectangle(550, 540, 750, 590, 0x4361EE);
+	pContext->drawForegroundString(650 - 85, 545, "How to Play", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 
-	pContext->drawBackgroundRectangle(550, 610, 750, 660, 0xF19C79);
-	pContext->drawBackgroundString(650 - 75, 615, "High Score", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawForegroundRectangle(550, 610, 750, 660, 0xF19C79);
+	pContext->drawForegroundString(650 - 75, 615, "High Score", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 
-	pContext->drawBackgroundRectangle(550, 680, 750, 730, 0x52B69A);
-	pContext->drawBackgroundString(650 - 28, 685, "Exit", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
-}
-
-void StartState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
-{
-	//char buf[128];
-	//sprintf(buf, "Incrememt per 1000 ticks: %d (foreground & before moving object)", pContext->getModifiedTime() / 1000);
-	//pContext->drawForegroundString(50, 600, buf, 0xffffff, pContext->getFont("Cornerstone Regular.ttf", 28));
-	pContext->BaseEngine::virtDrawStringsOnTop();
+	pContext->drawForegroundRectangle(550, 680, 750, 730, 0x52B69A);
+	pContext->drawForegroundString(650 - 28, 685, "Exit", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 }
 
 int StartState::virtInitialiseObjects(Scyyz12Engine2* pContext)
@@ -108,7 +133,17 @@ void StartState::virtMouseWheel(Scyyz12Engine2* pContext, int x, int y, int whic
 
 void StartState::virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext)
 {
-	pContext->BaseEngine::virtMainLoopDoBeforeUpdate();
+	m_iCurrentSurfaceNumber = (m_iCurrentSurfaceNumber + 1) % 600;
+	switch (m_iCurrentSurfaceNumber / 100)
+	{
+	case 0: pContext->setBackgourndSurface(&(pContext->getTheDefaultBackgroundSurface())); break;
+	case 1: pContext->setBackgourndSurface(m_oTheExtraSurface1); break;
+	case 2: pContext->setBackgourndSurface(m_oTheExtraSurface2); break;
+	case 3: pContext->setBackgourndSurface(m_oTheExtraSurface3); break;
+	case 4: pContext->setBackgourndSurface(m_oTheExtraSurface4); break;
+	case 5: pContext->setBackgourndSurface(m_oTheExtraSurface5); break;
+	}
+	pContext->redrawDisplay();
 }
 
 void StartState::copyAllBackgroundBuffer(Scyyz12Engine2* pContext)
@@ -119,4 +154,20 @@ void StartState::copyAllBackgroundBuffer(Scyyz12Engine2* pContext)
 void StartState::virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode)
 {
 	pContext->BaseEngine::virtKeyDown(iKeyCode);
+}
+
+void StartState::virtCreateSurfaces(Scyyz12Engine2* pContext)
+{
+	pContext->BaseEngine::virtCreateSurfaces();
+
+	m_oTheExtraSurface1 = new DrawingSurface(pContext);
+	m_oTheExtraSurface2 = new DrawingSurface(pContext);
+	m_oTheExtraSurface3 = new DrawingSurface(pContext);
+	m_oTheExtraSurface4 = new DrawingSurface(pContext);
+	m_oTheExtraSurface5 = new DrawingSurface(pContext);
+	m_oTheExtraSurface1->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
+	m_oTheExtraSurface2->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
+	m_oTheExtraSurface3->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
+	m_oTheExtraSurface4->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
+	m_oTheExtraSurface5->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
 }

@@ -170,3 +170,8 @@ void GameOverState::virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode)
 	}
 	pContext->redrawDisplay();
 }
+
+void GameOverState::virtCreateSurfaces(Scyyz12Engine2* pContext)
+{
+	pContext->BaseEngine::virtCreateSurfaces();
+}

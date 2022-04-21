@@ -25,6 +25,9 @@ public:
 	// changes to the state of given string, if fail changes to start state
 	void changeState(std::string strState);
 
+	void setBackgourndSurface(DrawingSurface* pBackgroundSurface);
+	DrawingSurface& getTheDefaultBackgroundSurface();
+
 	int virtInitialise() override;
 	void virtSetupBackgroundBuffer() override;
 	void virtDrawStringsOnTop() override;
@@ -34,5 +37,6 @@ public:
 	void virtMainLoopDoBeforeUpdate() override;
 	void copyAllBackgroundBuffer() override;
 	void virtKeyDown(int iKeyCode) override;
+	void virtCreateSurfaces() override;
 };
 

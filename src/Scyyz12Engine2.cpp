@@ -21,6 +21,16 @@ void Scyyz12Engine2::changeState(std::string strState)
 	virtInitialiseObjects();
 }
 
+void Scyyz12Engine2::setBackgourndSurface(DrawingSurface* pBackgroundSurface)
+{
+	m_pBackgroundSurface = pBackgroundSurface;
+}
+
+DrawingSurface& Scyyz12Engine2::getTheDefaultBackgroundSurface()
+{
+	return m_oTheBackgroundSurface;
+}
+
 
 int Scyyz12Engine2::virtInitialise()
 {
@@ -65,4 +75,9 @@ void Scyyz12Engine2::copyAllBackgroundBuffer()
 void Scyyz12Engine2::virtKeyDown(int iKeyCode)
 {
 	m_pState->virtKeyDown(this, iKeyCode);
+}
+
+void Scyyz12Engine2::virtCreateSurfaces()
+{
+	m_pState->virtCreateSurfaces(this);
 }

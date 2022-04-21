@@ -18,5 +18,6 @@ public:
     virtual void virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext) = 0;
     virtual void copyAllBackgroundBuffer(Scyyz12Engine2* pContext) = 0;
     virtual void virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode)  = 0;
+    virtual void virtCreateSurfaces(Scyyz12Engine2* pContext) = 0;
 };
 

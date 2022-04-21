@@ -141,7 +141,13 @@ void GameState::virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode)
 		break;
 	case SDLK_SPACE:
 		m_filterTranslation.setOffset(0, 0);
+		m_filterScaling.setStretch(0);
 		pContext->redrawDisplay();
 		break;
 	}
+}
+
+void GameState::virtCreateSurfaces(Scyyz12Engine2* pContext)
+{
+	pContext->BaseEngine::virtCreateSurfaces();
 }

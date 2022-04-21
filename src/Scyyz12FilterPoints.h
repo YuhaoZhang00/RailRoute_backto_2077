@@ -50,9 +50,6 @@ public:
 		else if (factor > 0) { m_stretch = 1 + factor; m_compress = 1; } // Positive: Stretch by this factor
 		else if (factor < 0) { m_stretch = 1; m_compress = 1 - factor; } // Negative: Compress by this factor
 	}
-	float getZoom() {
-		return (float)m_stretch / (float)m_compress;
-	}
 
 	bool filter(DrawingSurface* surface, int& xVirtual, int& yVirtual, unsigned int& uiColour) override
 	{

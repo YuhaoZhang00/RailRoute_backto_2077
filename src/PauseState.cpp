@@ -59,3 +59,8 @@ void PauseState::virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode)
 {
 	pContext->BaseEngine::virtKeyDown(iKeyCode);
 }
+
+void PauseState::virtCreateSurfaces(Scyyz12Engine2* pContext)
+{
+	pContext->BaseEngine::virtCreateSurfaces();
+}
