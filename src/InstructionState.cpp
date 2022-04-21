@@ -44,72 +44,59 @@ int InstructionState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 	m_linelink4 = new RailLink90Diagonal(pContext, 200, 195, 3, 0xF94144);
 	pContext->appendObjectToArray(m_linelink4);*/
 
-	/*m_stationls.clear();
-	for (int i = 0; i < 6; i++) {
-		StationCollection* temp = new StationCollection(i, pContext, 100, 100 + 100 * i);
-		temp->getStation()->addPassenger(new PassengerCollection(0, pContext));
-		temp->getStation()->addPassenger(new PassengerCollection(1, pContext));
-		temp->getStation()->addPassenger(new PassengerCollection(2, pContext));
-		temp->getStation()->addPassenger(new PassengerCollection(3, pContext));
-		temp->getStation()->addPassenger(new PassengerCollection(4, pContext));
-		temp->getStation()->addPassenger(new PassengerCollection(5, pContext));
-		temp->getStation()->addPassenger(new PassengerCollection(4, pContext));
-		temp->getStation()->addPassenger(new PassengerCollection(2, pContext));
-		temp->getStation()->addPassenger(new PassengerCollection(0, pContext));
-		temp->getStation()->removePassenger(1);
-		m_stationls.emplace_back(temp);
-		pContext->appendObjectToArray(m_stationls[i]->getStation());
-	}*/
-
-	//CarriageCollection* temp = new CarriageCollection(0, pContext, 500, 600, 0x52B69A);
-	////CarriageCollection* temp = new CarriageCollection(1, pContext, 500, 600, 0x52B69A);
-	////CarriageCollection* temp = new CarriageCollection(2, pContext, 500, 600, 0xFFD700);
-	////CarriageCollection* temp = new CarriageCollection(3, pContext, 500, 600, 0x52B69A);
-	//temp->getCarriage()->addPassenger(new PassengerCollection(0, pContext));
-	//temp->getCarriage()->addPassenger(new PassengerCollection(1, pContext));
-	//temp->getCarriage()->addPassenger(new PassengerCollection(2, pContext));
-	//temp->getCarriage()->addPassenger(new PassengerCollection(3, pContext));
-	//temp->getCarriage()->addPassenger(new PassengerCollection(3, pContext));
-	//temp->getCarriage()->addPassenger(new PassengerCollection(4, pContext));
-	//for (int idx : temp->getCarriage()->findPassengerByType(3)) {
-	//	temp->getCarriage()->removePassenger(idx);
-	//}
-	//temp->getCarriage()->addPassenger(new PassengerCollection(5, pContext));
-	//pContext->appendObjectToArray(temp->getCarriage());
-
-	//TrainCollection* temp = new TrainCollection(0, pContext, 500, 500, 0x52B69A);
-	TrainCollection* temp = new TrainCollection(1, pContext, 500, 500, 0x52B69A);
-	//TrainCollection* temp = new TrainCollection(2, pContext, 500, 500, 0x52B69A);
-	temp->getTrain()->addHead();
-	temp->getTrain()->addCarriage();
-	temp->getTrain()->addCarriage();
-	temp->getTrain()->addCarriage();
-	temp->getTrain()->addCarriage();
-	temp->getTrain()->removeCarriageAfterN(2);
-	temp->getTrain()->addCarriage();
-	temp->getTrain()->addCarriage();
-	temp->getTrain()->removeCarriageAfterN(2);
-	temp->getTrain()->addPassenger(new PassengerCollection(0, pContext));
-	temp->getTrain()->addPassenger(new PassengerCollection(1, pContext));
-	temp->getTrain()->addPassenger(new PassengerCollection(2, pContext));
-	temp->getTrain()->addPassenger(new PassengerCollection(3, pContext));
-	temp->getTrain()->addPassenger(new PassengerCollection(4, pContext));
-	temp->getTrain()->addPassenger(new PassengerCollection(0, pContext));
-	temp->getTrain()->addPassenger(new PassengerCollection(1, pContext));
-	temp->getTrain()->addPassenger(new PassengerCollection(2, pContext));
-	temp->getTrain()->addPassenger(new PassengerCollection(3, pContext));
-	temp->getTrain()->addPassenger(new PassengerCollection(4, pContext));
-	temp->getTrain()->addPassenger(new PassengerCollection(0, pContext));
-	temp->getTrain()->addPassenger(new PassengerCollection(1, pContext));
-	temp->getTrain()->addPassenger(new PassengerCollection(2, pContext));
-	temp->getTrain()->addPassenger(new PassengerCollection(3, pContext));
-	temp->getTrain()->addPassenger(new PassengerCollection(4, pContext));
-	for (int passengerIdx : (temp->getTrain()->findPassengerByType(1))) {
-		temp->getTrain()->removePassenger(passengerIdx);
+	if (m_vecStations.size() == 0) {
+		for (int i = 0; i < 6; i++) {
+			StationCollection* temp = new StationCollection(i, pContext, 100, 100 + 100 * i);
+			temp->getStation()->addPassenger(new PassengerCollection(0, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(1, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(2, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(3, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(4, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(5, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(4, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(2, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(0, pContext));
+			temp->getStation()->removePassenger(1);
+			m_vecStations.emplace_back(temp);
+		}
 	}
-	temp->getTrain()->addPassenger(new PassengerCollection(5, pContext));
-	temp->getTrain()->addPassenger(new PassengerCollection(5, pContext));
-	for (CarriageCollection* carriage : temp->getTrain()->getCarriageList()) {
+	for (StationCollection* station : m_vecStations) {
+		pContext->appendObjectToArray(station->getStation());
+	}
+
+	if (m_train1 == nullptr) {
+		m_train1 = new TrainCollection(1, pContext, 500, 500, 0x52B69A);
+		m_train1->getTrain()->addHead();
+		m_train1->getTrain()->addCarriage();
+		m_train1->getTrain()->addCarriage();
+		m_train1->getTrain()->addCarriage();
+		m_train1->getTrain()->addCarriage();
+		m_train1->getTrain()->removeCarriageAfterN(2);
+		m_train1->getTrain()->addCarriage();
+		m_train1->getTrain()->addCarriage();
+		m_train1->getTrain()->removeCarriageAfterN(2);
+		m_train1->getTrain()->addPassenger(new PassengerCollection(0, pContext));
+		m_train1->getTrain()->addPassenger(new PassengerCollection(1, pContext));
+		m_train1->getTrain()->addPassenger(new PassengerCollection(2, pContext));
+		m_train1->getTrain()->addPassenger(new PassengerCollection(3, pContext));
+		m_train1->getTrain()->addPassenger(new PassengerCollection(4, pContext));
+		m_train1->getTrain()->addPassenger(new PassengerCollection(0, pContext));
+		m_train1->getTrain()->addPassenger(new PassengerCollection(1, pContext));
+		m_train1->getTrain()->addPassenger(new PassengerCollection(2, pContext));
+		m_train1->getTrain()->addPassenger(new PassengerCollection(3, pContext));
+		m_train1->getTrain()->addPassenger(new PassengerCollection(4, pContext));
+		m_train1->getTrain()->addPassenger(new PassengerCollection(0, pContext));
+		m_train1->getTrain()->addPassenger(new PassengerCollection(1, pContext));
+		m_train1->getTrain()->addPassenger(new PassengerCollection(2, pContext));
+		m_train1->getTrain()->addPassenger(new PassengerCollection(3, pContext));
+		m_train1->getTrain()->addPassenger(new PassengerCollection(4, pContext));
+		for (int passengerIdx : (m_train1->getTrain()->findPassengerByType(1))) {
+			m_train1->getTrain()->removePassenger(passengerIdx);
+		}
+		m_train1->getTrain()->addPassenger(new PassengerCollection(5, pContext));
+		m_train1->getTrain()->addPassenger(new PassengerCollection(5, pContext));
+	}
+	for (CarriageCollection* carriage : m_train1->getTrain()->getCarriageList()) {
 		pContext->appendObjectToArray(carriage->getCarriage());
 	}
 

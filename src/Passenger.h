@@ -144,6 +144,10 @@ public:
 		}
 	}
 
+	~PassengerCollection() {
+		delete m_oPassenger;
+	}
+
 	Passenger* getPassenger();
 	short getType();
 };

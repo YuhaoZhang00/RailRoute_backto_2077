@@ -176,6 +176,7 @@ std::vector<CarriageCollection*> Train::getCarriageList()
 void Train::addPassenger(PassengerCollection* oPassenger)
 {
 	if (isFull()) {
+		delete oPassenger;
 		printf("!! Error @ Train.cpp Train::addPassenger - all carriages are full, please check isFull() before adding passenger to train\n");
 	}
 	else {
@@ -232,7 +233,7 @@ bool Train::isFull()
 void TrainNormal::addHead(int iMaxNumberOfPassengers, int iLength)
 {
 	if (m_iCarriageCount >= MAX_CARRIAGES_IN_TRAIN) {
-		printf("!! Error @ Train.cpp TrainNormal::addHead() - add a head will not redult in max carriage count\n");
+		printf("!! Error @ Train.cpp TrainNormal::addHead() - add a head will not result in max carriage count\n");
 	}
 	else {
 		CarriageCollection* oCarriage = new CarriageCollection(0, m_pEngine, m_iXCenterHead, m_iYCenterHead, m_uiColor,
@@ -246,7 +247,7 @@ void TrainNormal::addHead(int iMaxNumberOfPassengers, int iLength)
 void TrainFast::addHead(int iMaxNumberOfPassengers, int iLength)
 {
 	if (m_iCarriageCount >= MAX_CARRIAGES_IN_TRAIN) {
-		printf("!! Error @ Train.cpp TrainFast::addHead() - add a head will not redult in max carriage count\n");
+		printf("!! Error @ Train.cpp TrainFast::addHead() - add a head will not result in max carriage count\n");
 	}
 	else {
 		CarriageCollection* oCarriage = new CarriageCollection(1, m_pEngine, m_iXCenterHead, m_iYCenterHead, m_uiColor,
@@ -260,7 +261,7 @@ void TrainFast::addHead(int iMaxNumberOfPassengers, int iLength)
 void TrainIntelli::addHead(int iMaxNumberOfPassengers, int iLength)
 {
 	if (m_iCarriageCount >= MAX_CARRIAGES_IN_TRAIN) {
-		printf("!! Error @ Train.cpp TrainIntelli::addHead() - add a head will not redult in max carriage count\n");
+		printf("!! Error @ Train.cpp TrainIntelli::addHead() - add a head will not result in max carriage count\n");
 	}
 	else {
 		CarriageCollection* oCarriage = new CarriageCollection(2, m_pEngine, m_iXCenterHead, m_iYCenterHead, m_uiColor,

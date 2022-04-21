@@ -7,6 +7,8 @@ class Scyyz12Engine2;
 class State
 {
 public:
+    virtual ~State() {}
+
     virtual int virtInitialise(Scyyz12Engine2* pContext) = 0;
     virtual void virtSetupBackgroundBuffer(Scyyz12Engine2* pContext) = 0;
     virtual void virtDrawStringsOnTop(Scyyz12Engine2* pContext) = 0;

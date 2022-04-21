@@ -26,23 +26,24 @@ void GameState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 	pContext->drawBackgroundRectangle(280, 710, 1020, 800, 0xeeeeee);
 	pContext->drawBackgroundThickLine(280, 710, 1020, 710, 0xaaaaaa, 2);
 
-	m_tSelectionArea = new SelectionArea({ 0x52B69A, 0xF9C74F, 0xF94144 ,0x4361EE ,0xF19C79 ,0x90BE6D }, 0xAAAAAA, true, true, true, true, false);
-	m_tSelectionArea->setProperty(-5, 5);
-	m_tSelectionArea->setProperty(-4, 3);
-	m_tSelectionArea->setProperty(-3, 1);
-	m_tSelectionArea->setProperty(-6, 7);
-	m_tSelectionArea->setProperty(-2, 10);
-	m_tSelectionArea->setProperty(-1, 8);
+	if (m_tSelectionArea == nullptr) {
+		m_tSelectionArea = new SelectionArea({ 0x52B69A, 0xF9C74F, 0xF94144 ,0x4361EE ,0xF19C79 ,0x90BE6D }, 0xAAAAAA, true, true, true, true, false);
+		m_tSelectionArea->setProperty(-5, 5);
+		m_tSelectionArea->setProperty(-4, 3);
+		m_tSelectionArea->setProperty(-3, 1);
+		m_tSelectionArea->setProperty(-6, 7);
+		m_tSelectionArea->setProperty(-2, 10);
+		m_tSelectionArea->setProperty(-1, 8);
 
-	m_tSelectionArea->addNewLineState2Discovered();
-	m_tSelectionArea->addNewLineState2Discovered();
-	m_tSelectionArea->addNewLineState2Discovered();
-	m_tSelectionArea->addNewLineState2Discovered();
-	m_tSelectionArea->setLineState2Using(1);
-	m_tSelectionArea->setLineState2Using(2);
-	m_tSelectionArea->setLineState2Using(3);
-	m_tSelectionArea->setLineState2Discovered(1); // 0 discovered  1 discovered  2 using  3 using  4 undiscovered  5 undiscovered
-
+		m_tSelectionArea->addNewLineState2Discovered();
+		m_tSelectionArea->addNewLineState2Discovered();
+		m_tSelectionArea->addNewLineState2Discovered();
+		m_tSelectionArea->addNewLineState2Discovered();
+		m_tSelectionArea->setLineState2Using(1);
+		m_tSelectionArea->setLineState2Using(2);
+		m_tSelectionArea->setLineState2Using(3);
+		m_tSelectionArea->setLineState2Discovered(1); // 0 discovered  1 discovered  2 using  3 using  4 undiscovered  5 undiscovered
+	}
 	m_tSelectionArea->setTopLeftPositionOnScreen(300, 720);
 	m_tSelectionArea->drawAllTiles(pContext, pContext->getBackgroundSurface());
 }

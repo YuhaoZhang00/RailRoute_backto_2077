@@ -18,15 +18,22 @@ private:
 	//RailLineDiagonal* m_line4_2;
 	//RailLink90Diagonal* m_linelink4;
 
-	std::vector<StationCollection*> m_stationls;
+	std::vector<StationCollection*> m_vecStations;
 
-	~InstructionState() {
-		delete m_line1;
-		delete m_line2;
-		// TODO: delete for `m_stationls`
-	}
+	TrainCollection* m_train1;
 
 public:
+	InstructionState()
+		: m_line1(nullptr), m_line2(nullptr), m_train1(nullptr)
+	{}
+
+	~InstructionState() {
+		for (StationCollection* station : m_vecStations) {
+			delete station;
+		}
+		delete m_train1;
+	}
+
 	int virtInitialise(Scyyz12Engine2* pContext) override;
 	void virtSetupBackgroundBuffer(Scyyz12Engine2* pContext) override;
 	void virtDrawStringsOnTop(Scyyz12Engine2* pContext) override;

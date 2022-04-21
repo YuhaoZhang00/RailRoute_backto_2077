@@ -162,6 +162,11 @@ public:
 			printf("!! Error @ Station.h StationCollection Constructor - invalid sIndex\n");
 			break;
 		}
+		m_oStation->setShouldDeleteOnRemoval(false);
+	}
+
+	~StationCollection() {
+		delete m_oStation;
 	}
 
 	Station* getStation();

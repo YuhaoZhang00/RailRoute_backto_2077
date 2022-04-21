@@ -135,6 +135,11 @@ public:
 			printf("!! Error @ Train.h CarriageCollection Constructor - invalid sIndex\n");
 			break;
 		}
+		m_oCarriage->setShouldDeleteOnRemoval(false);
+	}
+
+	~CarriageCollection() {
+		delete m_oCarriage;
 	}
 
 	Carriage* getCarriage();
@@ -161,8 +166,7 @@ public:
 		: m_pEngine(pEngine), m_iXCenterHead(iXCenterHead), m_iYCenterHead(iYCenterHead), m_uiColor(uiColor), m_iDist(iDist)
 	{}
 
-	~Train()
-	{
+	~Train() {
 		for (int i = 0; i < m_iCarriageCount; i++) {
 			delete m_vecCarriage[i];
 		}
@@ -247,6 +251,10 @@ public:
 			printf("!! Error @ Train.h TrainCollection Constructor - invalid sIndex\n");
 			break;
 		}
+	}
+
+	~TrainCollection() {
+		delete m_oTrain;
 	}
 
 	Train* getTrain();
