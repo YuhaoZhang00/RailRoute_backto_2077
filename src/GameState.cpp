@@ -11,7 +11,7 @@ void GameState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 {
 	m_filterScaling = Scyyz12FilterPointsScaling(0, pContext);
 	m_filterTranslation = Scyyz12FilterPointsTranslation(0, 0, &m_filterScaling);
-	pContext->getForegroundSurface()->setDrawPointsFilter(&m_filterTranslation);
+	pContext->getForegroundSurface()->setDrawPointsFilter(&m_filterTranslation); // TODO: 增加拖拽移动的监听
 
 	pContext->fillBackground(0xffffff);
 
@@ -67,7 +67,8 @@ int GameState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 
 void GameState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int iY)
 {
-	printf("## Debug - click at %d %d\n", iX, iY);
+	int iXClicked = pContext->convertVirtualPixelToClickedXPosition(iX), iYClicked = pContext->convertVirtualPixelToClickedYPosition(iY);
+	printf("## Debug - click at %d %d (virtual), %d %d (to clicked)\n", iX, iY, iXClicked, iYClicked);
 	if (iButton == SDL_BUTTON_LEFT) {
 		if (iX > 550 && iX < 750) {
 			if (iY > 590 && iY < 640) {
@@ -77,20 +78,35 @@ void GameState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int
 				pContext->changeState("game_over");
 			}
 		}
-		else if (iX > 30 && iX < 80) {
-			if (iY > 30 && iY < 80) {
+		else if (iXClicked > 30 && iXClicked < 80) {
+			if (iYClicked > 30 && iYClicked < 80) {
 				pContext->changeState("start");
 			}
 		}
 	}
-	else if (iButton == SDL_BUTTON_MIDDLE) { // TODO: 修改鼠标缩放的监听，增加滚轮的监听，增加键盘移动的监听，增加拖拽移动的监听（参考ZoomingDemo.cpp）
-		m_filterScaling.compress();
-		pContext->redrawDisplay();
-	}
-	else if (iButton == SDL_BUTTON_RIGHT) {
-		m_filterScaling.stretch();
-		pContext->redrawDisplay();
-	}
+	//else if (iButton == SDL_BUTTON_MIDDLE) {
+	//	m_filterScaling.compress();
+	//	pContext->redrawDisplay();
+	//}
+	//else if (iButton == SDL_BUTTON_RIGHT) {
+	//	m_filterScaling.stretch();
+	//	pContext->redrawDisplay();
+	//}
+}
+
+void GameState::virtMouseWheel(Scyyz12Engine2* pContext, int x, int y, int which, int timestamp)
+{
+	int iOldCentreX = pContext->convertClickedToVirtualPixelXPosition(pContext->getWindowWidth() / 2);
+	int iOldCentreY = pContext->convertClickedToVirtualPixelYPosition(pContext->getWindowHeight() / 2);
+
+	if (y < 0) m_filterScaling.compress();
+	else if (y > 0) m_filterScaling.stretch();
+
+	int iNewCentreX = pContext->convertClickedToVirtualPixelXPosition(pContext->getWindowWidth() / 2);
+	int iNewCentreY = pContext->convertClickedToVirtualPixelYPosition(pContext->getWindowHeight() / 2);
+
+	m_filterTranslation.changeOffset(iNewCentreX - iOldCentreX, iNewCentreY - iOldCentreY);
+	pContext->redrawDisplay();
 }
 
 void GameState::virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext)
@@ -105,5 +121,27 @@ void GameState::copyAllBackgroundBuffer(Scyyz12Engine2* pContext)
 
 void GameState::virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode)
 {
-	pContext->BaseEngine::virtKeyDown(iKeyCode);
+	switch (iKeyCode)
+	{
+	case SDLK_LEFT:
+		m_filterTranslation.changeOffset(-20, 0);
+		pContext->redrawDisplay();
+		break;
+	case SDLK_RIGHT:
+		m_filterTranslation.changeOffset(20, 0);
+		pContext->redrawDisplay();
+		break;
+	case SDLK_UP:
+		m_filterTranslation.changeOffset(0, -20);
+		pContext->redrawDisplay();
+		break;
+	case SDLK_DOWN:
+		m_filterTranslation.changeOffset(0, 20);
+		pContext->redrawDisplay();
+		break;
+	case SDLK_SPACE:
+		m_filterTranslation.setOffset(0, 0);
+		pContext->redrawDisplay();
+		break;
+	}
 }

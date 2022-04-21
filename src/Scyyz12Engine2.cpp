@@ -47,6 +47,11 @@ void Scyyz12Engine2::virtMouseDown(int iButton, int iX, int iY)
 	m_pState->virtMouseDown(this, iButton, iX, iY);
 }
 
+void Scyyz12Engine2::virtMouseWheel(int x, int y, int which, int timestamp)
+{
+	m_pState->virtMouseWheel(this, x, y, which, timestamp);
+}
+
 void Scyyz12Engine2::virtMainLoopDoBeforeUpdate()
 {
 	m_pState->virtMainLoopDoBeforeUpdate(this);

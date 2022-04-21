@@ -88,6 +88,11 @@ void HighScoreState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX
 	}
 }
 
+void HighScoreState::virtMouseWheel(Scyyz12Engine2* pContext, int x, int y, int which, int timestamp)
+{
+	pContext->BaseEngine::virtMouseWheel(x, y, which, timestamp);
+}
+
 void HighScoreState::virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext)
 {
 	pContext->BaseEngine::virtMainLoopDoBeforeUpdate();

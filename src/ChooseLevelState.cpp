@@ -71,6 +71,11 @@ void ChooseLevelState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int 
 	}
 }
 
+void ChooseLevelState::virtMouseWheel(Scyyz12Engine2* pContext, int x, int y, int which, int timestamp)
+{
+	pContext->BaseEngine::virtMouseWheel(x, y, which, timestamp);
+}
+
 void ChooseLevelState::virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext)
 {
 	m_iOffset = (m_iOffset + 1) % 80;

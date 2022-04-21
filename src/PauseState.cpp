@@ -40,6 +40,11 @@ void PauseState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, in
 	}
 }
 
+void PauseState::virtMouseWheel(Scyyz12Engine2* pContext, int x, int y, int which, int timestamp)
+{
+	pContext->BaseEngine::virtMouseWheel(x, y, which, timestamp);
+}
+
 void PauseState::virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext)
 {
 	pContext->BaseEngine::virtMainLoopDoBeforeUpdate();

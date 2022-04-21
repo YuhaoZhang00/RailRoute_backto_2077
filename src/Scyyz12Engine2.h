@@ -30,6 +30,7 @@ public:
 	void virtDrawStringsOnTop() override;
 	int virtInitialiseObjects() override;
 	void virtMouseDown(int iButton, int iX, int iY) override;
+	void virtMouseWheel(int x, int y, int which, int timestamp) override;
 	void virtMainLoopDoBeforeUpdate() override;
 	void copyAllBackgroundBuffer() override;
 	void virtKeyDown(int iKeyCode) override;

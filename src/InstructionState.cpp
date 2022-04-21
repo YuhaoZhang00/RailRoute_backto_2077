@@ -116,6 +116,11 @@ void InstructionState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int 
 	}
 }
 
+void InstructionState::virtMouseWheel(Scyyz12Engine2* pContext, int x, int y, int which, int timestamp)
+{
+	pContext->BaseEngine::virtMouseWheel(x, y, which, timestamp);
+}
+
 void InstructionState::virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext)
 {
 	pContext->BaseEngine::virtMainLoopDoBeforeUpdate();
