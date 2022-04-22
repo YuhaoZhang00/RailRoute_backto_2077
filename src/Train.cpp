@@ -3,6 +3,112 @@
 #include "BaseEngine.h"
 #include "Constant.h"
 
+void Carriage::virtDoUpdate(int iCurrentTime)
+{
+	if (m_bIsRun) {
+		double dSpeedXY;
+		switch (m_sDirection) {
+		case 0:
+			m_dYExactPos -= m_dSpeed;
+			for (PassengerCollection* passenger : m_vecPassenger) {
+				if (passenger != nullptr) {
+					passenger->getPassenger()->incYCenter(-m_dSpeed);
+				}
+			}
+			break;
+		case 1:
+			dSpeedXY = m_dSpeed * 0.71;
+			m_dXExactPos += dSpeedXY;
+			m_dYExactPos -= dSpeedXY;
+			for (PassengerCollection* passenger : m_vecPassenger) {
+				if (passenger != nullptr) {
+					passenger->getPassenger()->incXCenter(dSpeedXY);
+					passenger->getPassenger()->incYCenter(-dSpeedXY);
+				}
+			}
+			break;
+		case 2:
+			m_dXExactPos += m_dSpeed;
+			for (PassengerCollection* passenger : m_vecPassenger) {
+				if (passenger != nullptr) {
+					passenger->getPassenger()->incXCenter(m_dSpeed);
+				}
+			}
+			break;
+		case 3:
+			dSpeedXY = m_dSpeed * 0.71;
+			m_dXExactPos += dSpeedXY;
+			m_dYExactPos += dSpeedXY;
+			for (PassengerCollection* passenger : m_vecPassenger) {
+				if (passenger != nullptr) {
+					passenger->getPassenger()->incXCenter(dSpeedXY);
+					passenger->getPassenger()->incYCenter(dSpeedXY);
+				}
+			}
+			break;
+		case 4:
+			m_dYExactPos += m_dSpeed;
+			for (PassengerCollection* passenger : m_vecPassenger) {
+				if (passenger != nullptr) {
+					passenger->getPassenger()->incYCenter(m_dSpeed);
+				}
+			}
+			break;
+		case 5:
+			dSpeedXY = m_dSpeed * 0.71;
+			m_dXExactPos -= dSpeedXY;
+			m_dYExactPos += dSpeedXY;
+			for (PassengerCollection* passenger : m_vecPassenger) {
+				if (passenger != nullptr) {
+					passenger->getPassenger()->incXCenter(-dSpeedXY);
+					passenger->getPassenger()->incYCenter(dSpeedXY);
+				}
+			}
+			break;
+		case 6:
+			m_dXExactPos -= m_dSpeed;
+			for (PassengerCollection* passenger : m_vecPassenger) {
+				if (passenger != nullptr) {
+					passenger->getPassenger()->incXCenter(-m_dSpeed);
+				}
+			}
+			break;
+		case 7:
+			dSpeedXY = m_dSpeed * 0.71;
+			m_dXExactPos -= dSpeedXY;
+			m_dYExactPos -= dSpeedXY;
+			for (PassengerCollection* passenger : m_vecPassenger) {
+				if (passenger != nullptr) {
+					passenger->getPassenger()->incXCenter(-dSpeedXY);
+					passenger->getPassenger()->incYCenter(-dSpeedXY);
+				}
+			}
+			break;
+		default:
+			printf("!! Error @ Train.cpp virtDoUpdate() - invalid direction\n");
+			break;
+		}
+	}
+
+	//TODO: comment this out ---------
+	if (m_dYExactPos < -30) {
+		m_dYExactPos = getEngine()->getWindowHeight() + 30;
+	}
+	for (PassengerCollection* passenger : m_vecPassenger) {
+		if (passenger != nullptr) {
+			if (passenger->getPassenger()->getYCenter() < -30) {
+				passenger->getPassenger()->setYCenter(getEngine()->getWindowHeight() + 30);
+			}
+		}
+	}
+	//---------------------------------
+
+	m_iCurrentScreenX = m_dXExactPos;
+	m_iCurrentScreenY = m_dYExactPos;
+
+	redrawDisplay();
+}
+
 int Carriage::getLength()
 {
 	return m_iLength;
@@ -60,6 +166,11 @@ void Carriage::removePassenger(int iIndex)
 bool Carriage::isFull()
 {
 	return (m_iPassengerCount >= m_iMaxNumOfPassengers);
+}
+
+void Carriage::setIsRun(bool isRun)
+{
+	m_bIsRun = isRun;
 }
 
 void CarriageHead::virtDraw()
@@ -139,10 +250,11 @@ bool Train::addCarriage(int iMaxNumberOfPassengers, int iLength)
 		return false;
 	}
 	else {
-		int iXCenter = m_iXCenterHead;
-		int iYCenter = m_iYCenterHead + m_iCarriageCount * m_iDist + m_vecCarriage[0]->getCarriage()->getLength() / 2
+		double dXCenter = m_dXCenterHead;
+		double dYCenter = m_dYCenterHead + m_iCarriageCount * m_iDist + m_vecCarriage[0]->getCarriage()->getLength() / 2
 			+ (m_iCarriageCount - 1) * ((iLength == -1) ? 30 : iLength) + ((iLength == -1) ? 30 : iLength) / 2;
-		CarriageCollection* oCarriage = new CarriageCollection(3, m_pEngine, iXCenter, iYCenter, m_uiColor, 0, iMaxNumberOfPassengers, 20, iLength);
+		CarriageCollection* oCarriage = new CarriageCollection(3, m_pEngine, dXCenter, dYCenter, m_uiColor, m_dSpeed, m_sDirection,
+			0, iMaxNumberOfPassengers, 20, iLength);
 		m_vecCarriage.emplace_back(oCarriage);
 		m_iCarriageCount++;
 		m_iMaxNumOfPassengers += oCarriage->getCarriage()->getMaxNumOfPassengers();
@@ -230,13 +342,34 @@ bool Train::isFull()
 	return (m_iPassengerCount >= m_iMaxNumOfPassengers);
 }
 
+bool Train::getIsRun()
+{
+	return m_bIsRun;
+}
+
+void Train::startTrain()
+{
+	m_bIsRun = true;
+	for (CarriageCollection* carriage : m_vecCarriage) {
+		carriage->getCarriage()->setIsRun(true);
+	}
+}
+
+void Train::stopTrain()
+{
+	m_bIsRun = false;
+	for (CarriageCollection* carriage : m_vecCarriage) {
+		carriage->getCarriage()->setIsRun(false);
+	}
+}
+
 void TrainNormal::addHead(int iMaxNumberOfPassengers, int iLength)
 {
 	if (m_iCarriageCount >= MAX_CARRIAGES_IN_TRAIN) {
 		printf("!! Error @ Train.cpp TrainNormal::addHead() - add a head will not result in max carriage count\n");
 	}
 	else {
-		CarriageCollection* oCarriage = new CarriageCollection(0, m_pEngine, m_iXCenterHead, m_iYCenterHead, m_uiColor,
+		CarriageCollection* oCarriage = new CarriageCollection(0, m_pEngine, m_dXCenterHead, m_dYCenterHead, m_uiColor, m_dSpeed, m_sDirection,
 			0, iMaxNumberOfPassengers, 20, iLength);
 		m_vecCarriage.emplace_back(oCarriage);
 		m_iCarriageCount++;
@@ -250,7 +383,7 @@ void TrainFast::addHead(int iMaxNumberOfPassengers, int iLength)
 		printf("!! Error @ Train.cpp TrainFast::addHead() - add a head will not result in max carriage count\n");
 	}
 	else {
-		CarriageCollection* oCarriage = new CarriageCollection(1, m_pEngine, m_iXCenterHead, m_iYCenterHead, m_uiColor,
+		CarriageCollection* oCarriage = new CarriageCollection(1, m_pEngine, m_dXCenterHead, m_dYCenterHead, m_uiColor, m_dSpeed, m_sDirection,
 			0, iMaxNumberOfPassengers, 20, iLength);
 		m_vecCarriage.emplace_back(oCarriage);
 		m_iCarriageCount++;
@@ -264,7 +397,7 @@ void TrainIntelli::addHead(int iMaxNumberOfPassengers, int iLength)
 		printf("!! Error @ Train.cpp TrainIntelli::addHead() - add a head will not result in max carriage count\n");
 	}
 	else {
-		CarriageCollection* oCarriage = new CarriageCollection(2, m_pEngine, m_iXCenterHead, m_iYCenterHead, m_uiColor,
+		CarriageCollection* oCarriage = new CarriageCollection(2, m_pEngine, m_dXCenterHead, m_dYCenterHead, m_uiColor, m_dSpeed, m_sDirection,
 			m_uiSpecialColor, iMaxNumberOfPassengers, 20, iLength);
 		m_vecCarriage.emplace_back(oCarriage);
 		m_iCarriageCount++;

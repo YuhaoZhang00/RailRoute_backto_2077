@@ -7,14 +7,38 @@ void Passenger::setColor(unsigned int uiColor)
 	m_uiColor = uiColor;
 }
 
-void Passenger::setXCenter(int iXCenter)
+double Passenger::getXCenter()
 {
+	return m_iCurrentScreenX;
+}
+
+void Passenger::setXCenter(double iXCenter)
+{
+	m_dXExactPos = iXCenter;
 	m_iCurrentScreenX = iXCenter;
 }
 
-void Passenger::setYCenter(int iYCenter)
+void Passenger::incXCenter(double incrementX)
 {
+	m_dXExactPos += incrementX;
+	m_iCurrentScreenX = m_dXExactPos;
+}
+
+double Passenger::getYCenter()
+{
+	return m_iCurrentScreenY;
+}
+
+void Passenger::setYCenter(double iYCenter)
+{
+	m_dYExactPos = iYCenter;
 	m_iCurrentScreenY = iYCenter;
+}
+
+void Passenger::incYCenter(double incrementY)
+{
+	m_dYExactPos += incrementY;
+	m_iCurrentScreenY = m_dYExactPos;
 }
 
 void PassengerCircle::virtDraw()
@@ -59,17 +83,17 @@ void PassengerTriangle::virtDraw()
 {
 	getEngine()->drawForegroundTriangle(
 		m_iCurrentScreenX, m_iCurrentScreenY - m_iSize / 2,
-		m_iCurrentScreenX + m_iSize / 2, m_iCurrentScreenY + m_iSize * 0.366+1, // 0.366 = sqrt(3)/2 - 0.5
-		m_iCurrentScreenX - m_iSize / 2, m_iCurrentScreenY + m_iSize * 0.366+1,
+		m_iCurrentScreenX + m_iSize / 2, m_iCurrentScreenY + m_iSize * 0.366 + 1, // 0.366 = sqrt(3)/2 - 0.5
+		m_iCurrentScreenX - m_iSize / 2, m_iCurrentScreenY + m_iSize * 0.366 + 1,
 		m_uiColor);
 }
 
 void PassengerInvTriangle::virtDraw()
 {
 	getEngine()->drawForegroundTriangle(
-		m_iCurrentScreenX, m_iCurrentScreenY + m_iSize / 2-1,
-		m_iCurrentScreenX - m_iSize / 2, m_iCurrentScreenY - m_iSize * 0.366-1, // 0.366 = sqrt(3)/2 - 0.5
-		m_iCurrentScreenX + m_iSize / 2, m_iCurrentScreenY - m_iSize * 0.366-1,
+		m_iCurrentScreenX, m_iCurrentScreenY + m_iSize / 2 - 1,
+		m_iCurrentScreenX - m_iSize / 2, m_iCurrentScreenY - m_iSize * 0.366 - 1, // 0.366 = sqrt(3)/2 - 0.5
+		m_iCurrentScreenX + m_iSize / 2, m_iCurrentScreenY - m_iSize * 0.366 - 1,
 		m_uiColor);
 }
 
@@ -80,11 +104,11 @@ int PassengerFlower::dist(int x1, int y1, int x2, int y2)
 
 void PassengerFlower::virtDraw()
 {
-	for (int i = m_iCurrentScreenX-m_iSize/2; i <= m_iCurrentScreenX + m_iSize / 2; i++) {
-		for (int j = m_iCurrentScreenY- m_iSize / 2; j <= m_iCurrentScreenY + m_iSize / 2; j++) {
-			if ((dist(i, j, m_iCurrentScreenX- m_iSize / 2, m_iCurrentScreenY + m_iSize / 2) < m_iSize &&
-				dist(i, j, m_iCurrentScreenX + m_iSize / 2, m_iCurrentScreenY- m_iSize / 2) < m_iSize) ||
-				(dist(i, j, m_iCurrentScreenX- m_iSize / 2, m_iCurrentScreenY- m_iSize / 2) < m_iSize &&
+	for (int i = m_iCurrentScreenX - m_iSize / 2; i <= m_iCurrentScreenX + m_iSize / 2; i++) {
+		for (int j = m_iCurrentScreenY - m_iSize / 2; j <= m_iCurrentScreenY + m_iSize / 2; j++) {
+			if ((dist(i, j, m_iCurrentScreenX - m_iSize / 2, m_iCurrentScreenY + m_iSize / 2) < m_iSize &&
+				dist(i, j, m_iCurrentScreenX + m_iSize / 2, m_iCurrentScreenY - m_iSize / 2) < m_iSize) ||
+				(dist(i, j, m_iCurrentScreenX - m_iSize / 2, m_iCurrentScreenY - m_iSize / 2) < m_iSize &&
 					dist(i, j, m_iCurrentScreenX + m_iSize / 2, m_iCurrentScreenY + m_iSize / 2) < m_iSize)) {
 				getEngine()->setForegroundPixel(i, j, m_uiColor);
 			}

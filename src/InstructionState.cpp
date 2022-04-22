@@ -44,28 +44,8 @@ int InstructionState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 	m_linelink4 = new RailLink90Diagonal(pContext, 200, 195, 3, 0xF94144);
 	pContext->appendObjectToArray(m_linelink4);*/
 
-	if (m_vecStations.size() == 0) {
-		for (int i = 0; i < 6; i++) {
-			StationCollection* temp = new StationCollection(i, pContext, 100, 100 + 100 * i);
-			temp->getStation()->addPassenger(new PassengerCollection(0, pContext));
-			temp->getStation()->addPassenger(new PassengerCollection(1, pContext));
-			temp->getStation()->addPassenger(new PassengerCollection(2, pContext));
-			temp->getStation()->addPassenger(new PassengerCollection(3, pContext));
-			temp->getStation()->addPassenger(new PassengerCollection(4, pContext));
-			temp->getStation()->addPassenger(new PassengerCollection(5, pContext));
-			temp->getStation()->addPassenger(new PassengerCollection(4, pContext));
-			temp->getStation()->addPassenger(new PassengerCollection(2, pContext));
-			temp->getStation()->addPassenger(new PassengerCollection(0, pContext));
-			temp->getStation()->removePassenger(1);
-			m_vecStations.emplace_back(temp);
-		}
-	}
-	for (StationCollection* station : m_vecStations) {
-		pContext->appendObjectToArray(station->getStation());
-	}
-
 	if (m_train1 == nullptr) {
-		m_train1 = new TrainCollection(1, pContext, 500, 500, 0x52B69A);
+		m_train1 = new TrainCollection(1, pContext, 100, 500, 0x52B69A);
 		m_train1->getTrain()->addHead();
 		m_train1->getTrain()->addCarriage();
 		m_train1->getTrain()->addCarriage();
@@ -100,6 +80,26 @@ int InstructionState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 		pContext->appendObjectToArray(carriage->getCarriage());
 	}
 
+	if (m_vecStations.size() == 0) {
+		for (int i = 0; i < 6; i++) {
+			StationCollection* temp = new StationCollection(i, pContext, 100, 100 + 100 * i);
+			temp->getStation()->addPassenger(new PassengerCollection(0, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(1, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(2, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(3, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(4, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(5, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(4, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(2, pContext));
+			temp->getStation()->addPassenger(new PassengerCollection(0, pContext));
+			temp->getStation()->removePassenger(1);
+			m_vecStations.emplace_back(temp);
+		}
+	}
+	for (StationCollection* station : m_vecStations) {
+		pContext->appendObjectToArray(station->getStation());
+	}
+
 	return 0;
 }
 
@@ -112,6 +112,14 @@ void InstructionState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int 
 			if (iY > 680 && iY < 730) {
 				pContext->changeState("start");
 			}
+		}
+	}
+	else if (iButton == SDL_BUTTON_RIGHT) { // TODO: 仅供测试用，记得删除
+		if (m_train1->getTrain()->getIsRun()) {
+			m_train1->getTrain()->stopTrain();
+		}
+		else {
+			m_train1->getTrain()->startTrain();
 		}
 	}
 }

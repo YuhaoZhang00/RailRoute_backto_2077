@@ -14,13 +14,21 @@ protected:
 	unsigned int m_uiPassengerColor;
 	unsigned int m_uiColor;
 
+	double m_dXExactPos;
+	double m_dYExactPos;
+	double m_dSpeed;
+	short m_sDirection;
+	bool m_bIsRun = true;
+
 	int m_iPassengerCount = 0;
 	std::vector<PassengerCollection*> m_vecPassenger;
 
 public:
-	Carriage(BaseEngine* pEngine, int iXCenter, int iYCenter, unsigned int uiColor, int iMaxNumOfPassengers = 6, int iWidth = 20, int iLength = 30)
-		: DisplayableObject(iXCenter, iYCenter, pEngine, iWidth, iLength, false),
-		m_uiPassengerColor(0), m_uiColor(uiColor), m_iMaxNumOfPassengers(iMaxNumOfPassengers), m_iWidth(iWidth), m_iLength(iLength)
+	Carriage(BaseEngine* pEngine, double dXCenter, double dYCenter, unsigned int uiColor,
+		double dSpeed, short sDirection, int iMaxNumOfPassengers = 6, int iWidth = 20, int iLength = 30)
+		: DisplayableObject(dXCenter, dYCenter, pEngine, iWidth, iLength, false), m_dXExactPos(dXCenter), m_dYExactPos(dYCenter),
+		m_uiPassengerColor(0), m_uiColor(uiColor), m_iMaxNumOfPassengers(iMaxNumOfPassengers), m_iWidth(iWidth), m_iLength(iLength),
+		m_dSpeed(dSpeed), m_sDirection(sDirection)
 	{
 		int iR = (0xff & (uiColor >> 16)) * 50 + (0xff & (0xFFFFFF >> 16)) * 50;
 		int iG = (0xff & (uiColor >> 8)) * 50 + (0xff & (0xFFFFFF >> 8)) * 50;
@@ -40,7 +48,7 @@ public:
 	}
 
 	virtual void virtDraw() override = 0;
-	//virtual void virtDoUpdate(int iCurrentTime) override = 0;
+	void virtDoUpdate(int iCurrentTime) override;
 
 	int getLength();
 	int getMaxNumOfPassengers();
@@ -50,14 +58,17 @@ public:
 	std::vector<int> findPassengerByType(short sType);
 	void removePassenger(int iIndex);
 	bool isFull();
+
+	void setIsRun(bool isRun);
 };
 
 class CarriageHead :
 	public Carriage
 {
 public:
-	CarriageHead(BaseEngine* pEngine, int iXCenter, int iYCenter, unsigned int uiColor, int iMaxNumOfPassengers = 6, int iWidth = 20, int iLength = 30)
-		: Carriage(pEngine, iXCenter, iYCenter, uiColor, iMaxNumOfPassengers, iWidth, iLength)
+	CarriageHead(BaseEngine* pEngine, double dXCenter, double dYCenter, unsigned int uiColor,
+		double dSpeed = 1, short sDirection = 0, int iMaxNumOfPassengers = 6, int iWidth = 20, int iLength = 30)
+		: Carriage(pEngine, dXCenter, dYCenter, uiColor, dSpeed, sDirection, iMaxNumOfPassengers, iWidth, iLength)
 	{}
 
 	void virtDraw() override;
@@ -67,8 +78,9 @@ class CarriageMain :
 	public Carriage
 {
 public:
-	CarriageMain(BaseEngine* pEngine, int iXCenter, int iYCenter, unsigned int uiColor, int iMaxNumOfPassengers = 6, int iWidth = 20, int iLength = 30)
-		: Carriage(pEngine, iXCenter, iYCenter, uiColor, iMaxNumOfPassengers, iWidth, iLength)
+	CarriageMain(BaseEngine* pEngine, double dXCenter, double dYCenter, unsigned int uiColor,
+		double dSpeed = 1, short sDirection = 0, int iMaxNumOfPassengers = 6, int iWidth = 20, int iLength = 30)
+		: Carriage(pEngine, dXCenter, dYCenter, uiColor, dSpeed, sDirection, iMaxNumOfPassengers, iWidth, iLength)
 	{}
 
 	void virtDraw() override;
@@ -78,8 +90,9 @@ class CarriageHeadFast :
 	public Carriage
 {
 public:
-	CarriageHeadFast(BaseEngine* pEngine, int iXCenter, int iYCenter, unsigned int uiColor, int iMaxNumOfPassengers = 4, int iWidth = 20, int iLength = 20)
-		: Carriage(pEngine, iXCenter, iYCenter, uiColor, iMaxNumOfPassengers, iWidth, iLength)
+	CarriageHeadFast(BaseEngine* pEngine, double dXCenter, double dYCenter, unsigned int uiColor,
+		double dSpeed = 2, short sDirection = 0, int iMaxNumOfPassengers = 4, int iWidth = 20, int iLength = 20)
+		: Carriage(pEngine, dXCenter, dYCenter, uiColor, dSpeed, sDirection, iMaxNumOfPassengers, iWidth, iLength)
 	{}
 
 	void virtDraw() override;
@@ -92,9 +105,9 @@ private:
 	unsigned int m_uiSpecialColor;
 
 public:
-	CarriageHeadIntelli(BaseEngine* pEngine, int iXCenter, int iYCenter, unsigned int uiColor = 0xFFD700, unsigned int uiSpecialColor = 0xCD9B1D,
-		int iMaxNumOfPassengers = 8, int iWidth = 20, int iLength = 40)
-		: Carriage(pEngine, iXCenter, iYCenter, uiColor, iMaxNumOfPassengers, iWidth, iLength), m_uiSpecialColor(uiSpecialColor)
+	CarriageHeadIntelli(BaseEngine* pEngine, double dXCenter, double dYCenter, unsigned int uiColor = 0xFFD700, unsigned int uiSpecialColor = 0xCD9B1D,
+		double dSpeed = 1, short sDirection = 0, int iMaxNumOfPassengers = 8, int iWidth = 20, int iLength = 40)
+		: Carriage(pEngine, dXCenter, dYCenter, uiColor, dSpeed, sDirection, iMaxNumOfPassengers, iWidth, iLength), m_uiSpecialColor(uiSpecialColor)
 	{}
 
 	void virtDraw() override;
@@ -109,27 +122,32 @@ public:
 	* 0 - head  1 - fast head  2 - intelligent head  3 - main
 	* `uiBorderColor` is only useful for type 2 carriage
 	* set `iMaxNumOfPassengers` and `iLength` (i.e. default setting) will generate default train
+	* sDirection - a short number between [0,7] for different direction of movement
+	*  7  0  1
+	*  6     2
+	*  5  4  3
 	*/
-	CarriageCollection(short sType, BaseEngine* pEngine, int iXCenter, int iYCenter, unsigned int uiColor, unsigned int uiSpecialColor = 0xCD9B1D,
+	CarriageCollection(short sType, BaseEngine* pEngine, double dXCenter, double dYCenter, unsigned int uiColor,
+		double dSpeed = -1, short sDirection = 0, unsigned int uiSpecialColor = 0xCD9B1D,
 		int iMaxNumOfPassengers = -1, int iWidth = 20, int iLength = -1)
 		: m_oCarriage(NULL)
 	{
 		switch (sType) {
 		case 0:
-			m_oCarriage = new CarriageHead(pEngine, iXCenter, iYCenter, uiColor, (iMaxNumOfPassengers == -1) ? 6 : iMaxNumOfPassengers, iWidth,
-				(iLength == -1) ? 30 : iLength);
+			m_oCarriage = new CarriageHead(pEngine, dXCenter, dYCenter, uiColor, (dSpeed == -1) ? 1 : dSpeed, sDirection,
+				(iMaxNumOfPassengers == -1) ? 6 : iMaxNumOfPassengers, iWidth, (iLength == -1) ? 30 : iLength);
 			break;
 		case 1:
-			m_oCarriage = new CarriageHeadFast(pEngine, iXCenter, iYCenter, uiColor, (iMaxNumOfPassengers == -1) ? 4 : iMaxNumOfPassengers, iWidth,
-				(iLength == -1) ? 20 : iLength);
+			m_oCarriage = new CarriageHeadFast(pEngine, dXCenter, dYCenter, uiColor, (dSpeed == -1) ? 2 : dSpeed, sDirection,
+				(iMaxNumOfPassengers == -1) ? 4 : iMaxNumOfPassengers, iWidth, (iLength == -1) ? 20 : iLength);
 			break;
 		case 2:
-			m_oCarriage = new CarriageHeadIntelli(pEngine, iXCenter, iYCenter, uiColor, uiSpecialColor,
+			m_oCarriage = new CarriageHeadIntelli(pEngine, dXCenter, dYCenter, uiColor, uiSpecialColor, (dSpeed == -1) ? 1 : dSpeed, sDirection,
 				(iMaxNumOfPassengers == -1) ? 8 : iMaxNumOfPassengers, iWidth, (iLength == -1) ? 40 : iLength);
 			break;
 		case 3:
-			m_oCarriage = new CarriageMain(pEngine, iXCenter, iYCenter, uiColor, (iMaxNumOfPassengers == -1) ? 6 : iMaxNumOfPassengers, iWidth,
-				(iLength == -1) ? 30 : iLength);
+			m_oCarriage = new CarriageMain(pEngine, dXCenter, dYCenter, uiColor, dSpeed, sDirection,
+				(iMaxNumOfPassengers == -1) ? 6 : iMaxNumOfPassengers, iWidth, (iLength == -1) ? 30 : iLength);
 			break;
 		default:
 			printf("!! Error @ Train.h CarriageCollection Constructor - invalid sIndex\n");
@@ -150,10 +168,14 @@ class Train
 {
 protected:
 	BaseEngine* m_pEngine;
-	int m_iXCenterHead;
-	int m_iYCenterHead;
+	double m_dXCenterHead;
+	double m_dYCenterHead;
 	unsigned int m_uiColor;
 	int m_iDist;
+
+	double m_dSpeed;
+	short m_sDirection;
+	bool m_bIsRun = true;
 
 	int m_iCarriageCount = 0;
 	std::vector<CarriageCollection*> m_vecCarriage;
@@ -162,8 +184,9 @@ protected:
 	int m_iMaxNumOfPassengers = 0;
 
 public:
-	Train(BaseEngine* pEngine, int iXCenterHead, int iYCenterHead, unsigned int uiColor, int iDist = 5)
-		: m_pEngine(pEngine), m_iXCenterHead(iXCenterHead), m_iYCenterHead(iYCenterHead), m_uiColor(uiColor), m_iDist(iDist)
+	Train(BaseEngine* pEngine, double dXCenterHead, double dYCenterHead, double dSpeed, short sDirection, unsigned int uiColor, int iDist = 5)
+		: m_pEngine(pEngine), m_dXCenterHead(dXCenterHead), m_dYCenterHead(dYCenterHead), m_uiColor(uiColor), m_iDist(iDist),
+		m_dSpeed(dSpeed), m_sDirection(sDirection)
 	{}
 
 	~Train() {
@@ -186,14 +209,18 @@ public:
 	std::vector<int> findPassengerByType(short sType);
 	void removePassenger(int iIndex);
 	bool isFull();
+
+	bool getIsRun();
+	void startTrain();
+	void stopTrain();
 };
 
 class TrainNormal :
 	public Train
 {
 public:
-	TrainNormal(BaseEngine* pEngine, int iXCenterHead, int iYCenterHead, unsigned int uiColor, int iDist = 5)
-		: Train(pEngine, iXCenterHead, iYCenterHead, uiColor, iDist)
+	TrainNormal(BaseEngine* pEngine, double dXCenterHead, double dYCenterHead, double dSpeed, short sDirection, unsigned int uiColor, int iDist = 5)
+		: Train(pEngine, dXCenterHead, dYCenterHead, dSpeed, sDirection, uiColor, iDist)
 	{}
 
 	void addHead(int iMaxNumberOfPassengers = -1, int iLength = -1) override;
@@ -203,8 +230,8 @@ class TrainFast :
 	public Train
 {
 public:
-	TrainFast(BaseEngine* pEngine, int iXCenterHead, int iYCenterHead, unsigned int uiColor, int iDist = 5)
-		: Train(pEngine, iXCenterHead, iYCenterHead, uiColor, iDist)
+	TrainFast(BaseEngine* pEngine, double dXCenterHead, double dYCenterHead, double dSpeed, short sDirection, unsigned int uiColor, int iDist = 5)
+		: Train(pEngine, dXCenterHead, dYCenterHead, dSpeed, sDirection, uiColor, iDist)
 	{}
 
 	void addHead(int iMaxNumberOfPassengers = -1, int iLength = -1) override;
@@ -217,8 +244,9 @@ private:
 	unsigned int m_uiSpecialColor;
 
 public:
-	TrainIntelli(BaseEngine* pEngine, int iXCenterHead, int iYCenterHead, unsigned int uiColor, int iDist = 5, int uiSpecialColor = 0xCD9B1D)
-		: Train(pEngine, iXCenterHead, iYCenterHead, uiColor, iDist), m_uiSpecialColor(uiSpecialColor)
+	TrainIntelli(BaseEngine* pEngine, double dXCenterHead, double dYCenterHead, double dSpeed, short sDirection,
+		unsigned int uiColor, int iDist = 5, unsigned int uiSpecialColor = 0xCD9B1D)
+		: Train(pEngine, dXCenterHead, dYCenterHead, dSpeed, sDirection, uiColor, iDist), m_uiSpecialColor(uiSpecialColor)
 	{}
 
 	void addHead(int iMaxNumberOfPassengers = -1, int iLength = -1) override;
@@ -234,18 +262,19 @@ public:
 	* 0 - normal train  1 - fast train  2 - intelligent train
 	* `uiBorderColor` is only useful for type 2 train
 	*/
-	TrainCollection(short sType, BaseEngine* pEngine, int iXCenterHead, int iYCenterHead, unsigned int uiColor, int iDist = 5, unsigned int uiSpecialColor = 0xCD9B1D)
+	TrainCollection(short sType, BaseEngine* pEngine, double dXCenterHead, double dYCenterHead, unsigned int uiColor,
+		double dSpeed = -1, short sDirection = 0, int iDist = 5, unsigned int uiSpecialColor = 0xCD9B1D)
 		: m_oTrain(NULL)
 	{
 		switch (sType) {
 		case 0:
-			m_oTrain = new TrainNormal(pEngine, iXCenterHead, iYCenterHead, uiColor, iDist);
+			m_oTrain = new TrainNormal(pEngine, dXCenterHead, dYCenterHead, (dSpeed == -1) ? 1 : dSpeed, sDirection, uiColor, iDist);
 			break;
 		case 1:
-			m_oTrain = new TrainFast(pEngine, iXCenterHead, iYCenterHead, uiColor, iDist);
+			m_oTrain = new TrainFast(pEngine, dXCenterHead, dYCenterHead, (dSpeed == -1) ? 2 : dSpeed, sDirection, uiColor, iDist);
 			break;
 		case 2:
-			m_oTrain = new TrainIntelli(pEngine, iXCenterHead, iYCenterHead, uiColor, iDist, uiSpecialColor);
+			m_oTrain = new TrainIntelli(pEngine, dXCenterHead, dYCenterHead, (dSpeed == -1) ? 1 : dSpeed, sDirection, uiColor, iDist, uiSpecialColor);
 			break;
 		default:
 			printf("!! Error @ Train.h TrainCollection Constructor - invalid sIndex\n");
