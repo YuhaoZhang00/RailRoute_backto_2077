@@ -228,6 +228,9 @@
     <ClInclude Include="Scyyz12FilterPoints.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="LineRoute.h">
+      <Filter>Header Files\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mainfunction.cpp">
@@ -340,6 +343,9 @@
     </ClCompile>
     <ClCompile Include="SelectionArea.cpp">
       <Filter>Source Files\TileManager</Filter>
+    </ClCompile>
+    <ClCompile Include="LineRoute.cpp">
+      <Filter>Source Files\Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

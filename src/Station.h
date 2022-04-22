@@ -128,6 +128,7 @@ public:
 
 class StationCollection {
 private:
+	int m_id;
 	Station* m_oStation;
 
 public:
@@ -135,9 +136,9 @@ public:
 	* 0 - circle  1 - square  2 - triangle
 	* 3 - invert triangle  4 - diamond  5 - flower
 	*/
-	StationCollection(short sType, BaseEngine* pEngine, int iXCenter, int iYCenter,
+	StationCollection(int id, short sType, BaseEngine* pEngine, int iXCenter, int iYCenter,
 		unsigned int uiInnerColor = 0xFFFFFF, unsigned int uiColor = 0x000000, int iBorderWidth = 5, int iSize = 40)
-		: m_oStation(NULL)
+		: m_id(id), m_oStation(NULL)
 	{
 		switch (sType) {
 		case 0:

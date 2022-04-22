@@ -18,7 +18,7 @@ private:
 	//RailLineDiagonal* m_line4_2;
 	//RailLink90Diagonal* m_linelink4;
 
-	std::vector<StationCollection*> m_vecStations;
+	std::vector<StationCollection*> m_vecStation;
 
 	TrainCollection* m_train1;
 
@@ -28,7 +28,7 @@ public:
 	{}
 
 	~InstructionState() {
-		for (StationCollection* station : m_vecStations) {
+		for (StationCollection* station : m_vecStation) {
 			delete station;
 		}
 		delete m_train1;

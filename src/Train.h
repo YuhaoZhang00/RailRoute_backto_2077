@@ -255,6 +255,7 @@ public:
 class TrainCollection
 {
 private:
+	int m_id;
 	Train* m_oTrain;
 
 public:
@@ -262,9 +263,9 @@ public:
 	* 0 - normal train  1 - fast train  2 - intelligent train
 	* `uiBorderColor` is only useful for type 2 train
 	*/
-	TrainCollection(short sType, BaseEngine* pEngine, double dXCenterHead, double dYCenterHead, unsigned int uiColor,
+	TrainCollection(int id, short sType, BaseEngine* pEngine, double dXCenterHead, double dYCenterHead, unsigned int uiColor,
 		double dSpeed = -1, short sDirection = 0, int iDist = 5, unsigned int uiSpecialColor = 0xCD9B1D)
-		: m_oTrain(NULL)
+		: m_id(id), m_oTrain(NULL)
 	{
 		switch (sType) {
 		case 0:

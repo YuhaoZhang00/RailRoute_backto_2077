@@ -156,18 +156,72 @@ public:
 //	void virtDraw() override;
 //};
 
-//class Rail
-//{
-//private:
-//	short m_sDirection;
-//	double m_dSpeed;
-//
-//public:
-//	//Rail(BaseEngine* pEngine, int iSize = 50,
-//	//    int iX = 500, int iY = 500, double dSpeed = 2, short sDirection = 0)
-//	//    : DisplayableObject(iX, iY, pEngine, iSize, iSize), m_sDirection(sDirection)
-//	//{
-//	//}
-//
-//	//void virtDraw() override;
-//};
+class Rail
+{
+private:
+	int m_id;
+
+	BaseEngine* m_pEngine;
+
+	/* a number between [0,15] showing the starting direction of the rail
+	*  7 (15) 0 (8)  1
+	* (14)          (9)
+	*  6             2
+	* (13)          (10)
+	*  5 (12) 4 (11) 3 */
+	short m_sDirection;
+	// only used when m_sDirection in [8,15]
+	bool m_bIs45;
+
+	int m_iXStart;
+	int m_iYStart;
+	int m_iXEnd;
+	int m_iYEnd;
+
+	unsigned int m_uiColor;
+	int m_iRadius;
+	int m_iLineWidth;
+
+public:
+	Rail(int id, BaseEngine* pEngine, int iXStart, int iYStart, int iXEnd, int iYEnd,
+		bool bIs45, unsigned int uiColor, int iRadius = 20, int iLineWidth = 10)
+		: m_id(id), m_pEngine(pEngine), m_iXStart(iXStart), m_iYStart(iYStart), m_iXEnd(iXEnd), m_iYEnd(iYEnd),
+		m_bIs45(bIs45), m_sDirection(0), m_uiColor(uiColor), m_iRadius(iRadius), m_iLineWidth(iLineWidth)
+	{
+		if (iXStart == iXEnd) {
+			if (iYStart > iYEnd) m_sDirection = 0;
+			else if (iYStart < iYEnd) m_sDirection = 4;
+			else printf("!! Error @ Rail.h Rail Constructor - start point and end point are same\n");
+		}
+		else if (iYStart == iYEnd) {
+			if (iXStart > iXEnd) m_sDirection = 6;
+			else if (iXStart < iXEnd) m_sDirection = 2;
+		}
+		else if (iXStart > iXEnd) {
+			if (iYStart > iYEnd) {
+				if (abs(iXEnd - iXStart) == abs(iYEnd - iYStart)) m_sDirection = 7;
+				else if (abs(iXEnd - iXStart) > abs(iYEnd - iYStart)) m_sDirection = 14;
+				else m_sDirection = 15; // abs(iXEnd - iXStart)  abs(iYEnd - iYStart)
+			}
+			else { // iYStart < iYEnd
+				if (abs(iXEnd - iXStart) == abs(iYEnd - iYStart)) m_sDirection = 5;
+				else if (abs(iXEnd - iXStart) > abs(iYEnd - iYStart)) m_sDirection = 13;
+				else m_sDirection = 12; // abs(iXEnd - iXStart)  abs(iYEnd - iYStart)
+			}
+		}
+		else { // iXStart < iXEnd
+			if (iYStart > iYEnd) {
+				if (abs(iXEnd - iXStart) == abs(iYEnd - iYStart)) m_sDirection = 1;
+				else if (abs(iXEnd - iXStart) > abs(iYEnd - iYStart)) m_sDirection = 9;
+				else m_sDirection = 8; // abs(iXEnd - iXStart)  abs(iYEnd - iYStart)
+			}
+			else { // iYStart < iYEnd
+				if (abs(iXEnd - iXStart) == abs(iYEnd - iYStart)) m_sDirection = 3;
+				else if (abs(iXEnd - iXStart) > abs(iYEnd - iYStart)) m_sDirection = 10;
+				else m_sDirection = 11; // abs(iXEnd - iXStart)  abs(iYEnd - iYStart)
+			}
+		}
+	}
+
+	//void virtDraw() override;
+};

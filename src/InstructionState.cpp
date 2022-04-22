@@ -45,7 +45,7 @@ int InstructionState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 	pContext->appendObjectToArray(m_linelink4);*/
 
 	if (m_train1 == nullptr) {
-		m_train1 = new TrainCollection(1, pContext, 100, 500, 0x52B69A);
+		m_train1 = new TrainCollection(114514, 1, pContext, 100, 500, 0x52B69A);
 		m_train1->getTrain()->addHead();
 		m_train1->getTrain()->addCarriage();
 		m_train1->getTrain()->addCarriage();
@@ -80,9 +80,9 @@ int InstructionState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 		pContext->appendObjectToArray(carriage->getCarriage());
 	}
 
-	if (m_vecStations.size() == 0) {
+	if (m_vecStation.size() == 0) {
 		for (int i = 0; i < 6; i++) {
-			StationCollection* temp = new StationCollection(i, pContext, 100, 100 + 100 * i);
+			StationCollection* temp = new StationCollection(114515, i, pContext, 100, 100 + 100 * i);
 			temp->getStation()->addPassenger(new PassengerCollection(0, pContext));
 			temp->getStation()->addPassenger(new PassengerCollection(1, pContext));
 			temp->getStation()->addPassenger(new PassengerCollection(2, pContext));
@@ -93,10 +93,10 @@ int InstructionState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 			temp->getStation()->addPassenger(new PassengerCollection(2, pContext));
 			temp->getStation()->addPassenger(new PassengerCollection(0, pContext));
 			temp->getStation()->removePassenger(1);
-			m_vecStations.emplace_back(temp);
+			m_vecStation.emplace_back(temp);
 		}
 	}
-	for (StationCollection* station : m_vecStations) {
+	for (StationCollection* station : m_vecStation) {
 		pContext->appendObjectToArray(station->getStation());
 	}
 

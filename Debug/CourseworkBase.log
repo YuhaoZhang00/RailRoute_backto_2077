@@ -1,8 +1,6 @@
-﻿  Train.cpp
+﻿  InstructionState.cpp
 E:\Desktop\CPPCoursework2021\src\Passenger.h(17,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 E:\Desktop\CPPCoursework2021\src\Passenger.h(17,23): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 E:\Desktop\CPPCoursework2021\src\Train.h(29,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 E:\Desktop\CPPCoursework2021\src\Train.h(29,23): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-E:\Desktop\CPPCoursework2021\src\Train.cpp(105,22): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-E:\Desktop\CPPCoursework2021\src\Train.cpp(106,22): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
   CourseworkBase.vcxproj -> E:\Desktop\CPPCoursework2021\Debug\CourseworkBase2020.exe
