@@ -61,6 +61,12 @@
     <Filter Include="Source Files\TileManager">
       <UniqueIdentifier>{17f6afa8-aef5-4f2e-a755-3b77f6bf904e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ObjectCollection">
+      <UniqueIdentifier>{d688c30c-118c-4de2-a42d-544f08218a07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ObjectCollection">
+      <UniqueIdentifier>{ce857df6-791d-4795-83aa-0984362eab2f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header.h">
@@ -229,7 +235,10 @@
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="LineRoute.h">
-      <Filter>Header Files\Object</Filter>
+      <Filter>Header Files\ObjectCollection</Filter>
+    </ClInclude>
+    <ClInclude Include="StationMap.h">
+      <Filter>Header Files\ObjectCollection</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -345,7 +354,10 @@
       <Filter>Source Files\TileManager</Filter>
     </ClCompile>
     <ClCompile Include="LineRoute.cpp">
-      <Filter>Source Files\Object</Filter>
+      <Filter>Source Files\ObjectCollection</Filter>
+    </ClCompile>
+    <ClCompile Include="StationMap.cpp">
+      <Filter>Source Files\ObjectCollection</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

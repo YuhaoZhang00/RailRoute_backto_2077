@@ -26,35 +26,38 @@ void GameState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 	pContext->drawBackgroundRectangle(280, 710, 1020, 800, 0xeeeeee);
 	pContext->drawBackgroundThickLine(280, 710, 1020, 710, 0xaaaaaa, 2);
 
-	if (m_tSelectionArea == nullptr) {
-		m_tSelectionArea = new SelectionArea({ 0x52B69A, 0xF9C74F, 0xF94144 ,0x4361EE ,0xF19C79 ,0x90BE6D }, 0xAAAAAA, true, true, true, true, false);
-		m_tSelectionArea->setProperty(-5, 5);
-		m_tSelectionArea->setProperty(-4, 3);
-		m_tSelectionArea->setProperty(-3, 1);
-		m_tSelectionArea->setProperty(-6, 7);
-		m_tSelectionArea->setProperty(-2, 10);
-		m_tSelectionArea->setProperty(-1, 8);
+	if (m_sa == nullptr) {
+		m_sa = new SelectionArea({ 0x52B69A, 0xF9C74F, 0xF94144 ,0x4361EE ,0xF19C79 ,0x90BE6D }, 0xAAAAAA, true, true, true, true, false);
+		m_sa->setProperty(-5, 5);
+		m_sa->setProperty(-4, 3);
+		m_sa->setProperty(-3, 1);
+		m_sa->setProperty(-6, 7);
+		m_sa->setProperty(-2, 10);
+		m_sa->setProperty(-1, 8);
 
-		m_tSelectionArea->addNewLineState2Discovered();
-		m_tSelectionArea->addNewLineState2Discovered();
-		m_tSelectionArea->addNewLineState2Discovered();
-		m_tSelectionArea->addNewLineState2Discovered();
-		m_tSelectionArea->setLineState2Using(1);
-		m_tSelectionArea->setLineState2Using(2);
-		m_tSelectionArea->setLineState2Using(3);
-		m_tSelectionArea->setLineState2Discovered(1); // 0 discovered  1 discovered  2 using  3 using  4 undiscovered  5 undiscovered
+		m_sa->addNewLineState2Discovered();
+		m_sa->addNewLineState2Discovered();
+		m_sa->addNewLineState2Discovered();
+		m_sa->addNewLineState2Discovered();
+		m_sa->setLineState2Using(1);
+		m_sa->setLineState2Using(2);
+		m_sa->setLineState2Using(3);
+		m_sa->setLineState2Discovered(1); // 0 discovered  1 discovered  2 using  3 using  4 undiscovered  5 undiscovered
 	}
-	m_tSelectionArea->setTopLeftPositionOnScreen(300, 720);
-	m_tSelectionArea->drawAllTiles(pContext, pContext->getBackgroundSurface());
+	m_sa->setTopLeftPositionOnScreen(300, 720);
+	m_sa->drawAllTiles(pContext, pContext->getBackgroundSurface());
 }
 
 void GameState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 {
-	char buf[128];
-	sprintf(buf, "Time %6d", rand());
-	pContext->drawForegroundString(150, 40, buf, 0xff00ff, NULL);
-
-	pContext->drawForegroundString(650 - 40, 100, "game", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 40));
+	pContext->drawForegroundString(650 - 450, 33, "Week 1", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawForegroundString(650 - 330, 33, "Sun.", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawForegroundRectangle(650 - 250, 48, 650 + 450, 52, 0xDDDDDD);
+	pContext->drawForegroundRectangle(650 - 250, 40, 650 - 246, 60, 0x777777);
+	pContext->drawForegroundRectangle(650 + 446, 40, 650 + 450, 60, 0x777777);
+	int x = 400+ (++m_timeCount / 10)%697;
+	pContext->drawForegroundRectangle(x, 40, x+4, 60, 0x000000);
+	
 
 	pContext->drawForegroundString(650 - 80, 600, "test pause", 0x777777, pContext->getFont("Ubuntu-Medium.ttf", 20));
 	pContext->drawForegroundString(650 - 80, 650, "test game over", 0x777777, pContext->getFont("Ubuntu-Medium.ttf", 20));
@@ -62,6 +65,36 @@ void GameState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 
 int GameState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 {
+	pContext->destroyOldObjects(true);
+
+	if (m_sm == nullptr) {
+		m_sm = new StationMap(pContext);
+		m_sm->addStation(201, 0, 200, 100);
+		m_sm->addStation(202, 1, 100, 200);
+		m_sm->addStation(203, 2, 100, 400);
+		m_sm->addStation(204, 3, 200, 500);
+		m_sm->addStation(205, 4, 200, 600);
+		m_sm->addStation(206, 5, 400, 600);
+	}
+	if (m_lr1 == nullptr) {
+		m_lr1 = new LineRoute(pContext, 0x52B69A);
+		m_lr1->iniAdd2Stations(m_sm->getStation(0), m_sm->getStation(1), false, 0, 50, 1);
+		m_lr1->addStationTail(m_sm->getStation(2), false, 51);
+		m_lr1->addStationTail(m_sm->getStation(3), false, 52);
+		m_lr1->addStationTail(m_sm->getStation(4), false, 53);
+		m_lr1->addStationTail(m_sm->getStation(5), false, 54);
+		m_lr1->addTrain(300, 0, 100, 350);
+		m_lr1->addTrain(350, 1, 100, 250);
+		m_lr1->addTrain(350, 2, 200, 550);
+		m_lr1->addCarriage(0);
+		m_lr1->addCarriage(1);
+		m_lr1->addCarriage(1);
+		m_lr1->addCarriage(2);
+	}
+
+	m_lr1->drawInitialise();
+	m_sm->drawInitialise();
+
 	return 0;
 }
 
@@ -111,7 +144,8 @@ void GameState::virtMouseWheel(Scyyz12Engine2* pContext, int x, int y, int which
 
 void GameState::virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext)
 {
-	pContext->BaseEngine::virtMainLoopDoBeforeUpdate();
+	m_lr1->update();
+	m_sm->update();
 }
 
 void GameState::copyAllBackgroundBuffer(Scyyz12Engine2* pContext)

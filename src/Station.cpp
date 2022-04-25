@@ -30,6 +30,25 @@ int Station::findFirstPassengerOfType(short sType)
 	return -1;
 }
 
+short Station::removeFirstPassenger()
+{
+	if (isEmpty()) {
+		printf("!! Error @ Station.cpp removeFirstPassenger() - invalid remove of passenger from station\n");
+		return -1;
+	}
+	else {
+		short sType = m_vecPassenger[0]->getType();
+		delete m_vecPassenger[0];
+		m_vecPassenger.erase(m_vecPassenger.begin());
+		m_iPassengerCount--;
+		for (int i = 0; i < m_iPassengerCount; i++) {
+			m_vecPassenger[i]->getPassenger()->setXCenter(m_iCurrentScreenX + 30 + i % PASSENGER_IN_STATION_X * 10);
+			m_vecPassenger[i]->getPassenger()->setYCenter(m_iCurrentScreenY - 10 + i / PASSENGER_IN_STATION_X * 10);
+		}
+		return sType;
+	}
+}
+
 void Station::removePassenger(int iIndex)
 {
 	if (iIndex < 0 || iIndex >= m_iPassengerCount) {
@@ -44,6 +63,11 @@ void Station::removePassenger(int iIndex)
 			m_vecPassenger[i]->getPassenger()->setYCenter(m_iCurrentScreenY - 10 + i / PASSENGER_IN_STATION_X * 10);
 		}
 	}
+}
+
+bool Station::isEmpty()
+{
+	return (m_iPassengerCount == 0);
 }
 
 void StationCircle::virtDraw()
@@ -190,4 +214,19 @@ void StationFlower::virtDraw()
 Station* StationCollection::getStation()
 {
 	return m_oStation;
+}
+
+int StationCollection::getId()
+{
+	return m_id;
+}
+
+void StationCollection::setId(int id)
+{
+	m_id = id;
+}
+
+short StationCollection::getType()
+{
+	return m_sType;
 }

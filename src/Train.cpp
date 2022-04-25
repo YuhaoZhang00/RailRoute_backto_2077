@@ -3,6 +3,126 @@
 #include "BaseEngine.h"
 #include "Constant.h"
 
+void Carriage::drawForegroundRectangle0()
+{
+	getEngine()->drawForegroundRectangle(
+		m_iCurrentScreenX - m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2,
+		m_iCurrentScreenX + m_iWidth / 2, m_iCurrentScreenY + m_iLength / 2,
+		m_uiColor);
+}
+
+void Carriage::drawForegroundRectangle90()
+{
+	getEngine()->drawForegroundRectangle(
+		m_iCurrentScreenX - m_iLength / 2, m_iCurrentScreenY - m_iWidth / 2,
+		m_iCurrentScreenX + m_iLength / 2, m_iCurrentScreenY + m_iWidth / 2,
+		m_uiColor);
+}
+
+void Carriage::drawForegroundRectangle45()
+{
+	for (int i = -m_iLength; i <= m_iLength; i++) {
+		for (int j = -m_iLength; j <= m_iLength; j++) {
+			if (i + j < m_iWidth * 0.707 && i + j > -m_iWidth * 0.707 && j - i<m_iLength * 0.707 && j - i > -m_iLength * 0.707) {
+				getEngine()->setForegroundPixel(m_iCurrentScreenX + i, m_iCurrentScreenY + j, m_uiColor);
+			}
+		}
+	}
+}
+
+void Carriage::drawForegroundRectangle135()
+{
+	for (int i = -m_iLength; i <= m_iLength; i++) {
+		for (int j = -m_iLength; j <= m_iLength; j++) {
+			if (i + j < m_iLength * 0.707 && i + j > -m_iLength * 0.707 && j - i<m_iWidth * 0.707 && j - i > -m_iWidth * 0.707) {
+				getEngine()->setForegroundPixel(m_iCurrentScreenX + i, m_iCurrentScreenY + j, m_uiColor);
+			}
+		}
+	}
+}
+
+void Carriage::getPassengerPosition()
+{
+	m_vecPassengerPos.clear();
+	if (m_sDirection == 0) {
+		for (int i = 0; i < m_iMaxNumOfPassengers; i++) {
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenX - m_iWidth / 2 + m_iWidth / 2 * (i % 2) + m_iWidth / 4);
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenY - m_iLength / 2 + m_iLength / (m_iMaxNumOfPassengers / 2) * (i / 2) + m_iLength / (m_iMaxNumOfPassengers / 2) / 2);
+		}
+	}
+	else if (m_sDirection == 4) {
+		for (int i = m_iMaxNumOfPassengers - 1; i >= 0; i--) {
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenX - m_iWidth / 2 + m_iWidth / 2 * (i % 2) + m_iWidth / 4);
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenY - m_iLength / 2 + m_iLength / (m_iMaxNumOfPassengers / 2) * (i / 2) + m_iLength / (m_iMaxNumOfPassengers / 2) / 2);
+		}
+	}
+	else if (m_sDirection == 2) {
+		for (int i = 0; i < m_iMaxNumOfPassengers; i++) {
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenX - m_iLength / 2 + m_iLength / (m_iMaxNumOfPassengers / 2) * (i / 2) + m_iLength / (m_iMaxNumOfPassengers / 2) / 2);
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenY - m_iWidth / 2 + m_iWidth / 2 * (i % 2) + m_iWidth / 4);
+
+		}
+	}
+	else if (m_sDirection == 6) {
+		for (int i = m_iMaxNumOfPassengers - 1; i >= 0; i--) {
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenX - m_iLength / 2 + m_iLength / (m_iMaxNumOfPassengers / 2) * (i / 2) + m_iLength / (m_iMaxNumOfPassengers / 2) / 2);
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenY - m_iWidth / 2 + m_iWidth / 2 * (i % 2) + m_iWidth / 4);
+
+		}
+	}
+	else if (m_sDirection == 1) {
+		for (int i = 0; i < m_iMaxNumOfPassengers; i++) {
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenX + 1 + 0.707 * (m_iWidth * (-0.25 + i % 2 * 1.0 / 2) - m_iLength * (-0.5 + (i / 2 * 2 + 1) * 1.0 / m_iMaxNumOfPassengers)));
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenY + 0.707 * (m_iWidth * (-0.25 + i % 2 * 1.0 / 2) + m_iLength * (-0.5 + (i / 2 * 2 + 1) * 1.0 / m_iMaxNumOfPassengers)));
+		}
+	}
+	else if (m_sDirection == 5) {
+		for (int i = 0; i < m_iMaxNumOfPassengers; i++) {
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenX +1- 0.707 * (m_iWidth * (-0.25 + i % 2 * 1.0 / 2) - m_iLength * (-0.5 + (i / 2 * 2 + 1) * 1.0 / m_iMaxNumOfPassengers)));
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenY - 0.707 * (m_iWidth * (-0.25 + i % 2 * 1.0 / 2) + m_iLength * (-0.5 + (i / 2 * 2 + 1) * 1.0 / m_iMaxNumOfPassengers)));
+		}
+	}
+	else if (m_sDirection == 3) {
+		for (int i = 0; i < m_iMaxNumOfPassengers; i++) {
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenX - 0.707 * (m_iWidth * (-0.25 + i % 2 * 1.0 / 2) - m_iLength * (-0.5 + (i / 2 * 2 + 1) * 1.0 / m_iMaxNumOfPassengers)));
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenY + 0.707 * (m_iWidth * (-0.25 + i % 2 * 1.0 / 2) + m_iLength * (-0.5 + (i / 2 * 2 + 1) * 1.0 / m_iMaxNumOfPassengers)));
+		}
+	}
+	else if (m_sDirection == 7) {
+		for (int i = 0; i < m_iMaxNumOfPassengers; i++) {
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenX + 0.707 * (m_iWidth * (-0.25 + i % 2 * 1.0 / 2) - m_iLength * (-0.5 + (i / 2 * 2 + 1) * 1.0 / m_iMaxNumOfPassengers)));
+			m_vecPassengerPos.emplace_back(
+				m_iCurrentScreenY - 0.707 * (m_iWidth * (-0.25 + i % 2 * 1.0 / 2) + m_iLength * (-0.5 + (i / 2 * 2 + 1) * 1.0 / m_iMaxNumOfPassengers)));
+		}
+	}
+}
+
+void Carriage::drawPassenger()
+{
+	for (int i = 0; i < m_iMaxNumOfPassengers; i++) {
+		if (m_vecPassenger[i] != nullptr) {
+			m_vecPassenger[i]->getPassenger()->setXCenter(m_vecPassengerPos[i * 2]);
+			m_vecPassenger[i]->getPassenger()->setYCenter(m_vecPassengerPos[i * 2 + 1]);
+			m_vecPassenger[i]->getPassenger()->virtDraw();
+		}
+	}
+}
+
 void Carriage::virtDoUpdate(int iCurrentTime)
 {
 	if (m_bIsRun) {
@@ -90,19 +210,6 @@ void Carriage::virtDoUpdate(int iCurrentTime)
 		}
 	}
 
-	//TODO: comment this out ---------
-	if (m_dYExactPos < -30) {
-		m_dYExactPos = getEngine()->getWindowHeight() + 30;
-	}
-	for (PassengerCollection* passenger : m_vecPassenger) {
-		if (passenger != nullptr) {
-			if (passenger->getPassenger()->getYCenter() < -30) {
-				passenger->getPassenger()->setYCenter(getEngine()->getWindowHeight() + 30);
-			}
-		}
-	}
-	//---------------------------------
-
 	m_iCurrentScreenX = m_dXExactPos;
 	m_iCurrentScreenY = m_dYExactPos;
 
@@ -127,8 +234,6 @@ void Carriage::addPassenger(PassengerCollection* oPassenger)
 	else {
 		for (int i = 0; i < m_iMaxNumOfPassengers; i++) {
 			if (m_vecPassenger[i] == nullptr) {
-				oPassenger->getPassenger()->setXCenter(m_iCurrentScreenX - m_iWidth / 2 + m_iWidth / 2 * (i % 2) + m_iWidth / 4);
-				oPassenger->getPassenger()->setYCenter(m_iCurrentScreenY - m_iLength / 2 + m_iLength / (m_iMaxNumOfPassengers / 2) * (i / 2) + m_iLength / (m_iMaxNumOfPassengers / 2) / 2);
 				oPassenger->getPassenger()->setColor(m_uiPassengerColor);
 				m_vecPassenger[i] = oPassenger;
 				m_iPassengerCount++;
@@ -138,6 +243,16 @@ void Carriage::addPassenger(PassengerCollection* oPassenger)
 		printf("!! Error @ Train.cpp Carriage::addPassenger() - m_iPassengerCount said there are still places, but failed to put the passenger into the carriage\n");
 	}
 
+}
+
+int Carriage::findFirstPassengerByType(short sType)
+{
+	for (int i = 0; i < m_iMaxNumOfPassengers; i++) {
+		if (m_vecPassenger[i] != nullptr && m_vecPassenger[i]->getType() == sType) {
+			return i;
+		}
+	}
+	return -1;
 }
 
 std::vector<int> Carriage::findPassengerByType(short sType)
@@ -168,79 +283,283 @@ bool Carriage::isFull()
 	return (m_iPassengerCount >= m_iMaxNumOfPassengers);
 }
 
-void Carriage::setIsRun(bool isRun)
+double Carriage::getXExactPos()
 {
-	m_bIsRun = isRun;
+	return m_dXExactPos;
+}
+
+double Carriage::getYExactPos()
+{
+	return m_dYExactPos;
+}
+
+void Carriage::setExactPos(double dX, double dY)
+{
+	for (PassengerCollection* passenger : m_vecPassenger) {
+		if (passenger != nullptr) {
+			passenger->getPassenger()->incXCenter(dX - m_dXExactPos);
+			passenger->getPassenger()->incYCenter(dY - m_dYExactPos);
+		}
+	}
+	m_dXExactPos = dX;
+	m_dYExactPos = dY;
+	m_iCurrentScreenX = dX;
+	m_iCurrentScreenY = dY;
+}
+
+short Carriage::getDirection()
+{
+	return m_sDirection;
+}
+
+void Carriage::setDirection(short sDirection)
+{
+	m_sDirection = sDirection;
+}
+
+void Carriage::setIsRun(bool bIsRun)
+{
+	m_bIsRun = bIsRun;
 }
 
 void CarriageHead::virtDraw()
 {
-	getEngine()->drawForegroundRectangle(
-		m_iCurrentScreenX - m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2,
-		m_iCurrentScreenX + m_iWidth / 2, m_iCurrentScreenY + m_iLength / 2,
-		m_uiColor);
-	getEngine()->drawForegroundOval(
-		m_iCurrentScreenX - m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2 - m_iLength / 5,
-		m_iCurrentScreenX + m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2 + m_iLength / 5,
-		m_uiColor);
-
-	for (PassengerCollection* passenger : m_vecPassenger) {
-		if (passenger != nullptr)
-			passenger->getPassenger()->virtDraw();
+	if (m_sDirection == 0 || m_sDirection == 4) {
+		drawForegroundRectangle0();
+		if (m_sDirection == 0) {
+			getEngine()->drawForegroundOval(
+				m_iCurrentScreenX - m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2 - m_iLength / 5,
+				m_iCurrentScreenX + m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2 + m_iLength / 5,
+				m_uiColor);
+		}
+		else {
+			getEngine()->drawForegroundOval(
+				m_iCurrentScreenX - m_iWidth / 2, m_iCurrentScreenY + m_iLength / 2 - m_iLength / 5,
+				m_iCurrentScreenX + m_iWidth / 2, m_iCurrentScreenY + m_iLength / 2 + m_iLength / 5,
+				m_uiColor);
+		}
 	}
+	else if (m_sDirection == 2 || m_sDirection == 6) {
+		drawForegroundRectangle90();
+		if (m_sDirection == 2) {
+			getEngine()->drawForegroundOval(
+				m_iCurrentScreenX + m_iLength / 2 - m_iWidth / 2, m_iCurrentScreenY - m_iWidth / 2,
+				m_iCurrentScreenX + m_iLength / 2 + m_iWidth / 2, m_iCurrentScreenY + m_iWidth / 2,
+				m_uiColor);
+		}
+		else {
+			getEngine()->drawForegroundOval(
+				m_iCurrentScreenX - m_iLength / 2 - m_iWidth / 2, m_iCurrentScreenY - m_iWidth / 2,
+				m_iCurrentScreenX - m_iLength / 2 + m_iWidth / 2, m_iCurrentScreenY + m_iWidth / 2,
+				m_uiColor);
+		}
+	}
+	else if (m_sDirection == 1 || m_sDirection == 5) {
+		drawForegroundRectangle45();
+		if (m_sDirection == 1) {
+			getEngine()->drawForegroundOval(
+				m_iCurrentScreenX + m_iLength / 2 * 0.707 - m_iWidth / 2 + 1, m_iCurrentScreenY - m_iLength / 2 * 0.707 - m_iWidth / 2,
+				m_iCurrentScreenX + m_iLength / 2 * 0.707 + m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2 * 0.707 + m_iWidth / 2,
+				m_uiColor);
+		}
+		else {
+			getEngine()->drawForegroundOval(
+				m_iCurrentScreenX - m_iLength / 2 * 0.707 - m_iWidth / 2 + 1, m_iCurrentScreenY + m_iLength / 2 * 0.707 - m_iWidth / 2,
+				m_iCurrentScreenX - m_iLength / 2 * 0.707 + m_iWidth / 2, m_iCurrentScreenY + m_iLength / 2 * 0.707 + m_iWidth / 2,
+				m_uiColor);
+		}
+	}
+	else {
+		drawForegroundRectangle135();
+		if (m_sDirection == 3) {
+			getEngine()->drawForegroundOval(
+				m_iCurrentScreenX + m_iLength / 2 * 0.707 - m_iWidth / 2, m_iCurrentScreenY + m_iLength / 2 * 0.707 - m_iWidth / 2,
+				m_iCurrentScreenX + m_iLength / 2 * 0.707 + m_iWidth / 2, m_iCurrentScreenY + m_iLength / 2 * 0.707 + m_iWidth / 2,
+				m_uiColor);
+		}
+		else {
+			getEngine()->drawForegroundOval(
+				m_iCurrentScreenX - m_iLength / 2 * 0.707 - m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2 * 0.707 - m_iWidth / 2,
+				m_iCurrentScreenX - m_iLength / 2 * 0.707 + m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2 * 0.707 + m_iWidth / 2,
+				m_uiColor);
+		}
+	}
+
+	drawPassenger();
 }
 
 void CarriageMain::virtDraw()
 {
-	getEngine()->drawForegroundRectangle(
-		m_iCurrentScreenX - m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2,
-		m_iCurrentScreenX + m_iWidth / 2, m_iCurrentScreenY + m_iLength / 2,
-		m_uiColor);
+	if (m_sDirection == 0 || m_sDirection == 4) drawForegroundRectangle0();
+	else if (m_sDirection == 2 || m_sDirection == 6) drawForegroundRectangle90();
+	else if (m_sDirection == 1 || m_sDirection == 5) drawForegroundRectangle45();
+	else drawForegroundRectangle135();
 
-	for (PassengerCollection* passenger : m_vecPassenger) {
-		if (passenger != nullptr)
-			passenger->getPassenger()->virtDraw();
-	}
+	drawPassenger();
 }
 
 void CarriageHeadFast::virtDraw()
 {
-	getEngine()->drawForegroundRectangle(
-		m_iCurrentScreenX - m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2,
-		m_iCurrentScreenX + m_iWidth / 2, m_iCurrentScreenY + m_iLength / 2,
-		m_uiColor);
-	getEngine()->drawForegroundTriangle(
-		m_iCurrentScreenX, m_iCurrentScreenY - m_iLength / 2 - m_iLength / 4,
-		m_iCurrentScreenX + m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2,
-		m_iCurrentScreenX - m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2,
-		m_uiColor);
-
-	for (PassengerCollection* passenger : m_vecPassenger) {
-		if (passenger != nullptr)
-			passenger->getPassenger()->virtDraw();
+	if (m_sDirection == 0 || m_sDirection == 4) {
+		drawForegroundRectangle0();
+		if (m_sDirection == 0) {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX, m_iCurrentScreenY - m_iLength / 2 - m_iLength / 4,
+				m_iCurrentScreenX + m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2,
+				m_iCurrentScreenX - m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2,
+				m_uiColor);
+		}
+		else {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX, m_iCurrentScreenY + m_iLength / 2 + m_iLength / 4,
+				m_iCurrentScreenX - m_iWidth / 2, m_iCurrentScreenY + m_iLength / 2,
+				m_iCurrentScreenX + m_iWidth / 2, m_iCurrentScreenY + m_iLength / 2,
+				m_uiColor);
+		}
 	}
+	else if (m_sDirection == 2 || m_sDirection == 6) {
+		drawForegroundRectangle90();
+		if (m_sDirection == 2) {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX + m_iLength / 2 + m_iLength / 4, m_iCurrentScreenY,
+				m_iCurrentScreenX + m_iLength / 2, m_iCurrentScreenY + m_iWidth / 2,
+				m_iCurrentScreenX + m_iLength / 2, m_iCurrentScreenY - m_iWidth / 2,
+				m_uiColor);
+		}
+		else {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX - m_iLength / 2 - m_iLength / 4, m_iCurrentScreenY,
+				m_iCurrentScreenX - m_iLength / 2, m_iCurrentScreenY - m_iWidth / 2,
+				m_iCurrentScreenX - m_iLength / 2, m_iCurrentScreenY + m_iWidth / 2,
+				m_uiColor);
+		}
+	}
+	else if (m_sDirection == 1 || m_sDirection == 5) {
+		drawForegroundRectangle45();
+		if (m_sDirection == 1) {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX + m_iLength * 3 / 4 * 0.707, m_iCurrentScreenY - m_iLength * 3 / 4 * 0.707,
+				m_iCurrentScreenX + (m_iLength - m_iWidth) / 2 * 0.707, m_iCurrentScreenY - (m_iLength + m_iWidth) / 2 * 0.707,
+				m_iCurrentScreenX + (m_iLength + m_iWidth) / 2 * 0.707, m_iCurrentScreenY - (m_iLength - m_iWidth) / 2 * 0.707,
+				m_uiColor);
+		}
+		else {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX - m_iLength * 3 / 4 * 0.707, m_iCurrentScreenY + m_iLength * 3 / 4 * 0.707,
+				m_iCurrentScreenX - (m_iLength - m_iWidth) / 2 * 0.707, m_iCurrentScreenY + (m_iLength + m_iWidth) / 2 * 0.707,
+				m_iCurrentScreenX - (m_iLength + m_iWidth) / 2 * 0.707, m_iCurrentScreenY + (m_iLength - m_iWidth) / 2 * 0.707,
+				m_uiColor);
+		}
+	}
+	else {
+		drawForegroundRectangle135();
+		if (m_sDirection == 3) {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX + m_iLength * 3 / 4 * 0.707, m_iCurrentScreenY + m_iLength * 3 / 4 * 0.707,
+				m_iCurrentScreenX + (m_iLength + m_iWidth) / 2 * 0.707, m_iCurrentScreenY + (m_iLength - m_iWidth) / 2 * 0.707,
+				m_iCurrentScreenX + (m_iLength - m_iWidth) / 2 * 0.707, m_iCurrentScreenY + (m_iLength + m_iWidth) / 2 * 0.707,
+				m_uiColor);
+		}
+		else {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX - m_iLength * 3 / 4 * 0.707, m_iCurrentScreenY - m_iLength * 3 / 4 * 0.707,
+				m_iCurrentScreenX - (m_iLength + m_iWidth) / 2 * 0.707, m_iCurrentScreenY - (m_iLength - m_iWidth) / 2 * 0.707,
+				m_iCurrentScreenX - (m_iLength - m_iWidth) / 2 * 0.707, m_iCurrentScreenY - (m_iLength + m_iWidth) / 2 * 0.707,
+				m_uiColor);
+		}
+	}
+
+	drawPassenger();
 }
 
 void CarriageHeadIntelli::virtDraw()
 {
-	getEngine()->drawForegroundRectangle(
-		m_iCurrentScreenX - m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2,
-		m_iCurrentScreenX + m_iWidth / 2, m_iCurrentScreenY + m_iLength / 2,
-		m_uiColor);
-	getEngine()->drawForegroundTriangle(
-		m_iCurrentScreenX, m_iCurrentScreenY - m_iLength / 2 - m_iLength / 4,
-		m_iCurrentScreenX + m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2,
-		m_iCurrentScreenX - m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2,
-		m_uiSpecialColor);
-
-	for (PassengerCollection* passenger : m_vecPassenger) {
-		if (passenger != nullptr)
-			passenger->getPassenger()->virtDraw();
+	if (m_sDirection == 0 || m_sDirection == 4) {
+		drawForegroundRectangle0();
+		if (m_sDirection == 0) {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX, m_iCurrentScreenY - m_iLength / 2 - m_iLength / 4,
+				m_iCurrentScreenX + m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2,
+				m_iCurrentScreenX - m_iWidth / 2, m_iCurrentScreenY - m_iLength / 2,
+				m_uiSpecialColor);
+		}
+		else {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX, m_iCurrentScreenY + m_iLength / 2 + m_iLength / 4,
+				m_iCurrentScreenX - m_iWidth / 2, m_iCurrentScreenY + m_iLength / 2,
+				m_iCurrentScreenX + m_iWidth / 2, m_iCurrentScreenY + m_iLength / 2,
+				m_uiSpecialColor);
+		}
 	}
+	else if (m_sDirection == 2 || m_sDirection == 6) {
+		drawForegroundRectangle90();
+		if (m_sDirection == 2) {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX + m_iLength / 2 + m_iLength / 4, m_iCurrentScreenY,
+				m_iCurrentScreenX + m_iLength / 2, m_iCurrentScreenY + m_iWidth / 2,
+				m_iCurrentScreenX + m_iLength / 2, m_iCurrentScreenY - m_iWidth / 2,
+				m_uiSpecialColor);
+		}
+		else {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX - m_iLength / 2 - m_iLength / 4, m_iCurrentScreenY,
+				m_iCurrentScreenX - m_iLength / 2, m_iCurrentScreenY - m_iWidth / 2,
+				m_iCurrentScreenX - m_iLength / 2, m_iCurrentScreenY + m_iWidth / 2,
+				m_uiSpecialColor);
+		}
+	}
+	else if (m_sDirection == 1 || m_sDirection == 5) {
+		drawForegroundRectangle45();
+		if (m_sDirection == 1) {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX + m_iLength * 3 / 4 * 0.707, m_iCurrentScreenY - m_iLength * 3 / 4 * 0.707,
+				m_iCurrentScreenX + (m_iLength - m_iWidth) / 2 * 0.707, m_iCurrentScreenY - (m_iLength + m_iWidth) / 2 * 0.707,
+				m_iCurrentScreenX + (m_iLength + m_iWidth) / 2 * 0.707, m_iCurrentScreenY - (m_iLength - m_iWidth) / 2 * 0.707,
+				m_uiSpecialColor);
+		}
+		else {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX - m_iLength * 3 / 4 * 0.707, m_iCurrentScreenY + m_iLength * 3 / 4 * 0.707,
+				m_iCurrentScreenX - (m_iLength - m_iWidth) / 2 * 0.707, m_iCurrentScreenY + (m_iLength + m_iWidth) / 2 * 0.707,
+				m_iCurrentScreenX - (m_iLength + m_iWidth) / 2 * 0.707, m_iCurrentScreenY + (m_iLength - m_iWidth) / 2 * 0.707,
+				m_uiSpecialColor);
+		}
+	}
+	else {
+		drawForegroundRectangle135();
+		if (m_sDirection == 3) {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX + m_iLength * 3 / 4 * 0.707, m_iCurrentScreenY + m_iLength * 3 / 4 * 0.707,
+				m_iCurrentScreenX + (m_iLength + m_iWidth) / 2 * 0.707, m_iCurrentScreenY + (m_iLength - m_iWidth) / 2 * 0.707,
+				m_iCurrentScreenX + (m_iLength - m_iWidth) / 2 * 0.707, m_iCurrentScreenY + (m_iLength + m_iWidth) / 2 * 0.707,
+				m_uiSpecialColor);
+		}
+		else {
+			getEngine()->drawForegroundTriangle(
+				m_iCurrentScreenX - m_iLength * 3 / 4 * 0.707, m_iCurrentScreenY - m_iLength * 3 / 4 * 0.707,
+				m_iCurrentScreenX - (m_iLength + m_iWidth) / 2 * 0.707, m_iCurrentScreenY - (m_iLength - m_iWidth) / 2 * 0.707,
+				m_iCurrentScreenX - (m_iLength - m_iWidth) / 2 * 0.707, m_iCurrentScreenY - (m_iLength + m_iWidth) / 2 * 0.707,
+				m_uiSpecialColor);
+		}
+	}
+
+	drawPassenger();
 }
 
 Carriage* CarriageCollection::getCarriage() {
 	return m_oCarriage;
+}
+
+void CarriageCollection::resetCooldown()
+{
+	m_cooldown = 3;
+}
+
+bool CarriageCollection::isCooldown()
+{
+	if (m_cooldown == 0) return false;
+	m_cooldown -= 1;
+	return true;
 }
 
 bool Train::addCarriage(int iMaxNumberOfPassengers, int iLength)
@@ -301,6 +620,17 @@ void Train::addPassenger(PassengerCollection* oPassenger)
 		}
 		printf("!! Error @ Train.cpp Train::addPassenger() - m_iPassengerCount said there are still places, but failed to put the passenger into the train\n");
 	}
+}
+
+int Train::findFirstPassengerByType(short sType)
+{
+	int iNumOfPassengersInPrevCarriages = 0;
+	for (int i = 0; i < size(m_vecCarriage); i++) {
+		int iPassengerInCarriage = m_vecCarriage[i]->getCarriage()->findFirstPassengerByType(sType);
+		if (iPassengerInCarriage != -1) return iPassengerInCarriage + iNumOfPassengersInPrevCarriages;
+		iNumOfPassengersInPrevCarriages += m_vecCarriage[i]->getCarriage()->getMaxNumOfPassengers();
+	}
+	return -1;
 }
 
 std::vector<int> Train::findPassengerByType(short sType)
@@ -408,4 +738,45 @@ void TrainIntelli::addHead(int iMaxNumberOfPassengers, int iLength)
 Train* TrainCollection::getTrain()
 {
 	return m_oTrain;
+}
+
+int TrainCollection::getId()
+{
+	return m_id;
+}
+
+void TrainCollection::setId(int id)
+{
+	m_id = id;
+}
+
+void TrainCollection::resetStopCooldown()
+{
+	m_StopCooldown = STOP_TIME;
+}
+
+bool TrainCollection::isStopCooldown()
+{
+	if (m_StopCooldown <= 0) {
+		if (m_StopCooldown == 0) {
+			m_StopCooldown -= 1;
+			m_oTrain->startTrain();
+			resetCooldown();
+		}
+		return false;
+	}
+	m_StopCooldown -= 1;
+	return true;
+}
+
+void TrainCollection::resetCooldown()
+{
+	m_cooldown = 3;
+}
+
+bool TrainCollection::isCooldown()
+{
+	if (m_cooldown == 0) return false;
+	m_cooldown -= 1;
+	return true;
 }

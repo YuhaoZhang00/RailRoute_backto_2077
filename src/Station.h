@@ -36,7 +36,10 @@ public:
 	void addPassenger(PassengerCollection* oPassenger);
 	// returns the index of the first passenger of given type; return -1 if not found
 	int findFirstPassengerOfType(short sType);
+	// returns the type of the first passenger
+	short removeFirstPassenger();
 	void removePassenger(int iIndex);
+	bool isEmpty();
 };
 
 class StationCircle :
@@ -129,6 +132,7 @@ public:
 class StationCollection {
 private:
 	int m_id;
+	short m_sType;
 	Station* m_oStation;
 
 public:
@@ -138,25 +142,31 @@ public:
 	*/
 	StationCollection(int id, short sType, BaseEngine* pEngine, int iXCenter, int iYCenter,
 		unsigned int uiInnerColor = 0xFFFFFF, unsigned int uiColor = 0x000000, int iBorderWidth = 5, int iSize = 40)
-		: m_id(id), m_oStation(NULL)
+		: m_id(id), m_sType(0), m_oStation(NULL)
 	{
 		switch (sType) {
 		case 0:
+			m_sType = 0;
 			m_oStation = new StationCircle(pEngine, iXCenter, iYCenter, uiInnerColor, uiColor, iBorderWidth, iSize);
 			break;
 		case 1:
+			m_sType = 1;
 			m_oStation = new StationSquare(pEngine, iXCenter, iYCenter, uiInnerColor, uiColor, iBorderWidth, iSize);
 			break;
 		case 2:
+			m_sType = 2;
 			m_oStation = new StationTriangle(pEngine, iXCenter, iYCenter, uiInnerColor, uiColor, iBorderWidth, iSize);
 			break;
 		case 3:
+			m_sType = 3;
 			m_oStation = new StationInvTriangle(pEngine, iXCenter, iYCenter, uiInnerColor, uiColor, iBorderWidth, iSize);
 			break;
 		case 4:
+			m_sType = 4;
 			m_oStation = new StationDiamond(pEngine, iXCenter, iYCenter, uiInnerColor, uiColor, iBorderWidth, iSize);
 			break;
 		case 5:
+			m_sType = 5;
 			m_oStation = new StationFlower(pEngine, iXCenter, iYCenter, uiInnerColor, uiColor, iBorderWidth, iSize);
 			break;
 		default:
@@ -171,4 +181,7 @@ public:
 	}
 
 	Station* getStation();
+	int getId();
+	void setId(int id);
+	short getType();
 };

@@ -2,24 +2,35 @@
 #include "header.h"
 #include "State.h"
 #include "SelectionArea.h"
+#include "StationMap.h"
+#include "LineRoute.h"
 #include "Scyyz12FilterPoints.h"
 
 class GameState :
 	public State
 {
 private:
-	SelectionArea* m_tSelectionArea;
+	SelectionArea* m_sa;
 
 	Scyyz12FilterPointsScaling m_filterScaling;
 	Scyyz12FilterPointsTranslation m_filterTranslation;
 
+	StationMap* m_sm;
+
+	LineRoute* m_lr1;
+
+	int m_timeCount = 0;
+
 public:
 	GameState()
-		: m_tSelectionArea(nullptr), m_filterScaling(0, nullptr), m_filterTranslation(0, 0, nullptr)
+		: m_sa(nullptr), m_filterScaling(0, nullptr), m_filterTranslation(0, 0, nullptr),
+		m_sm(nullptr), m_lr1(nullptr)
 	{}
 
 	~GameState() {
-		delete m_tSelectionArea;
+		delete m_sa;
+		delete m_sm;
+		delete m_lr1;
 	}
 
 	int virtInitialise(Scyyz12Engine2* pContext) override;

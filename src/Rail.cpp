@@ -134,3 +134,262 @@ void RailLink90Diagonal::virtDraw()
 		}
 	}
 }
+
+void RailEnd::virtDraw()
+{
+	if (m_sDirection == 0) {
+		getEngine()->drawForegroundThickLine(
+			getXCentre(), getYCentre() - m_iLineLength + m_iLineWidth / 2,
+			getXCentre(), getYCentre() - m_iLineWidth / 2,
+			m_uiColor, m_iLineWidth);
+		getEngine()->drawForegroundThickLine(
+			getXCentre() - m_iLineEndLength / 2 + m_iLineWidth / 2, getYCentre() - m_iLineLength + m_iLineWidth / 2,
+			getXCentre() + m_iLineEndLength / 2 - m_iLineWidth / 2, getYCentre() - m_iLineLength + m_iLineWidth / 2,
+			m_uiColor, m_iLineWidth);
+	}
+	else if (m_sDirection == 2) {
+		getEngine()->drawForegroundThickLine(
+			getXCentre() + m_iLineWidth / 2, getYCentre(),
+			getXCentre() + m_iLineLength - m_iLineWidth / 2, getYCentre(),
+			m_uiColor, m_iLineWidth);
+		getEngine()->drawForegroundThickLine(
+			getXCentre() + m_iLineLength - m_iLineWidth / 2, getYCentre() - m_iLineEndLength / 2 + m_iLineWidth / 2,
+			getXCentre() + m_iLineLength - m_iLineWidth / 2, getYCentre() + m_iLineEndLength / 2 - m_iLineWidth / 2,
+			m_uiColor, m_iLineWidth);
+	}
+	else if (m_sDirection == 4) {
+		getEngine()->drawForegroundThickLine(
+			getXCentre(), getYCentre() + m_iLineWidth / 2,
+			getXCentre(), getYCentre() + m_iLineLength - m_iLineWidth / 2,
+			m_uiColor, m_iLineWidth);
+		getEngine()->drawForegroundThickLine(
+			getXCentre() - m_iLineEndLength / 2 + m_iLineWidth / 2, getYCentre() + m_iLineLength - m_iLineWidth / 2,
+			getXCentre() + m_iLineEndLength / 2 - m_iLineWidth / 2, getYCentre() + m_iLineLength - m_iLineWidth / 2,
+			m_uiColor, m_iLineWidth);
+	}
+	else if (m_sDirection == 6) {
+		getEngine()->drawForegroundThickLine(
+			getXCentre() - m_iLineLength + m_iLineWidth / 2, getYCentre(),
+			getXCentre() - m_iLineWidth / 2, getYCentre(),
+			m_uiColor, m_iLineWidth);
+		getEngine()->drawForegroundThickLine(
+			getXCentre() - m_iLineLength + m_iLineWidth / 2, getYCentre() - m_iLineEndLength / 2 + m_iLineWidth / 2,
+			getXCentre() - m_iLineLength + m_iLineWidth / 2, getYCentre() + m_iLineEndLength / 2 - m_iLineWidth / 2,
+			m_uiColor, m_iLineWidth);
+	}
+	else if (m_sDirection == 1) {
+		getEngine()->drawForegroundThickLine(
+			getXCentre() + m_iLineWidth / 4, getYCentre() - m_iLineWidth / 4,
+			getXCentre() + static_cast<int>(m_iLineLength * 0.707) - m_iLineWidth / 4, getYCentre() - static_cast<int>(m_iLineLength * 0.707) + m_iLineWidth / 4,
+			m_uiColor, m_iLineWidth);
+		getEngine()->drawForegroundThickLine(
+			getXCentre() + static_cast<int>((m_iLineLength + m_iLineEndLength / 2 - m_iLineWidth / 2) * 0.707),
+			getYCentre() - static_cast<int>((m_iLineLength - m_iLineEndLength / 2) * 0.707),
+			getXCentre() + static_cast<int>((m_iLineLength - m_iLineEndLength / 2) * 0.707),
+			getYCentre() - static_cast<int>((m_iLineLength + m_iLineEndLength / 2 - m_iLineWidth / 2) * 0.707),
+			m_uiColor, m_iLineWidth);
+	}
+	else if (m_sDirection == 3) {
+		getEngine()->drawForegroundThickLine(
+			getXCentre() + m_iLineWidth / 4, getYCentre() + m_iLineWidth / 4,
+			getXCentre() + static_cast<int>(m_iLineLength * 0.707) - m_iLineWidth / 4, getYCentre() + static_cast<int>(m_iLineLength * 0.707) - m_iLineWidth / 4,
+			m_uiColor, m_iLineWidth);
+		getEngine()->drawForegroundThickLine(
+			getXCentre() + static_cast<int>((m_iLineLength + m_iLineEndLength / 2 - m_iLineWidth / 2) * 0.707),
+			getYCentre() + static_cast<int>((m_iLineLength - m_iLineEndLength / 2) * 0.707),
+			getXCentre() + static_cast<int>((m_iLineLength - m_iLineEndLength / 2) * 0.707),
+			getYCentre() + static_cast<int>((m_iLineLength + m_iLineEndLength / 2 - m_iLineWidth / 2) * 0.707),
+			m_uiColor, m_iLineWidth);
+	}
+	else if (m_sDirection == 5) {
+		getEngine()->drawForegroundThickLine(
+			getXCentre() - m_iLineWidth / 4, getYCentre() + m_iLineWidth / 4,
+			getXCentre() - static_cast<int>(m_iLineLength * 0.707) + m_iLineWidth / 4, getYCentre() + static_cast<int>(m_iLineLength * 0.707) - m_iLineWidth / 4,
+			m_uiColor, m_iLineWidth);
+		getEngine()->drawForegroundThickLine(
+			getXCentre() - static_cast<int>((m_iLineLength + m_iLineEndLength / 2 - m_iLineWidth / 2) * 0.707),
+			getYCentre() + static_cast<int>((m_iLineLength - m_iLineEndLength / 2) * 0.707),
+			getXCentre() - static_cast<int>((m_iLineLength - m_iLineEndLength / 2) * 0.707),
+			getYCentre() + static_cast<int>((m_iLineLength + m_iLineEndLength / 2 - m_iLineWidth / 2) * 0.707),
+			m_uiColor, m_iLineWidth);
+	}
+	else if (m_sDirection == 7) {
+		getEngine()->drawForegroundThickLine(
+			getXCentre() - m_iLineWidth / 4, getYCentre() - m_iLineWidth / 4,
+			getXCentre() - static_cast<int>(m_iLineLength * 0.707) + m_iLineWidth / 4, getYCentre() - static_cast<int>(m_iLineLength * 0.707) + m_iLineWidth / 4,
+			m_uiColor, m_iLineWidth);
+		getEngine()->drawForegroundThickLine(
+			getXCentre() - static_cast<int>((m_iLineLength + m_iLineEndLength / 2 - m_iLineWidth / 2) * 0.707),
+			getYCentre() - static_cast<int>((m_iLineLength - m_iLineEndLength / 2) * 0.707),
+			getXCentre() - static_cast<int>((m_iLineLength - m_iLineEndLength / 2) * 0.707),
+			getYCentre() - static_cast<int>((m_iLineLength + m_iLineEndLength / 2 - m_iLineWidth / 2) * 0.707),
+			m_uiColor, m_iLineWidth);
+	}
+}
+
+int Rail::getId()
+{
+	return m_id;
+}
+
+void Rail::setId(int id)
+{
+	m_id = id;
+}
+
+short Rail::getRailStartDirection()
+{
+	if (m_sDirection <= 7 || m_bIsEnd) return m_sDirection;
+	else if (m_sDirection == 8) {
+		if (m_bIs45) return 1;
+		else return 0;
+	}
+	else if (m_sDirection == 9) {
+		if (m_bIs45) return 1;
+		else return 2;
+	}
+	else if (m_sDirection == 10) {
+		if (m_bIs45) return 3;
+		else return 2;
+	}
+	else if (m_sDirection == 11) {
+		if (m_bIs45) return 3;
+		else return 4;
+	}
+	else if (m_sDirection == 12) {
+		if (m_bIs45) return 5;
+		else return 4;
+	}
+	else if (m_sDirection == 13) {
+		if (m_bIs45) return 5;
+		else return 6;
+	}
+	else if (m_sDirection == 14) {
+		if (m_bIs45) return 7;
+		else return 6;
+	}
+	else { // m_sDirection == 15
+		if (m_bIs45) return 7;
+		else return 0;
+	}
+}
+
+short Rail::getRailEndDirection()
+{
+	if (m_bIsEnd) printf("!! Error @ Rail.cpp getRailEndDirection() - for direction of RailEnd please call getRailStartDirection() function\n");
+	else if (m_sDirection <= 7) return (m_sDirection + 4) % 8;
+	else if (m_sDirection == 8) {
+		if (m_bIs45) return 4;
+		else return 5;
+	}
+	else if (m_sDirection == 9) {
+		if (m_bIs45) return 6;
+		else return 5;
+	}
+	else if (m_sDirection == 10) {
+		if (m_bIs45) return 6;
+		else return 7;
+	}
+	else if (m_sDirection == 11) {
+		if (m_bIs45) return 0;
+		else return 7;
+	}
+	else if (m_sDirection == 12) {
+		if (m_bIs45) return 0;
+		else return 1;
+	}
+	else if (m_sDirection == 13) {
+		if (m_bIs45) return 2;
+		else return 1;
+	}
+	else if (m_sDirection == 14) {
+		if (m_bIs45) return 2;
+		else return 3;
+	}
+	else { // m_sDirection == 15
+		if (m_bIs45) return 4;
+		else return 3;
+	}
+}
+
+void Rail::virtDraw()
+{
+	if (m_bIsEnd) {
+		if (m_re == nullptr) {
+			m_re = new RailEnd(m_pEngine, m_iXStart, m_iYStart, m_sDirection, m_uiColor);
+		}
+		m_re->virtDraw();
+	}
+	else {
+		switch (m_sDirection)
+		{
+		case 0:
+			if (m_rl == nullptr) {
+				m_rl = new RailLine(m_pEngine, m_iXStart, m_iYEnd, false, m_uiColor, m_iYStart - m_iYEnd);
+			}
+			m_rl->virtDraw();
+			break;
+		case 1:
+			if (m_rld == nullptr) {
+				m_rld = new RailLineDiagonal(m_pEngine, m_iXStart, m_iYStart, 0, m_uiColor, m_iXEnd - m_iXStart);
+			}
+			m_rld->virtDraw();
+			break;
+		case 2:
+			if (m_rl == nullptr) {
+				m_rl = new RailLine(m_pEngine, m_iXStart, m_iYStart, true, m_uiColor, m_iXEnd - m_iXStart);
+			}
+			m_rl->virtDraw();
+			break;
+		case 3:
+			if (m_rld == nullptr) {
+				m_rld = new RailLineDiagonal(m_pEngine, m_iXStart, m_iYStart, 1, m_uiColor, m_iXEnd - m_iXStart);
+			}
+			m_rld->virtDraw();
+			break;
+		case 4:
+			if (m_rl == nullptr) {
+				m_rl = new RailLine(m_pEngine, m_iXStart, m_iYStart, false, m_uiColor, m_iYEnd - m_iYStart);
+			}
+			m_rl->virtDraw();
+			break;
+		case 5:
+			if (m_rld == nullptr) {
+				m_rld = new RailLineDiagonal(m_pEngine, m_iXStart, m_iYStart, 2, m_uiColor, m_iXStart - m_iXEnd);
+			}
+			m_rld->virtDraw();
+			break;
+		case 6:
+			if (m_rl == nullptr) {
+				m_rl = new RailLine(m_pEngine, m_iXEnd, m_iYStart, true, m_uiColor, m_iXStart - m_iXEnd);
+			}
+			m_rl->virtDraw();
+			break;
+		case 7:
+			if (m_rld == nullptr) {
+				m_rld = new RailLineDiagonal(m_pEngine, m_iXStart, m_iYStart, 3, m_uiColor, m_iXStart - m_iXEnd);
+			}
+			m_rld->virtDraw();
+			break;
+		case 8:
+			break;
+		case 9:
+			break;
+		case 10:
+			break;
+		case 11:
+			break;
+		case 12:
+			break;
+		case 13:
+			break;
+		case 14:
+			break;
+		case 15:
+			break;
+		default:
+			printf("!! Error @ Rail.cpp virtDraw() - invalid sDirection\n");
+			break;
+		}
+	}
+}

@@ -139,54 +139,80 @@ public:
 	void virtDraw() override;
 };
 
-//class RailEnd :
-//	public DisplayableObject
-//{
-//private:
-//	short m_sDirection;
-//	double m_dSpeed;
-//
-//public:
-//	RailEnd(BaseEngine* pEngine, int iSize = 50,
-//		int iX = 500, int iY = 500, double dSpeed = 2, short sDirection = 0)
-//		: DisplayableObject(iX, iY, pEngine, iSize, iSize), m_sDirection(sDirection)
-//	{
-//	}
-//
-//	void virtDraw() override;
-//};
+class RailEnd :
+	public DisplayableObject
+{
+private:
+	/* a number between [0,7] showing the direction of the rail
+	* 7  0  1
+	* 6     2
+	* 5  4  3 */
+	short m_sDirection;
+	int m_iLineLength;
+	int m_iLineEndLength;
+	int m_iLineWidth;
+	unsigned int m_uiColor;
 
-class Rail
+public:
+	RailEnd(BaseEngine* pEngine, int iXStart, int iYStart, short sDirection, unsigned int uiColor, 
+		int iLineLength = 45, int iLineEndLength = 30, int iLineWidth = 10)
+		: DisplayableObject(iXStart - iLineEndLength * 2, iYStart - iLineEndLength * 2, pEngine, iLineEndLength * 4, iLineEndLength * 4),
+		m_sDirection(sDirection), m_uiColor(uiColor), m_iLineLength(iLineLength),m_iLineEndLength(iLineEndLength), m_iLineWidth(iLineWidth)
+	{
+		if (sDirection < 0 || sDirection > 7) {
+			printf("!! Error @ Rail.h RailEnd Constructor - invalid sDirection\n");
+		}
+	}
+
+	void virtDraw() override;
+};
+
+class Rail :
+	public DisplayableObject
 {
 private:
 	int m_id;
 
 	BaseEngine* m_pEngine;
 
-	/* a number between [0,15] showing the starting direction of the rail
+	bool m_bIsEnd;
+
+	/* a number between [0,15](m_bIsEnd == false) / [0,7](m_bIsEnd == true) showing the starting direction of the rail
 	*  7 (15) 0 (8)  1
 	* (14)          (9)
 	*  6             2
 	* (13)          (10)
 	*  5 (12) 4 (11) 3 */
 	short m_sDirection;
-	// only used when m_sDirection in [8,15]
+	// only used when (m_sDirection in [8,15]) and (m_bIsEnd == false)
 	bool m_bIs45;
 
 	int m_iXStart;
 	int m_iYStart;
+	// only used when (m_bIsEnd == true)
 	int m_iXEnd;
+	// only used when (m_bIsEnd == false)
 	int m_iYEnd;
 
 	unsigned int m_uiColor;
+	// only used when (m_sDirection in [8,15]) and (m_bIsEnd == false)
 	int m_iRadius;
 	int m_iLineWidth;
 
+	RailLine* m_rl;
+	RailLineDiagonal* m_rld;
+	RailLink90* m_rl90;
+	RailLink90Diagonal* m_rl90d;
+	RailEnd* m_re;
+
 public:
+	// Constructor for Rail Line
 	Rail(int id, BaseEngine* pEngine, int iXStart, int iYStart, int iXEnd, int iYEnd,
 		bool bIs45, unsigned int uiColor, int iRadius = 20, int iLineWidth = 10)
 		: m_id(id), m_pEngine(pEngine), m_iXStart(iXStart), m_iYStart(iYStart), m_iXEnd(iXEnd), m_iYEnd(iYEnd),
-		m_bIs45(bIs45), m_sDirection(0), m_uiColor(uiColor), m_iRadius(iRadius), m_iLineWidth(iLineWidth)
+		m_bIs45(bIs45), m_bIsEnd(false), m_sDirection(0), m_uiColor(uiColor), m_iRadius(iRadius), m_iLineWidth(iLineWidth),
+		DisplayableObject(iXStart, iYStart, pEngine, iXEnd - iXStart + 1, iYEnd - iYStart + 1),
+		m_rl(nullptr), m_rld(nullptr), m_rl90(nullptr), m_rl90d(nullptr), m_re(nullptr)
 	{
 		if (iXStart == iXEnd) {
 			if (iYStart > iYEnd) m_sDirection = 0;
@@ -221,7 +247,33 @@ public:
 				else m_sDirection = 11; // abs(iXEnd - iXStart)  abs(iYEnd - iYStart)
 			}
 		}
+		setShouldDeleteOnRemoval(false);
+	}
+	// Constructor for Rail End
+	Rail(int id, BaseEngine* pEngine, int iXStart, int iYStart, short sDirection, unsigned int uiColor, int iLineWidth = 10)
+		: m_id(id), m_pEngine(pEngine), m_iXStart(iXStart), m_iYStart(iYStart), m_iXEnd(-1), m_iYEnd(-1),
+		m_bIs45(false), m_bIsEnd(true), m_sDirection(sDirection), m_uiColor(uiColor), m_iRadius(-1), m_iLineWidth(iLineWidth),
+		DisplayableObject(iXStart - 100, iYStart - 100, pEngine, iXStart + 100, iYStart + 100),
+		m_rl(nullptr), m_rld(nullptr), m_rl90(nullptr), m_rl90d(nullptr), m_re(nullptr)
+	{
+		setShouldDeleteOnRemoval(false);
 	}
 
-	//void virtDraw() override;
+	~Rail() {
+		if (m_rl != nullptr) delete m_rl;
+		if (m_rld != nullptr) delete m_rld;
+		if (m_rl90 != nullptr) delete m_rl90;
+		if (m_rl90d != nullptr) delete m_rl90d;
+		if (m_re != nullptr) delete m_re;
+	}
+
+	int getId();
+	void setId(int id);
+
+	// returns a number between [0,7] showing the starting direction of the rail
+	short getRailStartDirection();
+	// returns a number between [0,7] showing the ending direction of the rail
+	short getRailEndDirection();
+
+	void virtDraw() override;
 };

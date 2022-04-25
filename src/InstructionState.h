@@ -5,33 +5,24 @@
 #include "Station.h"
 #include "Passenger.h"
 #include "Train.h"
+#include "LineRoute.h"
+#include "StationMap.h"
 
 class InstructionState :
-    public State
+	public State
 {
 private:
-	RailLine* m_line1;
-	RailLineDiagonal* m_line2;
-	//RailLine* m_line3_1;
-	//RailLineDiagonal* m_line3_2;
-	//RailLineDiagonal* m_line4_1;
-	//RailLineDiagonal* m_line4_2;
-	//RailLink90Diagonal* m_linelink4;
-
-	std::vector<StationCollection*> m_vecStation;
-
-	TrainCollection* m_train1;
+	StationMap* m_sm1;
+	LineRoute* m_lr1;
 
 public:
 	InstructionState()
-		: m_line1(nullptr), m_line2(nullptr), m_train1(nullptr)
+		: m_lr1(nullptr), m_sm1(nullptr)
 	{}
 
 	~InstructionState() {
-		for (StationCollection* station : m_vecStation) {
-			delete station;
-		}
-		delete m_train1;
+		delete m_sm1;
+		delete m_lr1;
 	}
 
 	int virtInitialise(Scyyz12Engine2* pContext) override;

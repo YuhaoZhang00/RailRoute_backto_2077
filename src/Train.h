@@ -2,6 +2,7 @@
 #include "header.h"
 #include "DisplayableObject.h"
 #include "Passenger.h"
+#include "Constant.h"
 #include <vector>
 
 class Carriage :
@@ -22,6 +23,13 @@ protected:
 
 	int m_iPassengerCount = 0;
 	std::vector<PassengerCollection*> m_vecPassenger;
+	std::vector<int> m_vecPassengerPos;
+
+	void drawForegroundRectangle0();
+	void drawForegroundRectangle90();
+	void drawForegroundRectangle45();
+	void drawForegroundRectangle135();
+	void drawPassenger();
 
 public:
 	Carriage(BaseEngine* pEngine, double dXCenter, double dYCenter, unsigned int uiColor,
@@ -36,6 +44,7 @@ public:
 		m_uiPassengerColor = (((iR / 100) & 0xff) << 16) | (((iG / 100) & 0xff) << 8) | ((iB / 100) & 0xff);
 
 		m_vecPassenger.resize(iMaxNumOfPassengers, nullptr);
+		getPassengerPosition();
 	}
 
 	~Carriage()
@@ -55,11 +64,19 @@ public:
 
 	// please check isFull() before ading passenger to carriage
 	void addPassenger(PassengerCollection* oPassenger);
+	// returns the index of the first passenger of given type; return -1 if not found
+	int findFirstPassengerByType(short sType);
 	std::vector<int> findPassengerByType(short sType);
 	void removePassenger(int iIndex);
 	bool isFull();
+	void getPassengerPosition();
 
-	void setIsRun(bool isRun);
+	double getXExactPos();
+	double getYExactPos();
+	void setExactPos(double dX, double dY);
+	short getDirection();
+	void setDirection(short sDirection);
+	void setIsRun(bool bIsRun);
 };
 
 class CarriageHead :
@@ -117,6 +134,8 @@ class CarriageCollection {
 private:
 	Carriage* m_oCarriage;
 
+	int m_cooldown = 3;
+
 public:
 	/* sType - a short number between [0,3] for different type or carriage
 	* 0 - head  1 - fast head  2 - intelligent head  3 - main
@@ -161,6 +180,9 @@ public:
 	}
 
 	Carriage* getCarriage();
+
+	void resetCooldown();
+	bool isCooldown();
 };
 
 
@@ -205,7 +227,8 @@ public:
 	std::vector<CarriageCollection*> getCarriageList();
 	// please check isFull() before ading passenger to train
 	void addPassenger(PassengerCollection* oPassenger);
-	// TODO: addPassengers function which accepts a list of passengers
+	// returns the index of the first passenger of given type; return -1 if not found
+	int findFirstPassengerByType(short sType);
 	std::vector<int> findPassengerByType(short sType);
 	void removePassenger(int iIndex);
 	bool isFull();
@@ -258,6 +281,9 @@ private:
 	int m_id;
 	Train* m_oTrain;
 
+	int m_StopCooldown = 0;
+	int m_cooldown = 3;
+
 public:
 	/* sType - a short number between [0,2] for different type of train
 	* 0 - normal train  1 - fast train  2 - intelligent train
@@ -288,4 +314,10 @@ public:
 	}
 
 	Train* getTrain();
+	int getId();
+	void setId(int id);
+	void resetStopCooldown();
+	bool isStopCooldown();
+	void resetCooldown();
+	bool isCooldown();
 };
