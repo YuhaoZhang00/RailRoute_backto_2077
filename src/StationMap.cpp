@@ -14,7 +14,7 @@ void StationMap::addStation(int sId, short sType, int iX, int iY)
 void StationMap::addRandomStation(int sId)
 {
 	// TODO: 不应该安排距离过近的车站
-	addStation(new StationCollection(sId, rand()%6, m_pEngine, rand()%1200+50, rand() % 600 + 50));
+	addStation(new StationCollection(sId, rand()%6, m_pEngine, rand()%1100+100, rand() % 500 + 100));
 }
 
 std::vector<StationCollection*> StationMap::getStationList()

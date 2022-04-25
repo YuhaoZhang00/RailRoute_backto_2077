@@ -66,21 +66,32 @@ public:
 	void virtDraw() override;
 };
 
-//class RailLink135 :
-//	public DisplayableObject
-//{
-//private:
-//	int m_iLineWidth;
-//	unsigned int m_uiColor;
-//
-//public:
-//	RailLink135(BaseEngine* pEngine, int iXCenter, int iYCenter, unsigned int uiColor, int iLineWidth = 10)
-//		: DisplayableObject(iXCenter, iYCenter, pEngine, iLineWidth, iLineWidth, false), m_uiColor(uiColor), m_iLineWidth(iLineWidth)
-//	{
-//	}
-//
-//	void virtDraw() override;
-//};
+class RailLink135 :
+	public DisplayableObject
+{
+private:
+	/* a number between [0,7] showing the shape of the arc
+	* 0: -/   1: -\   2: \-   3: /-
+	* 4: |\   5: |/   6: /|   7: \|
+	*/
+	short m_sDirection;
+	int m_iRadius;
+	int m_iLineWidth;
+	unsigned int m_uiColor;
+
+	int dist(int x1, int y1, int x2, int y2);
+
+public:
+	RailLink135(BaseEngine* pEngine, int iXCenter, int iYCenter, short sDirection, unsigned int uiColor, int iRadius = 20, int iLineWidth = 10)
+		: DisplayableObject(iXCenter, iYCenter, pEngine, iLineWidth, iLineWidth, false), m_sDirection(sDirection), m_uiColor(uiColor), m_iRadius(iRadius), m_iLineWidth(iLineWidth)
+	{
+		if (sDirection < 0 || sDirection >= 8) {
+			printf("!! Error @ Rail.h RailLink90 Constructor - invalid sDirection\n");
+		}
+	}
+
+	void virtDraw() override;
+};
 
 class RailLink90 :
 	public DisplayableObject
@@ -154,10 +165,10 @@ private:
 	unsigned int m_uiColor;
 
 public:
-	RailEnd(BaseEngine* pEngine, int iXStart, int iYStart, short sDirection, unsigned int uiColor, 
+	RailEnd(BaseEngine* pEngine, int iXStart, int iYStart, short sDirection, unsigned int uiColor,
 		int iLineLength = 45, int iLineEndLength = 30, int iLineWidth = 10)
 		: DisplayableObject(iXStart - iLineEndLength * 2, iYStart - iLineEndLength * 2, pEngine, iLineEndLength * 4, iLineEndLength * 4),
-		m_sDirection(sDirection), m_uiColor(uiColor), m_iLineLength(iLineLength),m_iLineEndLength(iLineEndLength), m_iLineWidth(iLineWidth)
+		m_sDirection(sDirection), m_uiColor(uiColor), m_iLineLength(iLineLength), m_iLineEndLength(iLineEndLength), m_iLineWidth(iLineWidth)
 	{
 		if (sDirection < 0 || sDirection > 7) {
 			printf("!! Error @ Rail.h RailEnd Constructor - invalid sDirection\n");
@@ -201,9 +212,12 @@ private:
 
 	RailLine* m_rl;
 	RailLineDiagonal* m_rld;
-	RailLink90* m_rl90;
-	RailLink90Diagonal* m_rl90d;
+	RailLink135* m_rl135;
 	RailEnd* m_re;
+
+	int m_iTurnX = 0;
+	int m_iTurnY = 0;
+	short m_sTurnDirection = 0;
 
 public:
 	// Constructor for Rail Line
@@ -212,7 +226,7 @@ public:
 		: m_id(id), m_pEngine(pEngine), m_iXStart(iXStart), m_iYStart(iYStart), m_iXEnd(iXEnd), m_iYEnd(iYEnd),
 		m_bIs45(bIs45), m_bIsEnd(false), m_sDirection(0), m_uiColor(uiColor), m_iRadius(iRadius), m_iLineWidth(iLineWidth),
 		DisplayableObject(iXStart, iYStart, pEngine, iXEnd - iXStart + 1, iYEnd - iYStart + 1),
-		m_rl(nullptr), m_rld(nullptr), m_rl90(nullptr), m_rl90d(nullptr), m_re(nullptr)
+		m_rl(nullptr), m_rld(nullptr), m_rl135(nullptr), m_re(nullptr)
 	{
 		if (iXStart == iXEnd) {
 			if (iYStart > iYEnd) m_sDirection = 0;
@@ -247,6 +261,103 @@ public:
 				else m_sDirection = 11; // abs(iXEnd - iXStart)  abs(iYEnd - iYStart)
 			}
 		}
+
+		if (m_sDirection == 8) {
+			if (bIs45) {
+				m_iTurnX = iXEnd;
+				m_iTurnY = iYStart - iXEnd + iXStart;
+				m_sTurnDirection = 14;
+			}
+			else {
+				m_iTurnX = iXStart;
+				m_iTurnY = iYEnd + iXEnd - iXStart;
+				m_sTurnDirection = 5;
+			}
+		}
+		else if (m_sDirection == 9) {
+			if (bIs45) {
+				m_iTurnX = iXStart + iYStart - iYEnd;
+				m_iTurnY = iYEnd;
+				m_sTurnDirection = 16;
+			}
+			else {
+				m_iTurnX = iXEnd - iYStart + iYEnd;
+				m_iTurnY = iYStart;
+				m_sTurnDirection = 25;
+			}
+		}
+		else if (m_sDirection == 10) {
+			if (bIs45) {
+				m_iTurnX = iXStart - iYStart + iYEnd;
+				m_iTurnY = iYEnd;
+				m_sTurnDirection = 36;
+			}
+			else {
+				m_iTurnX = iXEnd + iYStart - iYEnd;
+				m_iTurnY = iYStart;
+				m_sTurnDirection = 27;
+			}
+		}
+		else if (m_sDirection == 11) {
+			if (bIs45) {
+				m_iTurnX = iXEnd;
+				m_iTurnY = iYStart + iXEnd - iXStart;
+				m_sTurnDirection = 3;
+			}
+			else {
+				m_iTurnX = iXStart;
+				m_iTurnY = iYEnd - iXEnd + iXStart;
+				m_sTurnDirection = 47;
+			}
+		}
+		else if (m_sDirection == 12) {
+			if (bIs45) {
+				m_iTurnX = iXEnd;
+				m_iTurnY = iYStart - iXEnd + iXStart;
+				m_sTurnDirection = 5;
+			}
+			else {
+				m_iTurnX = iXStart;
+				m_iTurnY = iYEnd + iXEnd - iXStart;
+				m_sTurnDirection = 14;
+			}
+		}
+		else if (m_sDirection == 13) {
+			if (bIs45) {
+				m_iTurnX = iXStart + iYStart - iYEnd;
+				m_iTurnY = iYEnd;
+				m_sTurnDirection = 25;
+			}
+			else {
+				m_iTurnX = iXEnd - iYStart + iYEnd;
+				m_iTurnY = iYStart;
+				m_sTurnDirection = 16;
+			}
+		}
+		else if (m_sDirection == 14) {
+			if (bIs45) {
+				m_iTurnX = iXStart - iYStart + iYEnd;
+				m_iTurnY = iYEnd;
+				m_sTurnDirection = 27;
+			}
+			else {
+				m_iTurnX = iXEnd + iYStart - iYEnd;
+				m_iTurnY = iYStart;
+				m_sTurnDirection = 36;
+			}
+		}
+		else if (m_sDirection == 15) {
+			if (bIs45) {
+				m_iTurnX = iXEnd;
+				m_iTurnY = iYStart + iXEnd - iXStart;
+				m_sTurnDirection = 47;
+			}
+			else {
+				m_iTurnX = iXStart;
+				m_iTurnY = iYEnd - iXEnd + iXStart;
+				m_sTurnDirection = 3;
+			}
+		}
 		setShouldDeleteOnRemoval(false);
 	}
 	// Constructor for Rail End
@@ -254,7 +365,7 @@ public:
 		: m_id(id), m_pEngine(pEngine), m_iXStart(iXStart), m_iYStart(iYStart), m_iXEnd(-1), m_iYEnd(-1),
 		m_bIs45(false), m_bIsEnd(true), m_sDirection(sDirection), m_uiColor(uiColor), m_iRadius(-1), m_iLineWidth(iLineWidth),
 		DisplayableObject(iXStart - 100, iYStart - 100, pEngine, iXStart + 100, iYStart + 100),
-		m_rl(nullptr), m_rld(nullptr), m_rl90(nullptr), m_rl90d(nullptr), m_re(nullptr)
+		m_rl(nullptr), m_rld(nullptr), m_rl135(nullptr), m_re(nullptr)
 	{
 		setShouldDeleteOnRemoval(false);
 	}
@@ -262,8 +373,7 @@ public:
 	~Rail() {
 		if (m_rl != nullptr) delete m_rl;
 		if (m_rld != nullptr) delete m_rld;
-		if (m_rl90 != nullptr) delete m_rl90;
-		if (m_rl90d != nullptr) delete m_rl90d;
+		if (m_rl135 != nullptr) delete m_rl135;
 		if (m_re != nullptr) delete m_re;
 	}
 
@@ -274,6 +384,10 @@ public:
 	short getRailStartDirection();
 	// returns a number between [0,7] showing the ending direction of the rail
 	short getRailEndDirection();
+
+	int getTurnX();
+	int getTurnY();
+	short getTurnDirection();
 
 	void virtDraw() override;
 };

@@ -25,47 +25,46 @@ bool LineRoute::isCooldown()
 	return true;
 }
 
-void LineRoute::stopAtStation(TrainCollection* t)
+bool LineRoute::stopAtStation(TrainCollection* t)
 {
 	if (!t->isCooldown()) {
 		CarriageCollection* head = t->getTrain()->getCarriageList()[0];
 		int headX = head->getCarriage()->getXCentre();
 		int headY = head->getCarriage()->getYCentre();
-		for (int i = -1; i < 1; i++) {
-			for (int j = -1; j <= 1; j++) {
+		int speed = head->getCarriage()->getSpeed();
+		for (int i = -speed; i < speed; i++) {
+			for (int j = -speed; j <= speed; j++) {
 				if (m_mapStation.count((headX + i) * 10000 + (headY + j)) > 0) {
 					t->getTrain()->stopTrain();
 					t->resetStopCooldown();
-					return;
+					return true;
 				}
 			}
 		}
 	}
+	return false;
 }
 
 void LineRoute::setCarriageStateOnTurn(CarriageCollection* c)
 {
-	int x = c->getCarriage()->getXCentre();
-	int y = c->getCarriage()->getYCentre();
 	if (!c->isCooldown()) {
-		for (int i = -1; i < 1; i++) {
-			for (int j = -1; j <= 1; j++) {
+		int x = c->getCarriage()->getXCentre();
+		int y = c->getCarriage()->getYCentre();
+		int speed = c->getCarriage()->getSpeed();
+		for (int i = -speed; i < speed; i++) {
+			for (int j = -speed; j <= speed; j++) {
 				if (m_mapTurnPoints.count((x + i) * 10000 + (y + j)) > 0) {
-					//printf("%d %d\n", x, y);
-					//printf("%d\n", carriage->getCarriage()->getDirection());
 					short d1 = m_mapTurnPoints.at((x + i) * 10000 + (y + j));
 					short d2 = d1 % 10;
 					d1 = d1 / 10;
-					//printf("%d %d\n", d1, d2);
 					if (c->getCarriage()->getDirection() == d1)
 						c->getCarriage()->setDirection((d2 + 4) % 8);
 					else c->getCarriage()->setDirection((d1 + 4) % 8);
 
 					c->getCarriage()->setExactPos(x + i, y + j);
+					c->getCarriage()->setPassengerPosition();
+					//printf("%d %d %d\n", c->getCarriage()->getXCentre(), c->getCarriage()->getYCentre(), c->getCarriage()->getDirection());
 
-					c->getCarriage()->getPassengerPosition();
-					//printf("%f %f\n", carriage->getCarriage()->getXExactPos(), carriage->getCarriage()->getYExactPos());
-					//printf("------------\n");
 					c->resetCooldown();
 					return;
 				}
@@ -97,8 +96,9 @@ void LineRoute::exchangePassengers(TrainCollection* t)
 	CarriageCollection* head = t->getTrain()->getCarriageList()[0];
 	int headX = head->getCarriage()->getXCentre();
 	int headY = head->getCarriage()->getYCentre();
-	for (int i = -1; i < 1; i++) {
-		for (int j = -1; j <= 1; j++) {
+	int speed = head->getCarriage()->getSpeed();
+	for (int i = -speed; i < speed; i++) {
+		for (int j = -speed; j <= speed; j++) {
 			if (m_mapStation.count((headX + i) * 10000 + (headY + j)) > 0) {
 				exchangePassengers(t, m_mapStation.at((headX + i) * 10000 + (headY + j)));
 				return;
@@ -132,9 +132,10 @@ void LineRoute::iniAdd2Stations(StationCollection* s1, StationCollection* s2, bo
 	short end2Direction = (end2DirectionO + 4) % 8;
 	m_vecRail.emplace_back(new Rail(e2Id, m_pEngine, xEnd, yEnd, end2Direction, m_uiColor));
 
-
 	m_mapTurnPoints.emplace(xStart * 10000 + yStart, end1Direction * 10 + end1Direction);
 	m_mapTurnPoints.emplace(xEnd * 10000 + yEnd, end2Direction * 10 + end2Direction);
+	if (firstRail->getTurnDirection() != 0)
+		m_mapTurnPoints.emplace(firstRail->getTurnX() * 10000 + firstRail->getTurnY(), firstRail->getTurnDirection());
 
 	m_mapStation.emplace(xStart * 10000 + yStart, s1);
 	m_mapStation.emplace(xEnd * 10000 + yEnd, s2);
@@ -165,6 +166,8 @@ void LineRoute::addStationHead(StationCollection* s, bool bIs45, int rId)
 	m_mapTurnPoints.emplace(xStart * 10000 + yStart, end1Direction * 10 + end1Direction);
 	m_mapTurnPoints.emplace(xEnd * 10000 + yEnd,
 		(addRail->getRailEndDirection() + 4) % 8 * 10 + (m_vecRail[2]->getRailStartDirection() + 4) % 8);
+	if (addRail->getTurnDirection() != 0)
+		m_mapTurnPoints.emplace(addRail->getTurnX() * 10000 + addRail->getTurnY(), addRail->getTurnDirection());
 
 	m_mapStation.emplace(xStart * 10000 + yStart, s);
 }
@@ -194,6 +197,8 @@ void LineRoute::addStationTail(StationCollection* s, bool bIs45, int rId)
 	m_mapTurnPoints.emplace(xEnd * 10000 + yEnd, end1Direction * 10 + end1Direction);
 	m_mapTurnPoints.emplace(xStart * 10000 + yStart,
 		(addRail->getRailStartDirection() + 4) % 8 * 10 + (m_vecRail[m_vecRail.size() - 3]->getRailEndDirection() + 4) % 8);
+	if (addRail->getTurnDirection() != 0)
+		m_mapTurnPoints.emplace(addRail->getTurnX() * 10000 + addRail->getTurnY(), addRail->getTurnDirection());
 
 	m_mapStation.emplace(xEnd * 10000 + yEnd, s);
 }
@@ -227,6 +232,10 @@ void LineRoute::addStation(int index, StationCollection* s, bool bIs45_1, bool b
 	m_mapTurnPoints.erase(xStart * 10000 + yStart);
 	m_mapTurnPoints.erase(xEnd2 * 10000 + yEnd2);
 	m_mapTurnPoints.emplace(xEnd1 * 10000 + yEnd1, (addRail1->getRailEndDirection() + 4) % 8 * 10 + (addRail2->getRailStartDirection() + 4) % 8);
+	if (addRail1->getTurnDirection() != 0)
+		m_mapTurnPoints.emplace(addRail1->getTurnX() * 10000 + addRail1->getTurnY(), addRail1->getTurnDirection());
+	if (addRail2->getTurnDirection() != 0)
+		m_mapTurnPoints.emplace(addRail2->getTurnX() * 10000 + addRail2->getTurnY(), addRail2->getTurnDirection());
 
 	if (index == 0) {
 		int eId = m_vecRail.front()->getId();
@@ -271,10 +280,10 @@ void LineRoute::addTrain(TrainCollection* t)
 	m_vecTrain.emplace_back(t);
 }
 
-void LineRoute::addTrain(int sId, short sType, int iX, int iY)
+void LineRoute::addTrain(int tId, short sType, int iX, int iY)
 {
 	// TODO: 车辆应该加在线路上
-	TrainCollection* train = new TrainCollection(sId, sType, m_pEngine, iX, iY, m_uiColor);
+	TrainCollection* train = new TrainCollection(tId, sType, m_pEngine, iX, iY, m_uiColor);
 	addTrain(train);
 	train->getTrain()->addHead();
 }
@@ -286,7 +295,6 @@ std::vector<TrainCollection*> LineRoute::getTrainList()
 
 void LineRoute::addCarriage(int index)
 {
-	printf("aa");
 	m_vecTrain[index]->getTrain()->addCarriage();
 }
 
@@ -306,9 +314,10 @@ void LineRoute::update()
 {
 	for (TrainCollection* train : m_vecTrain) {
 		if (!train->isStopCooldown()) {
-			stopAtStation(train);
-			for (CarriageCollection* carriage : train->getTrain()->getCarriageList()) {
-				setCarriageStateOnTurn(carriage);
+			if (!stopAtStation(train)) {
+				for (CarriageCollection* carriage : train->getTrain()->getCarriageList()) {
+					setCarriageStateOnTurn(carriage);
+				}
 			}
 		}
 		else {

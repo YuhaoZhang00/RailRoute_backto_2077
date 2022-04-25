@@ -69,23 +69,34 @@ int GameState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 
 	if (m_sm == nullptr) {
 		m_sm = new StationMap(pContext);
-		m_sm->addStation(201, 0, 200, 100);
-		m_sm->addStation(202, 1, 100, 200);
-		m_sm->addStation(203, 2, 100, 400);
-		m_sm->addStation(204, 3, 200, 500);
-		m_sm->addStation(205, 4, 200, 600);
-		m_sm->addStation(206, 5, 400, 600);
+		m_sm->addStation(199, 0, 600, 300);
+		m_sm->addRandomStation(200);
+		m_sm->addRandomStation(201);
+		m_sm->addRandomStation(202);
+		m_sm->addRandomStation(203);
+		m_sm->addRandomStation(204);
+		m_sm->addRandomStation(205);
+		m_sm->addRandomStation(206);
+		m_sm->addRandomStation(207);
+		m_sm->addRandomStation(208);
+		m_sm->addRandomStation(209);
+		m_sm->addRandomStation(210);
 	}
 	if (m_lr1 == nullptr) {
 		m_lr1 = new LineRoute(pContext, 0x52B69A);
-		m_lr1->iniAdd2Stations(m_sm->getStation(0), m_sm->getStation(1), false, 0, 50, 1);
-		m_lr1->addStationTail(m_sm->getStation(2), false, 51);
+		m_lr1->iniAdd2Stations(m_sm->getStation(0), m_sm->getStation(1), true, 0, 50, 1);
+		m_lr1->addStationTail(m_sm->getStation(2), true, 51);
 		m_lr1->addStationTail(m_sm->getStation(3), false, 52);
-		m_lr1->addStationTail(m_sm->getStation(4), false, 53);
+		m_lr1->addStationTail(m_sm->getStation(4), true, 53);
 		m_lr1->addStationTail(m_sm->getStation(5), false, 54);
-		m_lr1->addTrain(300, 0, 100, 350);
-		m_lr1->addTrain(350, 1, 100, 250);
-		m_lr1->addTrain(350, 2, 200, 550);
+		m_lr1->addStationTail(m_sm->getStation(6), true, 55);
+		m_lr1->addStationTail(m_sm->getStation(7), false, 56);
+		m_lr1->addStationTail(m_sm->getStation(8), true, 57);
+		m_lr1->addStationTail(m_sm->getStation(9), false, 58);
+		m_lr1->addStationTail(m_sm->getStation(10), true, 59);
+		m_lr1->addTrain(300, 0, 600, 350);
+		m_lr1->addTrain(301, 1, 600, 450);
+		m_lr1->addTrain(302, 2, 600, 550);
 		m_lr1->addCarriage(0);
 		m_lr1->addCarriage(1);
 		m_lr1->addCarriage(1);

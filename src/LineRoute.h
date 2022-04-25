@@ -27,7 +27,7 @@ private:
 	void resetCooldown();
 	bool isCooldown();
 
-	void stopAtStation(TrainCollection* t);
+	bool stopAtStation(TrainCollection* t);
 	void setCarriageStateOnTurn(CarriageCollection* c);
 	void exchangePassengers(TrainCollection* t, StationCollection* s);
 	void exchangePassengers(TrainCollection* t);

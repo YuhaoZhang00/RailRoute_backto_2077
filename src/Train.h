@@ -44,7 +44,7 @@ public:
 		m_uiPassengerColor = (((iR / 100) & 0xff) << 16) | (((iG / 100) & 0xff) << 8) | ((iB / 100) & 0xff);
 
 		m_vecPassenger.resize(iMaxNumOfPassengers, nullptr);
-		getPassengerPosition();
+		setPassengerPosition();
 	}
 
 	~Carriage()
@@ -69,11 +69,12 @@ public:
 	std::vector<int> findPassengerByType(short sType);
 	void removePassenger(int iIndex);
 	bool isFull();
-	void getPassengerPosition();
+	void setPassengerPosition();
 
 	double getXExactPos();
 	double getYExactPos();
 	void setExactPos(double dX, double dY);
+	double getSpeed();
 	short getDirection();
 	void setDirection(short sDirection);
 	void setIsRun(bool bIsRun);
