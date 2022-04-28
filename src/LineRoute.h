@@ -22,7 +22,7 @@ private:
 
 	int m_cooldown = 0;
 
-	bool isStationInStationList(StationCollection* s);
+	
 
 	void resetCooldown();
 	bool isCooldown();
@@ -64,5 +64,9 @@ public:
 
 	void drawInitialise();
 	void update();
+
+	bool isPosAStationInLine(int iX, int iY);
+	int isPosATrainInLine(int iX, int iY);
+	bool isStationInStationList(StationCollection* s);
 };
 

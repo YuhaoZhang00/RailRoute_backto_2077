@@ -2,17 +2,6 @@
 #include "LineRoute.h"
 #include "Constant.h"
 
-bool LineRoute::isStationInStationList(StationCollection* s)
-{
-	for (StationCollection* station : m_vecStation) {
-		if (station->getId() == s->getId()) {
-			printf("## debug - cannot add a existing station / station with same id to the line\n");
-			return true;
-		}
-	}
-	return false;
-}
-
 void LineRoute::resetCooldown()
 {
 	m_cooldown = GET_ON_OFF_TRAIN_TIME;
@@ -131,6 +120,9 @@ void LineRoute::iniAdd2Stations(StationCollection* s1, StationCollection* s2, bo
 	short end2DirectionO = firstRail->getRailEndDirection();
 	short end2Direction = (end2DirectionO + 4) % 8;
 	m_vecRail.emplace_back(new Rail(e2Id, m_pEngine, xEnd, yEnd, end2Direction, m_uiColor));
+	m_pEngine->appendObjectToArray(m_vecRail[0]);
+	m_pEngine->appendObjectToArray(m_vecRail[1]);
+	m_pEngine->appendObjectToArray(m_vecRail[2]);
 
 	m_mapTurnPoints.emplace(xStart * 10000 + yStart, end1Direction * 10 + end1Direction);
 	m_mapTurnPoints.emplace(xEnd * 10000 + yEnd, end2Direction * 10 + end2Direction);
@@ -143,9 +135,9 @@ void LineRoute::iniAdd2Stations(StationCollection* s1, StationCollection* s2, bo
 
 void LineRoute::addStationHead(StationCollection* s, bool bIs45, int rId)
 {
-	if (isStationInStationList(s)) return;
-
 	int eId = m_vecRail.front()->getId();
+	m_pEngine->drawableObjectsChanged();
+	bool returnValue = m_pEngine->removeDisplayableObject(m_vecRail.front());
 	delete m_vecRail.front();
 	m_vecRail.erase(m_vecRail.begin());
 
@@ -153,14 +145,17 @@ void LineRoute::addStationHead(StationCollection* s, bool bIs45, int rId)
 	int yStart = s->getStation()->getYCentre();
 	int xEnd = m_vecStation.front()->getStation()->getXCentre();
 	int yEnd = m_vecStation.front()->getStation()->getYCentre();
+	short direction = m_vecRail.front()->getRailStartDirection();
 
 	m_vecStation.insert(m_vecStation.begin(), s);
 
-	Rail* addRail = new Rail(rId, m_pEngine, xStart, yStart, xEnd, yEnd, bIs45, m_uiColor);
+	Rail* addRail = new Rail(rId, m_pEngine, xStart, yStart, xEnd, yEnd, (direction % 2 == 0) ? true : false, m_uiColor);
 	m_vecRail.insert(m_vecRail.begin(), addRail);
+	m_pEngine->appendObjectToArray(m_vecRail[0]);
 	short end1DirectionO = addRail->getRailStartDirection();
 	short end1Direction = (end1DirectionO + 4) % 8;
 	m_vecRail.insert(m_vecRail.begin(), new Rail(eId, m_pEngine, xStart, yStart, end1Direction, m_uiColor));
+	m_pEngine->appendObjectToArray(m_vecRail[0]);
 
 	m_mapTurnPoints.erase(xEnd * 10000 + yEnd);
 	m_mapTurnPoints.emplace(xStart * 10000 + yStart, end1Direction * 10 + end1Direction);
@@ -174,9 +169,9 @@ void LineRoute::addStationHead(StationCollection* s, bool bIs45, int rId)
 
 void LineRoute::addStationTail(StationCollection* s, bool bIs45, int rId)
 {
-	if (isStationInStationList(s)) return;
-
 	int eId = m_vecRail.back()->getId();
+	m_pEngine->drawableObjectsChanged();
+	bool returnValue = m_pEngine->removeDisplayableObject(m_vecRail.back());
 	delete m_vecRail.back();
 	m_vecRail.pop_back();
 
@@ -184,14 +179,17 @@ void LineRoute::addStationTail(StationCollection* s, bool bIs45, int rId)
 	int yStart = m_vecStation.back()->getStation()->getYCentre();
 	int xEnd = s->getStation()->getXCentre();
 	int yEnd = s->getStation()->getYCentre();
+	short direction = m_vecRail.back()->getRailEndDirection();
 
 	m_vecStation.emplace_back(s);
 
-	Rail* addRail = new Rail(rId, m_pEngine, xStart, yStart, xEnd, yEnd, bIs45, m_uiColor);
+	Rail* addRail = new Rail(rId, m_pEngine, xStart, yStart, xEnd, yEnd, (direction % 2 == 0) ? false : true, m_uiColor);
 	m_vecRail.emplace_back(addRail);
+	m_pEngine->appendObjectToArray(m_vecRail.back());
 	short end1DirectionO = addRail->getRailEndDirection();
 	short end1Direction = (end1DirectionO + 4) % 8;
 	m_vecRail.emplace_back(new Rail(eId, m_pEngine, xEnd, yEnd, end1Direction, m_uiColor));
+	m_pEngine->appendObjectToArray(m_vecRail.back());
 
 	m_mapTurnPoints.erase(xStart * 10000 + yStart);
 	m_mapTurnPoints.emplace(xEnd * 10000 + yEnd, end1Direction * 10 + end1Direction);
@@ -212,6 +210,7 @@ void LineRoute::addStation(int index, StationCollection* s, bool bIs45_1, bool b
 	}
 
 	int r1Id = m_vecRail[index + 1]->getId();
+	m_pEngine->removeDisplayableObject(m_vecRail[index + 1]);
 	delete m_vecRail[index + 1];
 	m_vecRail.erase(m_vecRail.begin() + index + 1);
 
@@ -282,10 +281,10 @@ void LineRoute::addTrain(TrainCollection* t)
 
 void LineRoute::addTrain(int tId, short sType, int iX, int iY)
 {
-	// TODO: 车辆应该加在线路上
 	TrainCollection* train = new TrainCollection(tId, sType, m_pEngine, iX, iY, m_uiColor);
 	addTrain(train);
-	train->getTrain()->addHead();
+	train->getTrain()->addHead(); // next: add a 车厢
+	m_pEngine->appendObjectToArray(train->getTrain()->getCarriageList()[0]->getCarriage());
 }
 
 std::vector<TrainCollection*> LineRoute::getTrainList()
@@ -323,6 +322,35 @@ void LineRoute::update()
 		else {
 			exchangePassengers(train);
 		}
-
 	}
+}
+
+bool LineRoute::isPosAStationInLine(int iX, int iY)
+{
+	return (m_mapStation.count(iX * 10000 + iY) == 1);
+}
+
+int LineRoute::isPosATrainInLine(int iX, int iY)
+{
+	for (int i = 0; i < m_vecTrain.size(); i++) {
+		for (CarriageCollection* carriage : m_vecTrain[i]->getTrain()->getCarriageList()) {
+			if (carriage->getCarriage()->getDrawingRegionLeft() <= iX && carriage->getCarriage()->getDrawingRegionRight() >= iX &&
+				carriage->getCarriage()->getDrawingRegionTop() <= iY && carriage->getCarriage()->getDrawingRegionBottom() >= iY) {
+				return i;
+			}
+		}
+		
+	}
+	return -1;
+}
+
+bool LineRoute::isStationInStationList(StationCollection* s)
+{
+	for (StationCollection* station : m_vecStation) {
+		if (station->getId() == s->getId()) {
+			printf("## debug - cannot add a existing station / station with same id to the line\n");
+			return true;
+		}
+	}
+	return false;
 }

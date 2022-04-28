@@ -81,3 +81,8 @@ void Scyyz12Engine2::virtCreateSurfaces()
 {
 	m_pState->virtCreateSurfaces(this);
 }
+
+void Scyyz12Engine2::virtMouseMoved(int iX, int iY)
+{
+	m_pState->virtMouseMoved(this, iX, iY);
+}

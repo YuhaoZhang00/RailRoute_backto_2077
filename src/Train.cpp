@@ -216,8 +216,6 @@ void Carriage::virtDoUpdate(int iCurrentTime)
 
 	m_iCurrentScreenX = m_dXExactPos;
 	m_iCurrentScreenY = m_dYExactPos;
-
-	redrawDisplay();
 }
 
 int Carriage::getLength()
@@ -239,8 +237,8 @@ void Carriage::addPassenger(PassengerCollection* oPassenger)
 		for (int i = 0; i < m_iMaxNumOfPassengers; i++) {
 			if (m_vecPassenger[i] == nullptr) {
 				oPassenger->getPassenger()->setColor(m_uiPassengerColor);
-				oPassenger->getPassenger()->setXCenter(m_iCurrentScreenX+m_vecPassengerPos[i*2]);
-				oPassenger->getPassenger()->setYCenter(m_iCurrentScreenY+m_vecPassengerPos[i * 2+1]);
+				oPassenger->getPassenger()->setXCenter(m_iCurrentScreenX + m_vecPassengerPos[i * 2]);
+				oPassenger->getPassenger()->setYCenter(m_iCurrentScreenY + m_vecPassengerPos[i * 2 + 1]);
 				m_vecPassenger[i] = oPassenger;
 				m_iPassengerCount++;
 				return;
@@ -331,6 +329,11 @@ void Carriage::setDirection(short sDirection)
 void Carriage::setIsRun(bool bIsRun)
 {
 	m_bIsRun = bIsRun;
+}
+
+bool Carriage::getIsRun()
+{
+	return m_bIsRun;
 }
 
 void CarriageHead::virtDraw()
@@ -580,11 +583,48 @@ bool Train::addCarriage(int iMaxNumberOfPassengers, int iLength)
 		return false;
 	}
 	else {
-		double dXCenter = m_dXCenterHead;
-		double dYCenter = m_dYCenterHead + m_iCarriageCount * m_iDist + m_vecCarriage[0]->getCarriage()->getLength() / 2
+		short direction = m_vecCarriage[0]->getCarriage()->getDirection();
+		double dXCenter = m_vecCarriage[0]->getCarriage()->getXExactPos();
+		double dYCenter = m_vecCarriage[0]->getCarriage()->getYExactPos();
+		double distance = m_iCarriageCount * m_iDist + m_vecCarriage[0]->getCarriage()->getLength() / 2
 			+ (m_iCarriageCount - 1) * ((iLength == -1) ? 30 : iLength) + ((iLength == -1) ? 30 : iLength) / 2;
-		CarriageCollection* oCarriage = new CarriageCollection(3, m_pEngine, dXCenter, dYCenter, m_uiColor, m_dSpeed, m_sDirection,
+		switch (direction)
+		{
+		case 0:
+			dYCenter += distance;
+			break;
+		case 4:
+			dYCenter -= distance;
+			break;
+		case 2:
+			dXCenter -= distance;
+			break;
+		case 6:
+			dXCenter += distance;
+			break;
+		case 1:
+			dXCenter -= distance * 0.707;
+			dYCenter += distance * 0.707;
+			break;
+		case 3:
+			dXCenter -= distance * 0.707;
+			dYCenter -= distance * 0.707;
+			break;
+		case 5:
+			dXCenter += distance * 0.707;
+			dYCenter -= distance * 0.707;
+			break;
+		case 7:
+			dXCenter += distance * 0.707;
+			dYCenter += distance * 0.707;
+			break;
+		default:
+			break;
+		}
+		CarriageCollection* oCarriage = new CarriageCollection(3, m_pEngine, dXCenter, dYCenter, m_uiColor, m_dSpeed, direction,
 			0, iMaxNumberOfPassengers, 20, iLength);
+		oCarriage->getCarriage()->setIsRun(m_vecCarriage[0]->getCarriage()->getIsRun());
+		m_pEngine->appendObjectToArray(oCarriage->getCarriage());
 		m_vecCarriage.emplace_back(oCarriage);
 		m_iCarriageCount++;
 		m_iMaxNumOfPassengers += oCarriage->getCarriage()->getMaxNumOfPassengers();

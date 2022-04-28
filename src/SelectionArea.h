@@ -35,6 +35,8 @@ private:
 
 	int m_iDiscoveredLineCount = 0;
 
+	int m_iCurrentMouseAt = -1;
+
 public:
 	SelectionArea(std::vector<unsigned int> vecLineColors = { 0xFF0000, 0x00FF00, 0x0000FF }, unsigned int uiUndiscoveredColor = 0xAAAAAA,
 		bool bIsNormalTrain = true, bool bIsFastTrain = true, bool bIsIntelliTrain = false, bool bIsCarriage = true,
@@ -117,5 +119,10 @@ public:
 	* index value: index in vector m_vecLineColors
 	*/
 	void setLineState2Discovered(short index);
+
+	void mouseAt(short iX);
+	void mouseRemoved();
+
+	int getTileType(int iX);
 };
 

@@ -101,6 +101,11 @@ int StartState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 	return pContext->BaseEngine::virtInitialiseObjects();
 }
 
+void StartState::virtMouseMoved(Scyyz12Engine2* pContext, int iX, int iY)
+{
+	pContext->BaseEngine::virtMouseMoved(iX, iY);
+}
+
 void StartState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int iY)
 {
 	printf("## Debug - click at %d %d\n", iX, iY);

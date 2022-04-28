@@ -69,6 +69,11 @@ int HighScoreState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 	return pContext->BaseEngine::virtInitialiseObjects();
 }
 
+void HighScoreState::virtMouseMoved(Scyyz12Engine2* pContext, int iX, int iY)
+{
+	pContext->BaseEngine::virtMouseMoved(iX, iY);
+}
+
 void HighScoreState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int iY)
 {
 	printf("## Debug - click at %d %d\n", iX, iY);

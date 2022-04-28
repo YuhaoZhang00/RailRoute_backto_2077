@@ -1,9 +1,12 @@
 #include "header.h"
 #include "SelectionArea.h"
 #include "ImagePixelMapping.h"
+#include "Scyyz12ImagePixelMapping.h"
 
 void SelectionArea::virtDrawTileAt(BaseEngine* pEngine, DrawingSurface* pSurface, int iMapX, int iMapY, int iStartPositionScreenX, int iStartPositionScreenY) const
 {
+	pEngine->redrawRectangle(iStartPositionScreenX, iStartPositionScreenY, iStartPositionScreenX + getTileWidth(), iStartPositionScreenY + getTileHeight());
+
 	//printf("-- %d --\n", getMapValue(iMapX, iMapY));
 	int iMapValue = m_vecTile2Type[iMapX];
 	//printf("++ %d ++\n", iMapValue);
@@ -61,12 +64,21 @@ void SelectionArea::virtDrawTileAt(BaseEngine* pEngine, DrawingSurface* pSurface
 			printf("!! Error @ SelectionArea.cpp virtDrawTileAt - invalid iMapValue of properties\n");
 		}
 
-		ImagePixelMappingRotateAndColour mapping(0, 0, 0);
-		mapping.setTransparencyColour(0xffffff);
-		property.renderImageApplyingMapping(pEngine, pSurface,
-			iStartPositionScreenX + (getTileWidth() - property.getWidth()) / 2, iStartPositionScreenY + (getTileHeight() - property.getHeight()) / 2,
-			property.getWidth(), property.getHeight(),
-			&mapping);
+		if (m_iCurrentMouseAt == -1 || m_vecTile2Type[m_iCurrentMouseAt] == iMapValue) {
+			ImagePixelMappingRotateAndColour mapping(0, 0, 0);
+			mapping.setTransparencyColour(0xffffff);
+			property.renderImageApplyingMapping(pEngine, pSurface,
+				iStartPositionScreenX + (getTileWidth() - property.getWidth()) / 2, iStartPositionScreenY + (getTileHeight() - property.getHeight()) / 2,
+				property.getWidth(), property.getHeight(),
+				&mapping);
+		}
+		else {
+			Scyyz12ImagePixelMapping mapping(0xffffff, 0.7);
+			property.renderImageApplyingMapping(pEngine, pSurface,
+				iStartPositionScreenX + (getTileWidth() - property.getWidth()) / 2, iStartPositionScreenY + (getTileHeight() - property.getHeight()) / 2,
+				property.getWidth(), property.getHeight(),
+				&mapping);
+		}
 
 		pSurface->drawOval(iStartPositionScreenX + getTileWidth() - 24, iStartPositionScreenY + 4,
 			iStartPositionScreenX + getTileWidth() - 4, iStartPositionScreenY + 24,
@@ -182,4 +194,19 @@ void SelectionArea::setLineState2Discovered(short index)
 			}
 		}
 	}
+}
+
+void SelectionArea::mouseAt(short iX)
+{
+	m_iCurrentMouseAt = iX;
+}
+
+void SelectionArea::mouseRemoved()
+{
+	m_iCurrentMouseAt = -1;
+}
+
+int SelectionArea::getTileType(int iX)
+{
+	return m_vecTile2Type[iX];
 }

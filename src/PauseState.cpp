@@ -24,7 +24,12 @@ void PauseState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 
 int PauseState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 {
-	return 0;
+	return pContext->BaseEngine::virtInitialiseObjects();
+}
+
+void PauseState::virtMouseMoved(Scyyz12Engine2* pContext, int iX, int iY)
+{
+	pContext->BaseEngine::virtMouseMoved(iX, iY);
 }
 
 void PauseState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int iY)

@@ -364,7 +364,7 @@ public:
 	Rail(int id, BaseEngine* pEngine, int iXStart, int iYStart, short sDirection, unsigned int uiColor, int iLineWidth = 10)
 		: m_id(id), m_pEngine(pEngine), m_iXStart(iXStart), m_iYStart(iYStart), m_iXEnd(-1), m_iYEnd(-1),
 		m_bIs45(false), m_bIsEnd(true), m_sDirection(sDirection), m_uiColor(uiColor), m_iRadius(-1), m_iLineWidth(iLineWidth),
-		DisplayableObject(iXStart - 100, iYStart - 100, pEngine, iXStart + 100, iYStart + 100),
+		DisplayableObject(iXStart - 100, iYStart - 100, pEngine, 200, 200),
 		m_rl(nullptr), m_rld(nullptr), m_rl135(nullptr), m_re(nullptr)
 	{
 		setShouldDeleteOnRemoval(false);

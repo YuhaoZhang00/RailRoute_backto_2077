@@ -38,5 +38,6 @@ public:
 	void copyAllBackgroundBuffer() override;
 	void virtKeyDown(int iKeyCode) override;
 	void virtCreateSurfaces() override;
+	void virtMouseMoved(int iX, int iY) override;
 };
 

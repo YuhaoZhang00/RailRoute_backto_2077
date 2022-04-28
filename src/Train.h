@@ -78,6 +78,7 @@ public:
 	short getDirection();
 	void setDirection(short sDirection);
 	void setIsRun(bool bIsRun);
+	bool getIsRun();
 };
 
 class CarriageHead :
