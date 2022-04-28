@@ -226,6 +226,11 @@ void GameState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 	mapping.setRotation(M_PI);
 	backArrow.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 30, 30, backArrow.getWidth(), backArrow.getHeight(), &mapping);
 
+	// Pause btn
+	SimpleImage pause = ImageManager::loadImage("resources/pause-50-50.png", true);
+	mapping.setRotation(0);
+	pause.renderImageApplyingMapping(pContext, pContext->getBackgroundSurface(), 100, 30, pause.getWidth(), pause.getHeight(), &mapping);
+
 	// Selection area
 	pContext->drawBackgroundRectangle(280, 725, 1020, 800, 0xeeeeee);
 	pContext->drawBackgroundThickLine(280, 725, 1020, 725, 0xaaaaaa, 2);
@@ -245,22 +250,21 @@ void GameState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 
 void GameState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 {
-	pContext->drawForegroundString(650 - 450, 33, "Week 1", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
-	pContext->drawForegroundString(650 - 330, 33, "Sun.", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
-	pContext->drawForegroundRectangle(650 - 250, 48, 650 + 450, 52, 0xDDDDDD);
-	pContext->drawForegroundRectangle(650 - 250, 40, 650 - 246, 60, 0x777777);
-	pContext->drawForegroundRectangle(650 + 446, 40, 650 + 450, 60, 0x777777);
-	int x = 400 + (++m_timeCount / 10) % 697;
+	char strDay[10]; sprintf(strDay, "Day %d", m_dayCount);
+	pContext->drawForegroundString(650 - 350, 33, strDay, 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawForegroundRectangle(650 - 150, 48, 650 + 350, 52, 0xDDDDDD);
+	pContext->drawForegroundRectangle(650 - 150, 40, 650 - 146, 60, 0x777777);
+	pContext->drawForegroundRectangle(650 + 346, 40, 650 + 350, 60, 0x777777);
+	int x = 500 + m_timeCount;
 	pContext->drawForegroundRectangle(x, 40, x + 4, 60, 0x000000);
 
 
-	pContext->drawForegroundString(650 - 80, 600, "test pause", 0x777777, pContext->getFont("Ubuntu-Medium.ttf", 20));
-	pContext->drawForegroundString(650 - 80, 650, "test game over", 0x777777, pContext->getFont("Ubuntu-Medium.ttf", 20));
+	pContext->drawForegroundString(650 - 80, 650, "test game over", 0x777777, pContext->getFont("Ubuntu-Medium.ttf", 20)); // TODO: delete
 
 	switch (m_mouseState)
 	{
 	case 0:
-		pContext->drawForegroundString(650 - 450, 100, "Click a property / line end", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		pContext->drawForegroundString(650 - 450, 100, "Click a asset / line end", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 1:
 		pContext->drawForegroundString(650 - 450, 100, "Click a station (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
@@ -304,10 +308,62 @@ void GameState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 	default:
 		break;
 	}
+
+	if (m_bRunToStop || m_bSelectionNotMade) {
+		m_filterTranslation.setOffset(0, 0);
+		m_filterScaling.setStretch(0);
+
+		pContext->drawForegroundRectangle(300, 200, 1000, 600, 0xaaaaaa);
+		pContext->drawForegroundRectangle(302, 202, 998, 598, 0xeeeeee);
+		pContext->drawForegroundString(650 - 310, 210, "A brand new day!", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		pContext->drawForegroundString(650 - 310, 260, "Select one update for your railway:", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+
+		if (m_sa->isAllLineDiscovered()) {
+			SimpleImage train = ImageManager::loadImage("resources/train_normal-80-80-g.png", true);
+			SimpleImage carriage = ImageManager::loadImage("resources/carriage-80-80-g.png", true);
+			SimpleImage bridge = ImageManager::loadImage("resources/bridge_3-80-80-g.png", true);
+			train.renderImage(pContext->getForegroundSurface(), 0, 0, 430, 390, 80, 80);
+			carriage.renderImage(pContext->getForegroundSurface(), 0, 0, 610, 390, 80, 80);
+			bridge.renderImage(pContext->getForegroundSurface(), 0, 0, 790, 390, 80, 80);
+
+			pContext->drawForegroundOval(495, 385, 525, 415, 0xffffff);
+			pContext->drawForegroundOval(675, 385, 705, 415, 0xffffff);
+			pContext->drawForegroundOval(855, 385, 885, 415, 0xffffff);
+			pContext->drawForegroundString(503, 385, "2", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 25));
+			pContext->drawForegroundString(683, 385, "2", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 25));
+			pContext->drawForegroundString(863, 385, "3", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 25));
+		}
+		else {
+			SimpleImage rail = ImageManager::loadImage("resources/rail-80-80-g.png", true);
+			SimpleImage train = ImageManager::loadImage("resources/train_normal-80-80-g.png", true);
+			SimpleImage carriage = ImageManager::loadImage("resources/carriage-80-80-g.png", true);
+			SimpleImage bridge = ImageManager::loadImage("resources/bridge_3-80-80-g.png", true);
+			rail.renderImage(pContext->getForegroundSurface(), 0, 0, 430, 390, 80, 80);
+			train.renderImage(pContext->getForegroundSurface(), 0, 0, 550, 390, 80, 80);
+			carriage.renderImage(pContext->getForegroundSurface(), 0, 0, 670, 390, 80, 80);
+			bridge.renderImage(pContext->getForegroundSurface(), 0, 0, 790, 390, 80, 80);
+
+			pContext->drawForegroundOval(493 - 20, 385, 513 - 20, 415, 0xffffff);
+			pContext->drawForegroundRectangle(503 - 20, 385, 533 - 20, 415, 0xffffff);
+			pContext->drawForegroundOval(523 - 20, 385, 543 - 20, 415, 0xffffff);
+			pContext->drawForegroundOval(615 - 12, 385, 645 - 12, 415, 0xffffff);
+			pContext->drawForegroundOval(735 - 12, 385, 765 - 12, 415, 0xffffff);
+			pContext->drawForegroundOval(855 - 12, 385, 885 - 12, 415, 0xffffff);
+			pContext->drawForegroundString(499 - 20, 387, "new", 0x666666, pContext->getFont("Ubuntu-Medium.ttf", 20));
+			pContext->drawForegroundString(623 - 12, 385, "2", 0x666666, pContext->getFont("Ubuntu-Medium.ttf", 25));
+			pContext->drawForegroundString(743 - 12, 385, "2", 0x666666, pContext->getFont("Ubuntu-Medium.ttf", 25));
+			pContext->drawForegroundString(863 - 12, 385, "3", 0x666666, pContext->getFont("Ubuntu-Medium.ttf", 25));
+		}
+
+		char strDay[100]; sprintf(strDay, "And get ready for more passengers in Day %d", m_dayCount);
+		pContext->drawForegroundString(650 - 310, 550, strDay, 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	}
 }
 
 int GameState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 {
+	m_iniTimeCount = pContext->getModifiedTime();
+
 	pContext->destroyOldObjects(true);
 
 	if (m_sm == nullptr) {
@@ -316,7 +372,6 @@ int GameState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 		m_sm->addRandomStationInRectangle(m_stationCount++, 600, 400, 100, 100);
 		m_sm->addRandomStationInRectangle(m_stationCount++, 500, 400, 100, 100);
 	}
-
 
 	if (m_lr.size() == 0) {
 		LineRoute* lr = new LineRoute(pContext, 0x52B69A); // TODO : can be better by a vector
@@ -346,18 +401,16 @@ int GameState::virtInitialiseObjects(Scyyz12Engine2* pContext)
 void GameState::virtMouseMoved(Scyyz12Engine2* pContext, int iX, int iY)
 {
 	int iXClicked = pContext->convertVirtualPixelToClickedXPosition(iX), iYClicked = pContext->convertVirtualPixelToClickedYPosition(iY);
-	//printf("## Debug - move at %d %d (virtual), %d %d (to clicked)\n", iX, iY, iXClicked, iYClicked);
-	if (m_sa->isValidTilePosition(iX, iY)) {
-		int mapX = m_sa->getMapXForScreenX(iX);
+	printf("## Debug - move at %d %d (virtual), %d %d (to clicked)\n", iX, iY, iXClicked, iYClicked);
+	//printf("%d\n", m_sa->isValidTilePosition(iXClicked, iYClicked) ? 1 : 0);
+	if (m_sa->isValidTilePosition(iXClicked, iYClicked)) {
+		int mapX = m_sa->getMapXForScreenX(iXClicked);
 		m_sa->mouseAt(mapX);
-		pContext->getBackgroundSurface()->mySDLLockSurface();
-		m_sa->drawAllTiles(pContext, pContext->getBackgroundSurface());
-		pContext->getBackgroundSurface()->mySDLUnlockSurface();
 	}
 	else {
 		m_sa->mouseRemoved();
-		m_sa->drawAllTiles(pContext, pContext->getBackgroundSurface());
 	}
+	m_sa->drawAllTiles(pContext, pContext->getBackgroundSurface());
 }
 
 void GameState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int iY)
@@ -367,10 +420,51 @@ void GameState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int
 	//printf("## Debug - mouse state %d\n", m_mouseState);
 
 	if (iButton == SDL_BUTTON_LEFT) {
-		if (m_mouseState == 0) {
-			if (m_sa->isValidTilePosition(iX, iY)) {
-				int mapX = m_sa->getMapXForScreenX(iX);
-				int mapY = m_sa->getMapYForScreenY(iY);
+		if (m_bIsNewDay && m_bSelectionNotMade) {
+			if (m_sa->isAllLineDiscovered()) {
+				if (iXClicked >= 430 && iXClicked <= 510 && iYClicked >= 390 && iYClicked <= 470) {
+					m_sa->incProperty(-5);
+					m_sa->incProperty(-5);
+					m_bSelectionNotMade = false;
+				}
+				else if (iXClicked >= 610 && iXClicked <= 690 && iYClicked >= 390 && iYClicked <= 470) {
+					m_sa->incProperty(-6);
+					m_sa->incProperty(-6);
+					m_bSelectionNotMade = false;
+				}
+				else if (iXClicked >= 790 && iXClicked <= 870 && iYClicked >= 390 && iYClicked <= 470) {
+					m_sa->incProperty(-1);
+					m_sa->incProperty(-1);
+					m_sa->incProperty(-1);
+					m_bSelectionNotMade = false;
+				}
+			}
+			else {
+				if (iXClicked >= 430 && iXClicked <= 510 && iYClicked >= 390 && iYClicked <= 470) {
+					m_sa->addNewLineState2Discovered();
+					m_bSelectionNotMade = false;
+				}
+				if (iXClicked >= 550 && iXClicked <= 630 && iYClicked >= 390 && iYClicked <= 470) {
+					m_sa->incProperty(-5);
+					m_sa->incProperty(-5);
+					m_bSelectionNotMade = false;
+				}
+				else if (iXClicked >= 670 && iXClicked <= 750 && iYClicked >= 390 && iYClicked <= 470) {
+					m_sa->incProperty(-6);
+					m_sa->incProperty(-6);
+					m_bSelectionNotMade = false;
+				}
+				else if (iXClicked >= 790 && iXClicked <= 870 && iYClicked >= 390 && iYClicked <= 470) {
+					m_sa->incProperty(-1);
+					m_sa->incProperty(-1);
+					m_sa->incProperty(-1);
+					m_bSelectionNotMade = false;
+				}
+			}
+		}
+		else if (m_mouseState == 0) {
+			if (m_sa->isValidTilePosition(iXClicked, iYClicked)) {
+				int mapX = m_sa->getMapXForScreenX(iXClicked);
 				clickAtSelectionArea(pContext, mapX);
 			}
 			else if ((m_tempLineIndex = clickAtRailEnd(iX, iY)) != -1) {
@@ -379,16 +473,18 @@ void GameState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int
 			}
 			else {
 				if (iX > 550 && iX < 750) {
-					if (iY > 590 && iY < 640) {
-						pContext->changeState("pause");
-					}
-					else if (iY > 640 && iY < 690) {
+					if (iY > 640 && iY < 690) {
 						pContext->changeState("game_over");
 					}
 				}
 				else if (iXClicked > 30 && iXClicked < 80) {
 					if (iYClicked > 30 && iYClicked < 80) {
 						pContext->changeState("start");
+					}
+				}
+				else if (iXClicked > 100 && iXClicked < 150) {
+					if (iYClicked > 30 && iYClicked < 80) {
+						pContext->changeState("pause");
 					}
 				}
 			}
@@ -443,22 +539,55 @@ void GameState::virtMouseWheel(Scyyz12Engine2* pContext, int x, int y, int which
 
 void GameState::virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext)
 {
-	for (LineRoute* lr : m_lr) {
-		lr->update();
-	}
-	m_sm->update();
-
-	for (LineRoute* lr : m_lr) {
-		for (TrainCollection* train : lr->getTrainList()) {
-			for (CarriageCollection* carriage : train->getTrain()->getCarriageList()) {
-				pContext->moveToLast(carriage->getCarriage());
+	if (m_bIsNewDay) {
+		if (m_bRunToStop) {
+			for (LineRoute* lr : m_lr) {
+				for (TrainCollection* train : lr->getTrainList()) {
+					train->getTrain()->stopTrain();
+				}
 			}
+			pContext->redrawDisplay();
+			m_bRunToStop = false;
+
+		}
+		if (!m_bSelectionNotMade) {
+			m_bIsNewDay = false;
+			for (LineRoute* lr : m_lr) {
+				for (TrainCollection* train : lr->getTrainList()) {
+					if (!train->isStopCooldown()) {
+						train->getTrain()->startTrain();
+					}
+				}
+			}
+			m_iniTimeCount = pContext->getModifiedTime();
 		}
 	}
-	for (StationCollection* station : m_sm->getStationList()) {
-		pContext->moveToLast(station->getStation());
+	else {
+		m_timeCount = ((pContext->getModifiedTime() - m_iniTimeCount) / 10) % 497;
+		if (m_timeCount == 496) {
+			++m_dayCount;
+			m_bIsNewDay = true;
+			m_bRunToStop = true;
+			m_bSelectionNotMade = true;
+		}
+
+		for (LineRoute* lr : m_lr) {
+			lr->update();
+		}
+		m_sm->update();
+
+		for (LineRoute* lr : m_lr) {
+			for (TrainCollection* train : lr->getTrainList()) {
+				for (CarriageCollection* carriage : train->getTrain()->getCarriageList()) {
+					pContext->moveToLast(carriage->getCarriage());
+				}
+			}
+		}
+		for (StationCollection* station : m_sm->getStationList()) {
+			pContext->moveToLast(station->getStation());
+		}
+		pContext->redrawDisplay();
 	}
-	pContext->redrawDisplay();
 }
 
 void GameState::copyAllBackgroundBuffer(Scyyz12Engine2* pContext)

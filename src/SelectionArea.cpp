@@ -5,7 +5,8 @@
 
 void SelectionArea::virtDrawTileAt(BaseEngine* pEngine, DrawingSurface* pSurface, int iMapX, int iMapY, int iStartPositionScreenX, int iStartPositionScreenY) const
 {
-	pEngine->redrawRectangle(iStartPositionScreenX, iStartPositionScreenY, iStartPositionScreenX + getTileWidth(), iStartPositionScreenY + getTileHeight());
+	//printf("%d %d\n", iStartPositionScreenX, iStartPositionScreenY);
+	pEngine->redrawDisplay();
 
 	//printf("-- %d --\n", getMapValue(iMapX, iMapY));
 	int iMapValue = m_vecTile2Type[iMapX];

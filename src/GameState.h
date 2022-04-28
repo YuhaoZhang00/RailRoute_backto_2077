@@ -22,7 +22,14 @@ private:
 	int m_stationCount = 0;
 	int m_railCount = 0;
 
+	int m_iniTimeCount = 0;
 	int m_timeCount = 0;
+
+	int m_dayCount = 1;
+
+	bool m_bIsNewDay = false;
+	bool m_bRunToStop = false;
+	bool m_bSelectionNotMade = false;
 
 	/*
 	* 0 - no action
