@@ -58,7 +58,7 @@ public:
 
 	void addTrain(TrainCollection* t);
 	void addTrain(int sId, short sType, int iX, int iY);
-	void removeTrain();
+	void removeTrain(TrainCollection* t);
 	std::vector<TrainCollection*> getTrainList();
 
 	void addCarriage(int index);

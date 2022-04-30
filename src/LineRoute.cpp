@@ -309,6 +309,20 @@ void LineRoute::addTrain(int tId, short sType, int iX, int iY)
 	m_pEngine->appendObjectToArray(train->getTrain()->getCarriageList()[0]->getCarriage());
 }
 
+void LineRoute::removeTrain(TrainCollection* t)
+{
+	for (int i = 0; i < m_vecTrain.size(); i++) {
+		if (m_vecTrain[i] == t) {
+			for (CarriageCollection* c : m_vecTrain[i]->getTrain()->getCarriageList()) {
+				m_pEngine->removeDisplayableObject(c->getCarriage());
+			}
+			delete m_vecTrain[i];
+			m_vecTrain.erase(m_vecTrain.begin() + i);
+			break;
+		}
+	}
+}
+
 std::vector<TrainCollection*> LineRoute::getTrainList()
 {
 	return m_vecTrain;

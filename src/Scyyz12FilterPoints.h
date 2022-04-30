@@ -127,6 +127,8 @@ public:
 	{}
 
 	bool filter(DrawingSurface* surface, int& x, int& y, unsigned int& uiColour) override {
+		if (x < 0 || y < 0 || x >= 1300 || y >= 800)
+			return false;
 		if (x < x1 || y < y1 || x > x2 || y > y2)
 			return true;
 		return (m_pNextFilter == nullptr) || m_pNextFilter->filter(surface, x, y, uiColour);
