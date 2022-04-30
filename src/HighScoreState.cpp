@@ -32,19 +32,19 @@ void HighScoreState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 		printf("!! Error @ HighScoreState.cpp virtSetupBackgroundBuffer - too many high scores");
 	}
 	pContext->drawBackgroundString(350, 120, "Player", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
-	pContext->drawBackgroundString(650, 120, "Level", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawBackgroundString(630, 120, "Day", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 	pContext->drawBackgroundString(790, 120, "Passengers", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 	pContext->drawBackgroundThickLine(350, 160, 950, 160, 0x000000, 2);
 	for (int i = 0; i < 3 * MAX_SCORES_IN_HIGH_SCORE; i += 3) {
 		if (i < iLen) {
 			pContext->drawBackgroundString(350, 170 + 16 * i, m_vecHighScore[i].c_str(), 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 20));
-			pContext->drawBackgroundString(680, 170 + 16 * i, m_vecHighScore[i + 1].c_str(), 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 20));
+			pContext->drawBackgroundString(645, 170 + 16 * i, m_vecHighScore[i + 1].c_str(), 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 20));
 			pContext->drawBackgroundString(840, 170 + 16 * i, m_vecHighScore[i + 2].c_str(), 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 20));
 		}
 		else {
 			pContext->drawBackgroundString(350, 170 + 16 * i, "-", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 20));
-			pContext->drawBackgroundString(680, 170 + 16 * i, "-", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 20));
-			pContext->drawBackgroundString(840, 170 + 16 * i, "    -", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 20));
+			pContext->drawBackgroundString(648, 170 + 16 * i, " -", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 20));
+			pContext->drawBackgroundString(842, 170 + 16 * i, "    -", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 20));
 		}
 	}
 

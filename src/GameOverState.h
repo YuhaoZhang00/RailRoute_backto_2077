@@ -27,5 +27,7 @@ public:
 	void copyAllBackgroundBuffer(Scyyz12Engine2* pContext) override;
 	void virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode) override;
 	void virtCreateSurfaces(Scyyz12Engine2* pContext) override;
+
+	void virtSetSelfDefinedValue(int i, int j) override;
 };
 

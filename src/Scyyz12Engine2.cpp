@@ -17,8 +17,37 @@ void Scyyz12Engine2::changeState(std::string strState)
 		m_pState = m_mAllState.at("start");
 	}
 	redrawDisplay();
-	lockAndSetupBackground();
-	virtInitialiseObjects();
+	virtInitialise();
+}
+
+void Scyyz12Engine2::changeState(std::string strState, int iTemp1, int iTemp2)
+{
+	try {
+		m_pState = m_mAllState.at(strState);
+		m_pState->virtSetSelfDefinedValue(iTemp1, iTemp2);
+		printf("## Debug - state changed to %s\n", strState.c_str());
+	}
+	catch (std::out_of_range) {
+		printf("!! Error @ Scyyz12Engine2.cpp changeState() - state not found\n");
+		m_pState = m_mAllState.at("start");
+	}
+	redrawDisplay();
+	virtInitialise();
+}
+
+void Scyyz12Engine2::changeState(std::string strState, bool bTemp1, bool bTemp2, int iTemp1)
+{
+	try {
+		m_pState = m_mAllState.at(strState);
+		m_pState->virtSetSelfDefinedValue(bTemp1, bTemp2, iTemp1);
+		printf("## Debug - state changed to %s\n", strState.c_str());
+	}
+	catch (std::out_of_range) {
+		printf("!! Error @ Scyyz12Engine2.cpp changeState() - state not found\n");
+		m_pState = m_mAllState.at("start");
+	}
+	redrawDisplay();
+	virtInitialise();
 }
 
 void Scyyz12Engine2::setBackgourndSurface(DrawingSurface* pBackgroundSurface)

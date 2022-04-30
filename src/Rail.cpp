@@ -379,12 +379,12 @@ void Rail::virtDraw()
 		case 8:
 			if (m_rl == nullptr) {
 				if (m_bIs45) {
-					m_rl = new RailLine(m_pEngine, m_iXEnd, m_iYEnd, false, m_uiColor, m_iTurnY - m_iYEnd);
+					m_rl = new RailLine(m_pEngine, m_iXEnd, m_iYEnd - 2, false, m_uiColor, m_iTurnY - m_iYEnd + 4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iXStart, m_iYStart, 0, m_uiColor, m_iXEnd - m_iXStart);
 					//m_rl135 = new RailLink135();
 				}
 				else {
-					m_rl = new RailLine(m_pEngine, m_iXStart, m_iTurnY, false, m_uiColor, m_iYStart - m_iTurnY);
+					m_rl = new RailLine(m_pEngine, m_iXStart, m_iTurnY - 2, false, m_uiColor, m_iYStart - m_iTurnY + 4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iXEnd, m_iYEnd, 2, m_uiColor, m_iXEnd - m_iXStart);
 					//m_rl135 = new RailLink135();
 				}
@@ -396,12 +396,12 @@ void Rail::virtDraw()
 		case 9:
 			if (m_rl == nullptr) {
 				if (m_bIs45) {
-					m_rl = new RailLine(m_pEngine, m_iTurnX, m_iTurnY, true, m_uiColor, m_iXEnd - m_iTurnX);
+					m_rl = new RailLine(m_pEngine, m_iTurnX - 2, m_iTurnY, true, m_uiColor, m_iXEnd - m_iTurnX + 4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iXStart, m_iYStart, 0, m_uiColor, m_iTurnX - m_iXStart);
 					//m_rl135 = new RailLink135();
 				}
 				else {
-					m_rl = new RailLine(m_pEngine, m_iXStart, m_iYStart, true, m_uiColor, m_iTurnX - m_iXStart);
+					m_rl = new RailLine(m_pEngine, m_iXStart - 2, m_iYStart, true, m_uiColor, m_iTurnX - m_iXStart + 4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iTurnX, m_iTurnY, 0, m_uiColor, m_iXEnd - m_iTurnX);
 					//m_rl135 = new RailLink135();
 				}
@@ -413,12 +413,12 @@ void Rail::virtDraw()
 		case 10:
 			if (m_rl == nullptr) {
 				if (m_bIs45) {
-					m_rl = new RailLine(m_pEngine, m_iTurnX, m_iTurnY, true, m_uiColor, m_iXEnd - m_iTurnX);
+					m_rl = new RailLine(m_pEngine, m_iTurnX - 2, m_iTurnY, true, m_uiColor, m_iXEnd - m_iTurnX + 4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iXStart, m_iYStart, 1, m_uiColor, m_iTurnX - m_iXStart);
 					//m_rl135 = new RailLink135();
 				}
 				else {
-					m_rl = new RailLine(m_pEngine, m_iXStart, m_iYStart, true, m_uiColor, m_iTurnX - m_iXStart);
+					m_rl = new RailLine(m_pEngine, m_iXStart - 2, m_iYStart, true, m_uiColor, m_iTurnX - m_iXStart + 4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iTurnX, m_iTurnY, 1, m_uiColor, m_iXEnd - m_iTurnX);
 					//m_rl135 = new RailLink135();
 				}
@@ -430,12 +430,12 @@ void Rail::virtDraw()
 		case 11:
 			if (m_rl == nullptr) {
 				if (m_bIs45) {
-					m_rl = new RailLine(m_pEngine, m_iTurnX, m_iTurnY, false, m_uiColor, m_iYEnd - m_iTurnY);
+					m_rl = new RailLine(m_pEngine, m_iTurnX, m_iTurnY - 2, false, m_uiColor, m_iYEnd - m_iTurnY + 4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iXStart, m_iYStart, 1, m_uiColor, m_iXEnd - m_iXStart);
 					//m_rl135 = new RailLink135();
 				}
 				else {
-					m_rl = new RailLine(m_pEngine, m_iXStart, m_iYStart, false, m_uiColor, m_iTurnY - m_iYStart);
+					m_rl = new RailLine(m_pEngine, m_iXStart, m_iYStart - 2, false, m_uiColor, m_iTurnY - m_iYStart + 4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iXEnd, m_iYEnd, 3, m_uiColor, m_iXEnd - m_iXStart);
 					//m_rl135 = new RailLink135();
 				}
@@ -447,12 +447,12 @@ void Rail::virtDraw()
 		case 12:
 			if (m_rl == nullptr) {
 				if (m_bIs45) {
-					m_rl = new RailLine(m_pEngine, m_iTurnX, m_iTurnY, false, m_uiColor, m_iYEnd - m_iTurnY);
+					m_rl = new RailLine(m_pEngine, m_iTurnX, m_iTurnY - 2, false, m_uiColor, m_iYEnd - m_iTurnY + 4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iXStart, m_iYStart, 2, m_uiColor, m_iXStart - m_iXEnd);
 					//m_rl135 = new RailLink135();
 				}
 				else {
-					m_rl = new RailLine(m_pEngine, m_iXStart, m_iYStart, false, m_uiColor, m_iTurnY - m_iYStart);
+					m_rl = new RailLine(m_pEngine, m_iXStart, m_iYStart - 2, false, m_uiColor, m_iTurnY - m_iYStart + 4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iXEnd, m_iYEnd, 0, m_uiColor, m_iXStart - m_iXEnd);
 					//m_rl135 = new RailLink135();
 				}
@@ -464,12 +464,12 @@ void Rail::virtDraw()
 		case 13:
 			if (m_rl == nullptr) {
 				if (m_bIs45) {
-					m_rl = new RailLine(m_pEngine, m_iXEnd, m_iYEnd, true, m_uiColor, m_iTurnX - m_iXEnd);
+					m_rl = new RailLine(m_pEngine, m_iXEnd - 2, m_iYEnd, true, m_uiColor, m_iTurnX - m_iXEnd + 4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iXStart, m_iYStart, 2, m_uiColor, m_iXStart - m_iTurnX);
 					//m_rl135 = new RailLink135();
 				}
 				else {
-					m_rl = new RailLine(m_pEngine, m_iTurnX, m_iTurnY, true, m_uiColor, m_iXStart - m_iTurnX);
+					m_rl = new RailLine(m_pEngine, m_iTurnX - 2, m_iTurnY, true, m_uiColor, m_iXStart - m_iTurnX + 4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iTurnX, m_iTurnY, 2, m_uiColor, m_iTurnX - m_iXEnd);
 					//m_rl135 = new RailLink135();
 				}
@@ -481,12 +481,12 @@ void Rail::virtDraw()
 		case 14:
 			if (m_rl == nullptr) {
 				if (m_bIs45) {
-					m_rl = new RailLine(m_pEngine, m_iXEnd, m_iYEnd, true, m_uiColor, m_iTurnX - m_iXEnd);
+					m_rl = new RailLine(m_pEngine, m_iXEnd - 2, m_iYEnd, true, m_uiColor, m_iTurnX - m_iXEnd + 4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iXStart, m_iYStart, 3, m_uiColor, m_iXStart - m_iTurnX);
 					//m_rl135 = new RailLink135();
 				}
 				else {
-					m_rl = new RailLine(m_pEngine, m_iTurnX, m_iTurnY, true, m_uiColor, m_iXStart - m_iTurnX);
+					m_rl = new RailLine(m_pEngine, m_iTurnX - 2, m_iTurnY, true, m_uiColor, m_iXStart - m_iTurnX + 4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iTurnX, m_iTurnY, 3, m_uiColor, m_iTurnX - m_iXEnd);
 					//m_rl135 = new RailLink135();
 				}
@@ -498,12 +498,12 @@ void Rail::virtDraw()
 		case 15:
 			if (m_rl == nullptr) {
 				if (m_bIs45) {
-					m_rl = new RailLine(m_pEngine, m_iXEnd, m_iYEnd, false, m_uiColor, m_iTurnY - m_iYEnd);
+					m_rl = new RailLine(m_pEngine, m_iXEnd, m_iYEnd - 2, false, m_uiColor, m_iTurnY - m_iYEnd + 4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iXStart, m_iYStart, 3, m_uiColor, m_iXStart - m_iXEnd);
 					//m_rl135 = new RailLink135();
 				}
 				else {
-					m_rl = new RailLine(m_pEngine, m_iXStart, m_iTurnY, false, m_uiColor, m_iYStart - m_iTurnY);
+					m_rl = new RailLine(m_pEngine, m_iXStart, m_iTurnY - 2, false, m_uiColor, m_iYStart - m_iTurnY+4);
 					m_rld = new RailLineDiagonal(m_pEngine, m_iXEnd, m_iYEnd, 1, m_uiColor, m_iXStart - m_iXEnd);
 					//m_rl135 = new RailLink135();
 				}
@@ -532,4 +532,38 @@ int Rail::getTurnY()
 short Rail::getTurnDirection()
 {
 	return m_sTurnDirection;
+}
+
+std::vector<int> Rail::getInfoForContinue()
+{
+	std::vector<int> ans;
+	ans.emplace_back(m_id);
+	ans.emplace_back(m_bIsEnd);
+	ans.emplace_back(m_iXStart);
+	ans.emplace_back(m_iYStart);
+	ans.emplace_back(m_iXEnd);
+	ans.emplace_back(m_iYEnd);
+	ans.emplace_back(m_bIs45);
+	ans.emplace_back(m_sDirection);
+	ans.emplace_back(m_uiColor);
+	return ans;
+}
+
+std::vector<std::vector<int>> Rail::getImagePixelMap()
+{
+	std::vector<std::vector<int>> ans;
+	//printf("%d %d %d %d\n", m_iXStart, m_iXEnd, m_iYStart, m_iYEnd);
+	int tempXS, tempXE, tempYS, tempYE;
+	if (m_iXStart > m_iXEnd) { tempXE = m_iXStart; tempXS = m_iXEnd; }
+	else { tempXS = m_iXStart; tempXE = m_iXEnd; }
+	if (m_iYStart > m_iYEnd) { tempYE = m_iYStart; tempYS = m_iYEnd; }
+	else { tempYS = m_iYStart; tempYE = m_iYEnd; }
+	//printf("%d %d %d %d\n", tempXS, tempXE, tempYS, tempYE);
+
+	for (int i = tempXS; i <= tempXE; i++) {
+		for (int j = tempYS; j <= tempYE; j++) {
+			ans.emplace_back(std::vector<int>{ i, j });
+		}
+	}
+	return ans;
 }

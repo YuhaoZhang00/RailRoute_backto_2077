@@ -336,6 +336,17 @@ bool Carriage::getIsRun()
 	return m_bIsRun;
 }
 
+std::vector<PassengerCollection*> Carriage::getPassengerList()
+{
+	return m_vecPassenger;
+}
+
+void Carriage::setPassengerList(std::vector<PassengerCollection*> p, int i)
+{
+	m_vecPassenger = p;
+	m_iPassengerCount = i;
+}
+
 void CarriageHead::virtDraw()
 {
 	if (m_sDirection == 0 || m_sDirection == 4) {
@@ -789,6 +800,11 @@ void TrainIntelli::addHead(int iMaxNumberOfPassengers, int iLength)
 Train* TrainCollection::getTrain()
 {
 	return m_oTrain;
+}
+
+int TrainCollection::getType()
+{
+	return m_type;
 }
 
 int TrainCollection::getId()

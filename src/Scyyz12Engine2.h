@@ -24,6 +24,8 @@ public:
 	State* getState(); // not used
 	// changes to the state of given string, if fail changes to start state
 	void changeState(std::string strState);
+	void changeState(std::string strState, int iTemp1, int iTemp2);
+	void changeState(std::string strState, bool bTemp1, bool bTemp2, int iTemp1);
 
 	void setBackgourndSurface(DrawingSurface* pBackgroundSurface);
 	DrawingSurface& getTheDefaultBackgroundSurface();

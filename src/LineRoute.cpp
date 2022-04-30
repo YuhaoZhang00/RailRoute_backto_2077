@@ -62,25 +62,26 @@ void LineRoute::setCarriageStateOnTurn(CarriageCollection* c)
 	}
 }
 
-void LineRoute::exchangePassengers(TrainCollection* t, StationCollection* s)
+bool LineRoute::exchangePassengers(TrainCollection* t, StationCollection* s)
 {
 	if (!isCooldown()) {
 		int index = t->getTrain()->findFirstPassengerByType(s->getType());
 		if (index != -1) {
 			t->getTrain()->removePassenger(index);
 			resetCooldown();
-			return;
+			return true;
 		}
 		while (!t->getTrain()->isFull() && !s->getStation()->isEmpty()) {
 			short sType = s->getStation()->removeFirstPassenger();
 			t->getTrain()->addPassenger(new PassengerCollection(sType, m_pEngine));
 			resetCooldown();
-			return;
+			return false;
 		}
 	}
+	return false;
 }
 
-void LineRoute::exchangePassengers(TrainCollection* t)
+bool LineRoute::exchangePassengers(TrainCollection* t)
 {
 	CarriageCollection* head = t->getTrain()->getCarriageList()[0];
 	int headX = head->getCarriage()->getXCentre();
@@ -89,11 +90,32 @@ void LineRoute::exchangePassengers(TrainCollection* t)
 	for (int i = -speed; i < speed; i++) {
 		for (int j = -speed; j <= speed; j++) {
 			if (m_mapStation.count((headX + i) * 10000 + (headY + j)) > 0) {
-				exchangePassengers(t, m_mapStation.at((headX + i) * 10000 + (headY + j)));
-				return;
+				return exchangePassengers(t, m_mapStation.at((headX + i) * 10000 + (headY + j)));
 			}
 		}
 	}
+	return false;
+}
+
+bool LineRoute::isCanAddStation(StationCollection* s1, StationCollection* s2)
+{
+	m_pEngine->getBackgroundSurface()->mySDLLockSurface();
+	int xStart = s1->getStation()->getXCentre();
+	int yStart = s1->getStation()->getYCentre();
+	int xEnd = s2->getStation()->getXCentre();
+	int yEnd = s2->getStation()->getYCentre();
+	Rail* testRail1 = new Rail(0, m_pEngine, xStart, yStart, xEnd, yEnd, true, 0x777777);
+	for (std::vector<int> pixelPoint : testRail1->getImagePixelMap()) {
+		if (m_pEngine->getBackgroundSurface()->rawGetPixel(pixelPoint[0], pixelPoint[1]) != -1) return false;
+	}
+	Rail* testRail2 = new Rail(0, m_pEngine, xStart, yStart, xEnd, yEnd, false, 0x777777);
+	for (std::vector<int> pixelPoint : testRail2->getImagePixelMap()) {
+		if (m_pEngine->getBackgroundSurface()->rawGetPixel(pixelPoint[0], pixelPoint[1]) != -1) return false;
+	}
+	m_pEngine->getBackgroundSurface()->mySDLUnlockSurface();
+	delete testRail1;
+	delete testRail2;
+	return true;
 }
 
 void LineRoute::iniAdd2Stations(StationCollection* s1, StationCollection* s2, bool bIs45, int e1Id, int rId, int e2Id)
@@ -309,8 +331,9 @@ void LineRoute::drawInitialise()
 	}
 }
 
-void LineRoute::update()
+int LineRoute::update()
 {
+	int passengerCount = 0;
 	for (TrainCollection* train : m_vecTrain) {
 		if (!train->isStopCooldown()) {
 			if (!stopAtStation(train)) {
@@ -320,9 +343,10 @@ void LineRoute::update()
 			}
 		}
 		else {
-			exchangePassengers(train);
+			if (exchangePassengers(train)) passengerCount++;
 		}
 	}
+	return passengerCount;
 }
 
 bool LineRoute::isPosAStationInLine(int iX, int iY)
@@ -339,7 +363,7 @@ int LineRoute::isPosATrainInLine(int iX, int iY)
 				return i;
 			}
 		}
-		
+
 	}
 	return -1;
 }

@@ -19,6 +19,20 @@ bool StationMap::isInMapBorder(int iX, int iY)
 	return false;
 }
 
+bool StationMap::isNothingInBackground(int iX, int iY)
+{
+	m_pEngine->getBackgroundSurface()->mySDLLockSurface();
+	for (int i = -m_stationSize / 2; i <= m_stationSize / 2; i++) {
+		for (int j = -m_stationSize / 2; j <= m_stationSize / 2; j++) {
+			if (m_pEngine->getBackgroundSurface()->rawGetPixel(iX + i, iY + j) != -1) {
+				return false;
+			}
+		}
+	}
+	m_pEngine->getBackgroundSurface()->mySDLUnlockSurface();
+	return true;
+}
+
 void StationMap::addStation(StationCollection* s)
 {
 	m_vecStation.emplace_back(s);
@@ -35,7 +49,7 @@ void StationMap::addRandomStation(int sId)
 	do {
 		x = rand() % 1100 + 100;
 		y = rand() % 500 + 100;
-	} while (!isNoStationTooClose(x, y));
+	} while (!isNoStationTooClose(x, y) || !isNothingInBackground(x, y));
 	addStation(new StationCollection(sId, rand() % 6, m_pEngine, x, y));
 }
 
@@ -46,7 +60,7 @@ void StationMap::addRandomStationInRectangle(int sId, int iX, int iY, int iWidth
 		x = rand() % iWidth + iX;
 		y = rand() % iHeight + iY;
 		++count;
-	} while ((!isNoStationTooClose(x, y) || !isInMapBorder(x, y)) && count < 10);
+	} while ((!isNoStationTooClose(x, y) || !isInMapBorder(x, y) || !isNothingInBackground(x, y)) && count < 10);
 	if (count == 10) {
 		addRandomStation(sId);
 		return;
@@ -64,13 +78,57 @@ void StationMap::addRandomStationNearCurrent(int sId)
 			x = rand() % 400 + m_vecStation[stationId]->getStation()->getXCentre();
 			y = rand() % 400 + m_vecStation[stationId]->getStation()->getYCentre();
 			++count;
-		} while ((!isNoStationTooClose(x, y) || !isInMapBorder(x, y)) && count < 10);
+		} while (!(isNoStationTooClose(x, y) && isInMapBorder(x, y) && isNothingInBackground(x, y)) && count < 10);
 		if (count < 10) {
 			addStation(new StationCollection(sId, rand() % 6, m_pEngine, x, y));
 			return;
 		}
 	}
 	addRandomStation(sId);
+}
+
+void StationMap::addRandomStationCertainType(int sId, short sType)
+{
+	int x, y;
+	do {
+		x = rand() % 1100 + 100;
+		y = rand() % 500 + 100;
+	} while (!isNoStationTooClose(x, y) || !isNothingInBackground(x, y));
+	addStation(new StationCollection(sId, sType, m_pEngine, x, y));
+}
+
+void StationMap::addStationInRectangle(int sId, short sType, int iX, int iY, int iWidth, int iHeight)
+{
+	int x, y, count = 0;
+	do {
+		x = rand() % iWidth + iX;
+		y = rand() % iHeight + iY;
+		++count;
+	} while ((!isNoStationTooClose(x, y) || !isInMapBorder(x, y) || !isNothingInBackground(x, y)) && count < 10);
+	if (count == 10) {
+		addRandomStationCertainType(sId, sType);
+		return;
+	}
+	addStation(new StationCollection(sId, sType, m_pEngine, x, y));
+}
+
+void StationMap::addStationNearCurrent(int sId, short sType)
+{
+	int len = m_vecStation.size();
+	for (int i = 0; i < len; i++) {
+		int stationId = rand() % len;
+		int x, y, count = 0;
+		do {
+			x = rand() % 300 + m_vecStation[stationId]->getStation()->getXCentre();
+			y = rand() % 300 + m_vecStation[stationId]->getStation()->getYCentre();
+			++count;
+		} while ((!isNoStationTooClose(x, y) || !isInMapBorder(x, y) || !isNothingInBackground(x, y)) && count < 10);
+		if (count < 10) {
+			addStation(new StationCollection(sId, sType, m_pEngine, x, y));
+			return;
+		}
+	}
+	addRandomStationCertainType(sId, sType);
 }
 
 std::vector<StationCollection*> StationMap::getStationList()
@@ -93,7 +151,7 @@ void StationMap::drawInitialise()
 	}
 }
 
-void StationMap::update()
+bool StationMap::update()
 {
 	++m_difficultyCount;
 
@@ -108,6 +166,9 @@ void StationMap::update()
 			} while (sTypePassenger == sType);
 			station->getStation()->addPassenger(new PassengerCollection(sTypePassenger, m_pEngine));
 		}
+		if (station->getStation()->getAngryValue() > 2000) {
+			return true;
+		}
 	}
 
 	if (m_difficultyCount / 1000 > m_stationCount) {
@@ -115,4 +176,5 @@ void StationMap::update()
 		addRandomStationNearCurrent(m_stationCount);
 		m_pEngine->appendObjectToArray(m_vecStation.back()->getStation());
 	}
+	return false;
 }

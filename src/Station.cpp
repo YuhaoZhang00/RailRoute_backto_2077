@@ -3,6 +3,16 @@
 #include "BaseEngine.h"
 #include "Constant.h"
 
+void Station::virtDoUpdate(int iCurrentTime)
+{
+	if (m_bIsAngry) {
+		++m_iAngryValue;
+	}
+	else {
+		if (m_iAngryValue != 0) --m_iAngryValue;
+	}
+}
+
 void Station::addPassenger(PassengerCollection* oPassenger)
 {
 	if (m_iPassengerCount < MAX_PASSENGERS_IN_STATION) {
@@ -11,11 +21,12 @@ void Station::addPassenger(PassengerCollection* oPassenger)
 		m_vecPassenger.emplace_back(oPassenger);
 		m_iPassengerCount++;
 		if (m_iPassengerCount > MAX_PASSENGERS_IN_STATION_BEFORE_ANGER) {
-			printf("-- TODO: the station begins a countdown - tong'guo yi'ge boolean value shi'xian\n");
+			//printf("## Debug - Anger!\n");
+			m_bIsAngry = true;
 		}
 	}
 	else {
-		printf("## Debug - too many passengers in station, negleting incoming one\n");
+		//printf("## Debug - too many passengers in station, negleting incoming one\n");
 	}
 
 }
@@ -45,8 +56,16 @@ short Station::removeFirstPassenger()
 			m_vecPassenger[i]->getPassenger()->setXCenter(m_iCurrentScreenX + 30 + i % PASSENGER_IN_STATION_X * 10);
 			m_vecPassenger[i]->getPassenger()->setYCenter(m_iCurrentScreenY - 10 + i / PASSENGER_IN_STATION_X * 10);
 		}
+		if (m_iPassengerCount <= MAX_PASSENGERS_IN_STATION_BEFORE_ANGER) {
+			m_bIsAngry = false;
+		}
 		return sType;
 	}
+}
+
+std::vector<PassengerCollection*> Station::getPassengerList()
+{
+	return m_vecPassenger;
 }
 
 void Station::removePassenger(int iIndex)
@@ -63,6 +82,9 @@ void Station::removePassenger(int iIndex)
 			m_vecPassenger[i]->getPassenger()->setYCenter(m_iCurrentScreenY - 10 + i / PASSENGER_IN_STATION_X * 10);
 		}
 	}
+	if (m_iPassengerCount <= MAX_PASSENGERS_IN_STATION_BEFORE_ANGER) {
+		m_bIsAngry = false;
+	}
 }
 
 bool Station::isEmpty()
@@ -70,8 +92,37 @@ bool Station::isEmpty()
 	return (m_iPassengerCount == 0);
 }
 
+bool Station::getIsAngry()
+{
+	return m_bIsAngry;
+}
+
+int Station::getAngryValue()
+{
+	return m_iAngryValue;
+}
+
+void Station::setIsAngry(bool b)
+{
+	m_bIsAngry = b;
+}
+
+void Station::setAngryValue(int i)
+{
+	m_iAngryValue = i;
+}
+
 void StationCircle::virtDraw()
 {
+	if (m_iAngryValue != 0) {
+		double percentage = std::min(1.0, m_iAngryValue * 1.0 / 2000);
+		//printf("%d %f\n", m_iAngryValue, percentage);
+		getEngine()->drawForegroundOval(
+			m_iCurrentScreenX - m_iSize / 2 * (1 + percentage), m_iCurrentScreenY - m_iSize / 2 * (1 + percentage),
+			m_iCurrentScreenX + m_iSize / 2 * (1 + percentage), m_iCurrentScreenY + m_iSize / 2 * (1 + percentage),
+			((0xFF << 16) + ((int)(0xFF * (1 - percentage)) << 8) + (0xFF * (1 - percentage))));
+	}
+
 	getEngine()->drawForegroundOval(
 		m_iCurrentScreenX - m_iSize / 2, m_iCurrentScreenY - m_iSize / 2,
 		m_iCurrentScreenX + m_iSize / 2, m_iCurrentScreenY + m_iSize / 2,
@@ -88,6 +139,15 @@ void StationCircle::virtDraw()
 
 void StationSquare::virtDraw()
 {
+	if (m_iAngryValue != 0) {
+		double percentage = std::min(1.0, m_iAngryValue * 1.0 / 2000);
+		//printf("%d %f\n", m_iAngryValue, percentage);
+		getEngine()->drawForegroundOval(
+			m_iCurrentScreenX - m_iSize / 2 * (1 + percentage), m_iCurrentScreenY - m_iSize / 2 * (1 + percentage),
+			m_iCurrentScreenX + m_iSize / 2 * (1 + percentage), m_iCurrentScreenY + m_iSize / 2 * (1 + percentage),
+			((0xFF << 16) + ((int)(0xFF * (1 - percentage)) << 8) + (0xFF * (1 - percentage))));
+	}
+
 	getEngine()->drawForegroundRectangle(
 		m_iCurrentScreenX - m_iSize * 2 / 5, m_iCurrentScreenY - m_iSize * 2 / 5,
 		m_iCurrentScreenX + m_iSize * 2 / 5, m_iCurrentScreenY + m_iSize * 2 / 5,
@@ -124,6 +184,15 @@ void StationSquare::virtDraw()
 
 void StationDiamond::virtDraw()
 {
+	if (m_iAngryValue != 0) {
+		double percentage = std::min(1.0, m_iAngryValue * 1.0 / 2000);
+		//printf("%d %f\n", m_iAngryValue, percentage);
+		getEngine()->drawForegroundOval(
+			m_iCurrentScreenX - m_iSize / 2 * (1 + percentage), m_iCurrentScreenY - m_iSize / 2 * (1 + percentage),
+			m_iCurrentScreenX + m_iSize / 2 * (1 + percentage), m_iCurrentScreenY + m_iSize / 2 * (1 + percentage),
+			((0xFF << 16) + ((int)(0xFF * (1 - percentage)) << 8) + (0xFF * (1 - percentage))));
+	}
+
 	getEngine()->drawForegroundPolygon(
 		m_iCurrentScreenX, m_iCurrentScreenY - m_iSize / 2,
 		m_iCurrentScreenX + m_iSize / 2, m_iCurrentScreenY,
@@ -144,6 +213,15 @@ void StationDiamond::virtDraw()
 
 void StationTriangle::virtDraw()
 {
+	if (m_iAngryValue != 0) {
+		double percentage = std::min(1.0, m_iAngryValue * 1.0 / 2000);
+		//printf("%d %f\n", m_iAngryValue, percentage);
+		getEngine()->drawForegroundOval(
+			m_iCurrentScreenX - m_iSize / 2 * (1 + percentage), m_iCurrentScreenY - m_iSize / 2 * (1 + percentage),
+			m_iCurrentScreenX + m_iSize / 2 * (1 + percentage), m_iCurrentScreenY + m_iSize / 2 * (1 + percentage),
+			((0xFF << 16) + ((int)(0xFF * (1 - percentage)) << 8) + (0xFF * (1 - percentage))));
+	}
+
 	getEngine()->drawForegroundTriangle(
 		m_iCurrentScreenX, m_iCurrentScreenY - m_iSize / 2,
 		m_iCurrentScreenX + m_iSize / 2, m_iCurrentScreenY + m_iSize * 0.366, // 0.366 = sqrt(3)/2 - 0.5
@@ -162,6 +240,15 @@ void StationTriangle::virtDraw()
 
 void StationInvTriangle::virtDraw()
 {
+	if (m_iAngryValue != 0) {
+		double percentage = std::min(1.0, m_iAngryValue * 1.0 / 2000);
+		//printf("%d %f\n", m_iAngryValue, percentage);
+		getEngine()->drawForegroundOval(
+			m_iCurrentScreenX - m_iSize / 2 * (1 + percentage), m_iCurrentScreenY - m_iSize / 2 * (1 + percentage),
+			m_iCurrentScreenX + m_iSize / 2 * (1 + percentage), m_iCurrentScreenY + m_iSize / 2 * (1 + percentage),
+			((0xFF << 16) + ((int)(0xFF * (1 - percentage)) << 8) + (0xFF * (1 - percentage))));
+	}
+
 	getEngine()->drawForegroundTriangle(
 		m_iCurrentScreenX, m_iCurrentScreenY + m_iSize / 2,
 		m_iCurrentScreenX - m_iSize / 2, m_iCurrentScreenY - m_iSize * 0.366, // 0.366 = sqrt(3)/2 - 0.5
@@ -185,6 +272,15 @@ int StationFlower::dist(int x1, int y1, int x2, int y2)
 
 void StationFlower::virtDraw()
 {
+	if (m_iAngryValue != 0) {
+		double percentage = std::min(1.0, m_iAngryValue * 1.0 / 2000);
+		//printf("%d %f\n", m_iAngryValue, percentage);
+		getEngine()->drawForegroundOval(
+			m_iCurrentScreenX - m_iSize / 2 * (1 + percentage), m_iCurrentScreenY - m_iSize / 2 * (1 + percentage),
+			m_iCurrentScreenX + m_iSize / 2 * (1 + percentage), m_iCurrentScreenY + m_iSize / 2 * (1 + percentage),
+			((0xFF << 16) + ((int)(0xFF * (1 - percentage)) << 8) + (0xFF * (1 - percentage))));
+	}
+
 	for (int i = m_iCurrentScreenX - m_iSize / 2; i <= m_iCurrentScreenX + m_iSize / 2; i++) {
 		for (int j = m_iCurrentScreenY - m_iSize / 2; j <= m_iCurrentScreenY + m_iSize / 2; j++) {
 			if ((dist(i, j, m_iCurrentScreenX - m_iSize / 2, m_iCurrentScreenY + m_iSize / 2) < m_iSize * 0.95 &&

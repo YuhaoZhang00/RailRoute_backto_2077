@@ -39,7 +39,7 @@ void PauseState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, in
 	{
 		if (iX > 550 && iX < 750) {
 			if (iY > 680 && iY < 730) {
-				pContext->changeState("gaming");
+				pContext->changeState("gaming", false, false, 0);
 			}
 		}
 	}

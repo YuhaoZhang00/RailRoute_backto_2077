@@ -33,8 +33,13 @@ public:
 		std::getline(o_file, output);
 	}
 
-	void readNumber(int output) {
-		o_file >> output;
+	int readNumber() {
+		std::string temp;
+		std::getline(o_file, temp);
+		//printf("%s - ", temp.c_str());
+		int output = stoi(temp);
+		//printf("%d\n", output);
+		return output;
 	}
 };
 

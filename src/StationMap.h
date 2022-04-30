@@ -15,9 +15,11 @@ private:
 
 	long long m_difficultyCount = 50000;
 	int m_stationCount = 0;
+	int m_stationSize = 40;
 
 	bool isNoStationTooClose(int iX, int iY);
 	bool isInMapBorder(int iX, int iY);
+	bool isNothingInBackground(int iX, int iY); // collision detection
 
 public:
 	StationMap(BaseEngine* pEngine)
@@ -35,10 +37,13 @@ public:
 	void addRandomStation(int sId);
 	void addRandomStationInRectangle(int sId, int iX, int iY, int iWidth, int iHeight);
 	void addRandomStationNearCurrent(int sId);
+	void addRandomStationCertainType(int sId, short sType);
+	void addStationInRectangle(int sId, short sType, int iX, int iY, int iWidth, int iHeight);
+	void addStationNearCurrent(int sId, short sType);
 	std::vector<StationCollection*> getStationList();
 	StationCollection* getStation(int iIndex);
 
 	void drawInitialise();
-	void update();
+	bool update();
 };
 

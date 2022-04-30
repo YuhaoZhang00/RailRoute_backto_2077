@@ -5,6 +5,8 @@
 #include "StationMap.h"
 #include "LineRoute.h"
 #include "Scyyz12FilterPoints.h"
+#include "FileHandler.h"
+#include "ImagePixelMapping.h"
 
 class GameState :
 	public State
@@ -14,9 +16,15 @@ private:
 
 	Scyyz12FilterPointsScaling m_filterScaling;
 	Scyyz12FilterPointsTranslation m_filterTranslation;
+	Scyyz12FilterPointsRectangularMask m_filterMask;
 
 	StationMap* m_sm;
 	std::vector<LineRoute*> m_lr;
+
+	SimpleImage map;
+	SimpleImage backArrow;
+	SimpleImage pause;
+	ImagePixelMappingRotateAndColour mapping;
 
 	int m_trainCount = 0;
 	int m_stationCount = 0;
@@ -26,10 +34,15 @@ private:
 	int m_timeCount = 0;
 
 	int m_dayCount = 1;
+	int m_scoreCount = 0;
 
 	bool m_bIsNewDay = false;
 	bool m_bRunToStop = false;
 	bool m_bSelectionNotMade = false;
+
+	bool m_bIsNeedsReload = false;
+	bool m_bIsContinue = false;
+	int m_iLevelId = 0;
 
 	/*
 	* 0 - no action
@@ -45,6 +58,7 @@ private:
 	* 105 - error - station not in line
 	* 106 - error - station already in line
 	* 107 - error - not click at a train at give line
+	* 108 - error - no enough bridges
 	* 200 - test
 	*/
 	short m_mouseState = 0;
@@ -63,9 +77,146 @@ private:
 
 	short directionToStation(int iX, int iY, int iStationX, int iStationY);
 
+	void doIfNeedsReload() {
+		if (m_bIsNeedsReload) {
+			delete m_sa;
+			delete m_sm;
+			for (LineRoute* lr : m_lr) {
+				delete lr;
+			}
+
+			m_sa = nullptr;
+			m_sm = nullptr;
+			m_lr.clear();
+
+			m_dayCount = 0;
+			m_scoreCount = 0;
+
+			m_bIsNeedsReload = false;
+		}
+	}
+
+	void writeToContinueFile(bool isWrite) {
+		FileWriter fh("resources/level-continue.txt");
+		if (!isWrite) {
+			fh.write(-1);
+		}
+		else {
+			fh.write(m_iLevelId);
+			fh.write(100000);
+			for (int i = 0; i < m_sa->getMapWidth(); i++) {
+				if (m_sa->getTileType(i) >= 0) {
+					fh.write(m_sa->getLineColor(i));
+					fh.write(m_sa->getMapValue(i, 0));
+				}
+			}
+			fh.write(100001);
+			fh.write(m_sa->getLineColor(-1));
+			for (int p = -6; p < 0; p++) {
+				int value = -1;
+				for (int i = 0; i < m_sa->getMapWidth(); i++) {
+					if (m_sa->getTileType(i) == p) {
+						value = m_sa->getMapValue(i, 0);
+						break;
+					}
+				}
+				fh.write(value);
+			}
+			fh.write(100002);
+
+			// all the stations with passengers
+			for (int i = 0; i < m_sm->getStationList().size(); i++) {
+				fh.write(m_sm->getStation(i)->getStation()->getXCentre());
+				fh.write(m_sm->getStation(i)->getStation()->getYCentre());
+				fh.write(m_sm->getStation(i)->getType());
+				fh.write(m_sm->getStation(i)->getId());
+				fh.write(m_sm->getStation(i)->getStation()->getIsAngry());
+				fh.write(m_sm->getStation(i)->getStation()->getAngryValue());
+				fh.write(1000000);
+				for (PassengerCollection* passenger : m_sm->getStation(i)->getStation()->getPassengerList()) {
+					fh.write(passenger->getType());
+				}
+				fh.write(1000001);
+			}
+			fh.write(100003);
+
+			// all the rail lines in lineroute
+			for (LineRoute* lr : m_lr) {
+				fh.write(1000005);
+				for (Rail* rail : lr->getRailList()) {
+					for (int i : rail->getInfoForContinue()) {
+						fh.write(i);
+					}
+				}
+			}
+			fh.write(100004);
+
+			// all the stations in lineroute
+			for (LineRoute* lr : m_lr) {
+				fh.write(1000005);
+				for (StationCollection* station : lr->getStationList()) {
+					fh.write(station->getId());
+				}
+			}
+			fh.write(100005);
+
+			// all the carriages with passengers in lineroute
+			for (LineRoute* lr : m_lr) {
+				fh.write(1000005);
+				for (TrainCollection* train : lr->getTrainList()) {
+					fh.write(train->getId());
+					fh.write(train->getType());
+					fh.write(train->getTrain()->getXCenter());
+					fh.write(train->getTrain()->getYCenter());
+					fh.write(train->getTrain()->getColor());
+					fh.write(train->getTrain()->getDirection());
+					fh.write(1000000);
+					for (CarriageCollection* carriage : train->getTrain()->getCarriageList()) {
+						fh.write(carriage->getType());
+						fh.write(carriage->getCarriage()->getXExactPos());
+						fh.write(carriage->getCarriage()->getYExactPos());
+						fh.write(carriage->getCarriage()->getDirection());
+						fh.write(carriage->getCarriage()->getSpeed());
+						fh.write(1000002);
+						for (PassengerCollection* passenger : carriage->getCarriage()->getPassengerList()) {
+							if (passenger == nullptr) fh.write(-1);
+							else fh.write(passenger->getType());
+						}
+						fh.write(1000003);
+					}
+					fh.write(1000001);
+				}
+			}
+			fh.write(100006);
+
+			// map turn points
+			for (LineRoute* lr : m_lr) {
+				fh.write(1000005);
+				for (std::pair<int, short> element : lr->getMapTurnPoints()) {
+					fh.write(element.first);
+					fh.write(element.second);
+				}
+			}
+			fh.write(100007);
+
+			// map station
+			for (LineRoute* lr : m_lr) {
+				fh.write(1000005);
+				for (std::pair<int, StationCollection*> element : lr->getMapStation()) {
+					fh.write(element.first);
+					fh.write(element.second->getId());
+				}
+			}
+			fh.write(100008);
+			fh.write(m_dayCount);
+			fh.write(m_scoreCount);
+			fh.write(100009);
+		}
+	}
+
 public:
 	GameState()
-		: m_sa(nullptr), m_filterScaling(0, nullptr), m_filterTranslation(0, 0, nullptr), m_sm(nullptr)
+		: m_sa(nullptr), m_filterScaling(0, 0, 100, 1300, 700), m_filterTranslation(0, 0),m_filterMask(0, 100, 1300, 700), m_sm(nullptr),mapping(0,0,0)
 	{}
 
 	~GameState() {
@@ -87,5 +238,7 @@ public:
 	void copyAllBackgroundBuffer(Scyyz12Engine2* pContext) override;
 	void virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode) override;
 	void virtCreateSurfaces(Scyyz12Engine2* pContext) override;
+
+	void virtSetSelfDefinedValue(bool b, bool c, int i) override;
 };
 

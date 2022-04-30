@@ -12,6 +12,7 @@ private:
 	DrawingSurface* m_oTheExtraSurface4;
 	DrawingSurface* m_oTheExtraSurface5;
 	int m_iCurrentSurfaceNumber;
+	bool m_bIsContinue = false;
 
 public:
 	StartState()

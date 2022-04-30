@@ -1,6 +1,7 @@
 #pragma once
 #include "header.h"
 #include "DisplayableObject.h"
+#include <vector>
 
 class RailLine :
 	public DisplayableObject
@@ -390,4 +391,9 @@ public:
 	short getTurnDirection();
 
 	void virtDraw() override;
+
+	std::vector<int> getInfoForContinue();
+
+	// returns the image pixel map of the rail line
+	std::vector<std::vector<int>> getImagePixelMap();
 };

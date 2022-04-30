@@ -79,6 +79,21 @@ public:
 	void setDirection(short sDirection);
 	void setIsRun(bool bIsRun);
 	bool getIsRun();
+
+	std::vector<PassengerCollection*> getPassengerList();
+	void setPassengerList(std::vector<PassengerCollection*> p, int i);
+	void setSpeed(int i) {
+		m_dSpeed = i;
+	}
+	int getPassengerColor() {
+		return m_uiPassengerColor;
+	}
+	int getPassengerCount() {
+		return m_iPassengerCount;
+	}
+	int getMaxNumberOfPassengers() {
+		return m_iMaxNumOfPassengers;
+	}
 };
 
 class CarriageHead :
@@ -135,6 +150,7 @@ public:
 class CarriageCollection {
 private:
 	Carriage* m_oCarriage;
+	int iType = 0;
 
 	int m_cooldown = 3;
 
@@ -155,18 +171,22 @@ public:
 	{
 		switch (sType) {
 		case 0:
+			iType = 0;
 			m_oCarriage = new CarriageHead(pEngine, dXCenter, dYCenter, uiColor, (dSpeed == -1) ? 1 : dSpeed, sDirection,
 				(iMaxNumOfPassengers == -1) ? 6 : iMaxNumOfPassengers, iWidth, (iLength == -1) ? 30 : iLength);
 			break;
 		case 1:
+			iType = 1;
 			m_oCarriage = new CarriageHeadFast(pEngine, dXCenter, dYCenter, uiColor, (dSpeed == -1) ? 2 : dSpeed, sDirection,
 				(iMaxNumOfPassengers == -1) ? 4 : iMaxNumOfPassengers, iWidth, (iLength == -1) ? 20 : iLength);
 			break;
 		case 2:
+			iType = 2;
 			m_oCarriage = new CarriageHeadIntelli(pEngine, dXCenter, dYCenter, uiColor, uiSpecialColor, (dSpeed == -1) ? 1 : dSpeed, sDirection,
 				(iMaxNumOfPassengers == -1) ? 8 : iMaxNumOfPassengers, iWidth, (iLength == -1) ? 40 : iLength);
 			break;
 		case 3:
+			iType = 3;
 			m_oCarriage = new CarriageMain(pEngine, dXCenter, dYCenter, uiColor, dSpeed, sDirection,
 				(iMaxNumOfPassengers == -1) ? 6 : iMaxNumOfPassengers, iWidth, (iLength == -1) ? 30 : iLength);
 			break;
@@ -185,6 +205,10 @@ public:
 
 	void resetCooldown();
 	bool isCooldown();
+
+	int getType() {
+		return iType;
+	}
 };
 
 
@@ -238,6 +262,34 @@ public:
 	bool getIsRun();
 	void startTrain();
 	void stopTrain();
+
+	int getXCenter() {
+		return m_dXCenterHead;
+	}
+	int getYCenter() {
+		return m_dYCenterHead;
+	}
+	int getColor() {
+		return m_uiColor;
+	}
+	void addCarriage(CarriageCollection* c) {
+		m_vecCarriage.emplace_back(c);
+		m_iCarriageCount++;
+	}
+	int getDirection() {
+		return m_sDirection;
+	}
+	void setDirection(short d) {
+		m_sDirection = d;
+	}
+	void recalculatePassengerCount() {
+		for (CarriageCollection* c : m_vecCarriage) {
+			m_iPassengerCount += c->getCarriage()->getPassengerCount();
+		}
+		for (CarriageCollection* c : m_vecCarriage) {
+			m_iMaxNumOfPassengers += c->getCarriage()->getMaxNumberOfPassengers();
+		}
+	}
 };
 
 class TrainNormal :
@@ -281,6 +333,7 @@ class TrainCollection
 {
 private:
 	int m_id;
+	int m_type;
 	Train* m_oTrain;
 
 	int m_StopCooldown = 0;
@@ -293,16 +346,19 @@ public:
 	*/
 	TrainCollection(int id, short sType, BaseEngine* pEngine, double dXCenterHead, double dYCenterHead, unsigned int uiColor,
 		double dSpeed = -1, short sDirection = 0, int iDist = 5, unsigned int uiSpecialColor = 0xCD9B1D)
-		: m_id(id), m_oTrain(NULL)
+		: m_id(id), m_oTrain(NULL), m_type(0)
 	{
 		switch (sType) {
 		case 0:
+			m_type = 0;
 			m_oTrain = new TrainNormal(pEngine, dXCenterHead, dYCenterHead, (dSpeed == -1) ? 1 : dSpeed, sDirection, uiColor, iDist);
 			break;
 		case 1:
+			m_type = 1;
 			m_oTrain = new TrainFast(pEngine, dXCenterHead, dYCenterHead, (dSpeed == -1) ? 2 : dSpeed, sDirection, uiColor, iDist);
 			break;
 		case 2:
+			m_type = 2;
 			m_oTrain = new TrainIntelli(pEngine, dXCenterHead, dYCenterHead, (dSpeed == -1) ? 1 : dSpeed, sDirection, uiColor, iDist, uiSpecialColor);
 			break;
 		default:
@@ -316,6 +372,7 @@ public:
 	}
 
 	Train* getTrain();
+	int getType();
 	int getId();
 	void setId(int id);
 	void resetStopCooldown();

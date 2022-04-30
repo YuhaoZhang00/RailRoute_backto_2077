@@ -65,12 +65,32 @@ void ChooseLevelState::virtMouseMoved(Scyyz12Engine2* pContext, int iX, int iY)
 
 void ChooseLevelState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int iY)
 {
-	printf("## Debug - click at %d %d\n", iX, iY);
+	//printf("## Debug - click at %d %d\n", iX, iY);
 	if (iButton == SDL_BUTTON_LEFT)
 	{
 		if (iX > 30 && iX < 80) {
 			if (iY > 30 && iY < 80) {
 				pContext->changeState("start");
+			}
+		}
+		else if (iX > 585 && iX < 625) {
+			if (iY > 195 && iY < 235) {
+				pContext->changeState("gaming", true, false, 0);
+			}
+		}
+		else if (iX > 1135 && iX < 1175) {
+			if (iY > 258 && iY < 298) {
+				pContext->changeState("gaming", true, false, 1);
+			}
+		}
+		else if (iX > 1065 && iX < 1105) {
+			if (iY > 300 && iY < 340) {
+				pContext->changeState("gaming", true, false, 2);
+			}
+		}
+		else if (iX > 415 && iX < 455) {
+			if (iY > 325 && iY < 365) {
+				pContext->changeState("gaming", true, false, 3);
 			}
 		}
 	}

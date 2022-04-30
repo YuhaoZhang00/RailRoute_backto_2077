@@ -124,5 +124,7 @@ public:
 	void mouseRemoved();
 
 	int getTileType(int iX);
+
+	int getLineColor(int iX);
 };
 

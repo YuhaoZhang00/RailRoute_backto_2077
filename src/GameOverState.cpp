@@ -14,10 +14,10 @@ void GameOverState::updateHighest10Scores()
 	bool bIsInserted = false;
 	for (int i = 0; i < size(vecHighScore); i += 3) {
 		if (stoi(vecHighScore[i + 2]) <= m_iNumOfPassengers) {
-			char cstrNumOfPassengers[6];
-			snprintf(cstrNumOfPassengers, 6, "%05d", m_iNumOfPassengers);
+			char cstrNumOfPassengers[6]; snprintf(cstrNumOfPassengers, 6, "%05d", m_iNumOfPassengers);
+			char cstrNumOfDays[3]; snprintf(cstrNumOfDays, 3, "%02d", m_iNumOfDays);
 			vecHighScore.insert(vecHighScore.begin() + i, std::string(cstrNumOfPassengers));
-			vecHighScore.insert(vecHighScore.begin() + i, std::to_string(m_iLevel));
+			vecHighScore.insert(vecHighScore.begin() + i, std::string(cstrNumOfDays));
 			vecHighScore.insert(vecHighScore.begin() + i, m_strUserName);
 			bIsInserted = true;
 			break;
@@ -25,9 +25,9 @@ void GameOverState::updateHighest10Scores()
 	}
 	if (!bIsInserted) {
 		vecHighScore.emplace_back(m_strUserName);
-		vecHighScore.emplace_back(std::to_string(m_iLevel));
-		char cstrNumOfPassengers[6];
-		snprintf(cstrNumOfPassengers, 6, "%05d", m_iNumOfPassengers);
+		char cstrNumOfDays[3]; snprintf(cstrNumOfDays, 3, "%02d", m_iNumOfDays);
+		vecHighScore.emplace_back(std::string(cstrNumOfDays));
+		char cstrNumOfPassengers[6]; snprintf(cstrNumOfPassengers, 6, "%05d", m_iNumOfPassengers);
 		vecHighScore.emplace_back(std::string(cstrNumOfPassengers));
 	}
 	for (int i = size(vecHighScore); i > 3 * MAX_SCORES_IN_HIGH_SCORE; i--) {
@@ -180,3 +180,10 @@ void GameOverState::virtCreateSurfaces(Scyyz12Engine2* pContext)
 {
 	pContext->BaseEngine::virtCreateSurfaces();
 }
+
+void GameOverState::virtSetSelfDefinedValue(int i, int j)
+{
+	m_iNumOfDays = i;
+	m_iNumOfPassengers = j;
+}
+

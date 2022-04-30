@@ -211,3 +211,9 @@ int SelectionArea::getTileType(int iX)
 {
 	return m_vecTile2Type[iX];
 }
+
+int SelectionArea::getLineColor(int iX)
+{
+	if (iX == -1) return m_uiUndiscoveredColor;
+	return m_vecLineColors[m_vecTile2Type[iX]];
+}

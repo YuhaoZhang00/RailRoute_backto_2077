@@ -20,5 +20,8 @@ public:
 	virtual void copyAllBackgroundBuffer(Scyyz12Engine2* pContext) = 0;
 	virtual void virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode) = 0;
 	virtual void virtCreateSurfaces(Scyyz12Engine2* pContext) = 0;
+
+	virtual void virtSetSelfDefinedValue(int i, int j) {};
+	virtual void virtSetSelfDefinedValue(bool b, bool c, int i) {};
 };
 

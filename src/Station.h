@@ -16,6 +16,9 @@ protected:
 	int m_iPassengerCount = 0;
 	std::vector<PassengerCollection*> m_vecPassenger;
 
+	bool m_bIsAngry = false;
+	int m_iAngryValue = 0;
+
 public:
 	Station(BaseEngine* pEngine, int iXCenter, int iYCenter,
 		unsigned int uiInnerColor = 0xFFFFFF, unsigned int uiColor = 0x000000, int iBorderWidth = 5, int iSize = 40)
@@ -31,15 +34,20 @@ public:
 	}
 
 	virtual void virtDraw() override = 0;
-	//virtual void virtDoUpdate(int iCurrentTime) override = 0;
+	void virtDoUpdate(int iCurrentTime) override;
 
 	void addPassenger(PassengerCollection* oPassenger);
 	// returns the index of the first passenger of given type; return -1 if not found
 	int findFirstPassengerOfType(short sType);
 	// returns the type of the first passenger
 	short removeFirstPassenger();
+	std::vector<PassengerCollection*> getPassengerList();
 	void removePassenger(int iIndex);
 	bool isEmpty();
+	bool getIsAngry();
+	int getAngryValue();
+	void setIsAngry(bool b);
+	void setAngryValue(int i);
 };
 
 class StationCircle :

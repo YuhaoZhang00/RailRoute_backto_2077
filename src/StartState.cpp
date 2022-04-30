@@ -1,9 +1,13 @@
 #include "header.h"
 #include "StartState.h"
 #include "ImagePixelMapping.h"
+#include "FileHandler.h"
 
 int StartState::virtInitialise(Scyyz12Engine2* pContext)
 {
+	FileReader fh("resources/level-continue.txt");
+	if (fh.readNumber() == -1) m_bIsContinue = false;
+	else m_bIsContinue = true;
 	return pContext->BaseEngine::virtInitialise();
 }
 
@@ -83,9 +87,15 @@ void StartState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 	pContext->drawForegroundRectangle(550, 400, 750, 450, 0xF94144);
 	pContext->drawForegroundString(650 - 72, 405, "New Game", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 
-	pContext->drawForegroundRectangle(550, 470, 750, 520, 0xF9C74F);
-	pContext->drawForegroundString(650 - 65, 475, "Continue", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
-
+	if (!m_bIsContinue) {
+		pContext->drawForegroundRectangle(550, 470, 750, 520, 0xeeeeee);
+		pContext->drawForegroundString(650 - 65, 475, "Continue", 0xaaaaaa, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	}
+	else {
+		pContext->drawForegroundRectangle(550, 470, 750, 520, 0xF9C74F);
+		pContext->drawForegroundString(650 - 65, 475, "Continue", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	}
+	
 	pContext->drawForegroundRectangle(550, 540, 750, 590, 0x4361EE);
 	pContext->drawForegroundString(650 - 85, 545, "How to Play", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 
@@ -108,15 +118,15 @@ void StartState::virtMouseMoved(Scyyz12Engine2* pContext, int iX, int iY)
 
 void StartState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int iY)
 {
-	printf("## Debug - click at %d %d\n", iX, iY);
+	//printf("## Debug - click at %d %d\n", iX, iY);
 	if (iButton == SDL_BUTTON_LEFT)
 	{
 		if (iX > 550 && iX < 750) {
 			if (iY > 400 && iY < 450) {
 				pContext->changeState("choose_level");
 			}
-			else if (iY > 470 && iY < 520) {
-				pContext->changeState("gaming");
+			else if (iY > 470 && iY < 520 && m_bIsContinue) {
+				pContext->changeState("gaming", true, true, 0);
 			}
 			else if (iY > 540 && iY < 590) {
 				pContext->changeState("instruction");
