@@ -1226,7 +1226,7 @@ void GameState::virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext)
 		}
 
 		for (LineRoute* lr : m_lr) {
-			m_scoreCount += lr->update();
+			m_scoreCount += lr->update(m_lr);
 		}
 		if (m_sm->update()) {
 			writeToContinueFile(false);

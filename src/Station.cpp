@@ -63,6 +63,33 @@ short Station::removeFirstPassenger()
 	}
 }
 
+short Station::removeFirstPassengerOfTypes(std::vector<bool> vecType)
+{
+	if (isEmpty()) {
+		printf("!! Error @ Station.cpp removeFirstPassenger() - invalid remove of passenger from station\n");
+		return -1;
+	}
+	else {
+		for (PassengerCollection* passenger : m_vecPassenger) {
+			short sType = m_vecPassenger[0]->getType();
+			if (vecType[sType]) {
+				delete m_vecPassenger[0];
+				m_vecPassenger.erase(m_vecPassenger.begin());
+				m_iPassengerCount--;
+				for (int i = 0; i < m_iPassengerCount; i++) {
+					m_vecPassenger[i]->getPassenger()->setXCenter(m_iCurrentScreenX + 30 + i % PASSENGER_IN_STATION_X * 10);
+					m_vecPassenger[i]->getPassenger()->setYCenter(m_iCurrentScreenY - 10 + i / PASSENGER_IN_STATION_X * 10);
+				}
+				if (m_iPassengerCount <= MAX_PASSENGERS_IN_STATION_BEFORE_ANGER) {
+					m_bIsAngry = false;
+				}
+				return sType;
+			}
+		}
+		return -1;
+	}
+}
+
 std::vector<PassengerCollection*> Station::getPassengerList()
 {
 	return m_vecPassenger;

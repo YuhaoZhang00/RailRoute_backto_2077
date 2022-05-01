@@ -41,6 +41,8 @@ public:
 	int findFirstPassengerOfType(short sType);
 	// returns the type of the first passenger
 	short removeFirstPassenger();
+	// returns the type of the first passenger, returns -1 if no passenger of that type
+	short removeFirstPassengerOfTypes(std::vector<bool> vecType);
 	std::vector<PassengerCollection*> getPassengerList();
 	void removePassenger(int iIndex);
 	bool isEmpty();

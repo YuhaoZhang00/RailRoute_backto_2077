@@ -17,38 +17,53 @@ void StartState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 
 	// background
 	pContext->fillBackground(0xffffff);
-	m_oTheExtraSurface1->fillSurface(0xffffff);
-	m_oTheExtraSurface2->fillSurface(0xffffff);
-	m_oTheExtraSurface3->fillSurface(0xffffff);
-	m_oTheExtraSurface4->fillSurface(0xffffff);
-	m_oTheExtraSurface5->fillSurface(0xffffff);
+	m_oTheExtraSurface11->fillSurface(0xffffff);
+	m_oTheExtraSurface12->fillSurface(0xffffff);
+	m_oTheExtraSurface13->fillSurface(0xffffff);
+	m_oTheExtraSurface21->fillSurface(0xffffff);
+	m_oTheExtraSurface22->fillSurface(0xffffff);
+	m_oTheExtraSurface23->fillSurface(0xffffff);
+	m_oTheExtraSurface31->fillSurface(0xffffff);
+	m_oTheExtraSurface32->fillSurface(0xffffff);
+	m_oTheExtraSurface33->fillSurface(0xffffff);
 
 	// ---------------------------------------------------
-	m_oTheExtraSurface1->mySDLLockSurface();
-	m_oTheExtraSurface2->mySDLLockSurface();
-	m_oTheExtraSurface3->mySDLLockSurface();
-	m_oTheExtraSurface4->mySDLLockSurface();
-	m_oTheExtraSurface5->mySDLLockSurface();
+	m_oTheExtraSurface11->mySDLLockSurface();
+	m_oTheExtraSurface12->mySDLLockSurface();
+	m_oTheExtraSurface13->mySDLLockSurface();
+	m_oTheExtraSurface21->mySDLLockSurface();
+	m_oTheExtraSurface22->mySDLLockSurface();
+	m_oTheExtraSurface23->mySDLLockSurface();
+	m_oTheExtraSurface31->mySDLLockSurface();
+	m_oTheExtraSurface32->mySDLLockSurface();
+	m_oTheExtraSurface33->mySDLLockSurface();
 	// ---------------------------------------------------
 
 	// TODO : beautify them
 
-	pContext->drawBackgroundRectangle(200, 200, 300, 400, 0x404040);
-	m_oTheExtraSurface1->drawOval(100, 100, 200, 200, 0x400000);
-	m_oTheExtraSurface2->drawOval(100, 100, 200, 200, 0x004000);
-	m_oTheExtraSurface3->drawOval(100, 100, 200, 200, 0x000040);
-	m_oTheExtraSurface4->drawOval(100, 100, 200, 200, 0x004040);
-	m_oTheExtraSurface5->drawOval(100, 100, 200, 200, 0x400040);
-
-	//SimpleImage background = ImageManager::loadImage("resources/bg-route-1300-800.png", true);
-	//background.renderImageWithMaskAndTransparency(pContext->getBackgroundSurface(), 0, 0, 0, 0, background.getWidth(), background.getHeight(), 0xffffff, 30);
+	SimpleImage bg1 = ImageManager::loadImage("resources/bg-1-y.png", true);
+	bg1.renderImage(m_oTheExtraSurface11, 0, 0, 70, 100, bg1.getWidth(), bg1.getHeight());
+	bg1.renderImageWithMaskAndTransparency(m_oTheExtraSurface12, 0, 0, 70, 100, bg1.getWidth(), bg1.getHeight(), -1, 66);
+	bg1.renderImageWithMaskAndTransparency(m_oTheExtraSurface13, 0, 0, 70, 100, bg1.getWidth(), bg1.getHeight(), -1, 33);
+	SimpleImage bg2 = ImageManager::loadImage("resources/bg-2-y.png", true);
+	bg2.renderImage(m_oTheExtraSurface21, 0, 0, 800, 200, bg2.getWidth(), bg2.getHeight());
+	bg2.renderImageWithMaskAndTransparency(m_oTheExtraSurface22, 0, 0, 800, 200, bg2.getWidth(), bg2.getHeight(), -1, 66);
+	bg2.renderImageWithMaskAndTransparency(m_oTheExtraSurface23, 0, 0, 800, 200, bg2.getWidth(), bg2.getHeight(), -1, 33);
+	SimpleImage bg3 = ImageManager::loadImage("resources/bg-3-y.png", true);
+	bg3.renderImage(m_oTheExtraSurface31, 0, 0, 20, 400, bg3.getWidth(), bg3.getHeight());
+	bg3.renderImageWithMaskAndTransparency(m_oTheExtraSurface32, 0, 0, 20, 400, bg3.getWidth(), bg3.getHeight(), -1, 66);
+	bg3.renderImageWithMaskAndTransparency(m_oTheExtraSurface33, 0, 0, 20, 400, bg3.getWidth(), bg3.getHeight(), -1, 33);
 
 	// ---------------------------------------------------
-	m_oTheExtraSurface1->mySDLUnlockSurface();
-	m_oTheExtraSurface2->mySDLUnlockSurface();
-	m_oTheExtraSurface3->mySDLUnlockSurface();
-	m_oTheExtraSurface4->mySDLUnlockSurface();
-	m_oTheExtraSurface5->mySDLUnlockSurface();
+	m_oTheExtraSurface11->mySDLUnlockSurface();
+	m_oTheExtraSurface12->mySDLUnlockSurface();
+	m_oTheExtraSurface13->mySDLUnlockSurface();
+	m_oTheExtraSurface21->mySDLUnlockSurface();
+	m_oTheExtraSurface22->mySDLUnlockSurface();
+	m_oTheExtraSurface23->mySDLUnlockSurface();
+	m_oTheExtraSurface31->mySDLUnlockSurface();
+	m_oTheExtraSurface32->mySDLUnlockSurface();
+	m_oTheExtraSurface33->mySDLUnlockSurface();
 	// ---------------------------------------------------
 }
 
@@ -95,7 +110,7 @@ void StartState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 		pContext->drawForegroundRectangle(550, 470, 750, 520, 0xF9C74F);
 		pContext->drawForegroundString(650 - 65, 475, "Continue", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 	}
-	
+
 	pContext->drawForegroundRectangle(550, 540, 750, 590, 0x4361EE);
 	pContext->drawForegroundString(650 - 85, 545, "How to Play", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 
@@ -148,16 +163,25 @@ void StartState::virtMouseWheel(Scyyz12Engine2* pContext, int x, int y, int whic
 
 void StartState::virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext)
 {
-	m_iCurrentSurfaceNumber = (m_iCurrentSurfaceNumber + 1) % 600;
-	switch (m_iCurrentSurfaceNumber / 100)
-	{
-	case 0: pContext->setBackgourndSurface(&(pContext->getTheDefaultBackgroundSurface())); break;
-	case 1: pContext->setBackgourndSurface(m_oTheExtraSurface1); break;
-	case 2: pContext->setBackgourndSurface(m_oTheExtraSurface2); break;
-	case 3: pContext->setBackgourndSurface(m_oTheExtraSurface3); break;
-	case 4: pContext->setBackgourndSurface(m_oTheExtraSurface4); break;
-	case 5: pContext->setBackgourndSurface(m_oTheExtraSurface5); break;
-	}
+	m_iCurrentSurfaceNumber = (++m_iCurrentSurfaceNumber) % 1950;
+	if (m_iCurrentSurfaceNumber == 50) pContext->setBackgourndSurface(m_oTheExtraSurface13);
+	else if (m_iCurrentSurfaceNumber == 54) pContext->setBackgourndSurface(m_oTheExtraSurface12);
+	else if (m_iCurrentSurfaceNumber == 58) pContext->setBackgourndSurface(m_oTheExtraSurface11);
+	else if (m_iCurrentSurfaceNumber == 600) pContext->setBackgourndSurface(m_oTheExtraSurface12);
+	else if (m_iCurrentSurfaceNumber == 604) pContext->setBackgourndSurface(m_oTheExtraSurface13);
+	else if (m_iCurrentSurfaceNumber == 608) pContext->setBackgourndSurface(&(pContext->getTheDefaultBackgroundSurface()));
+	else if (m_iCurrentSurfaceNumber == 50 + 650) pContext->setBackgourndSurface(m_oTheExtraSurface23);
+	else if (m_iCurrentSurfaceNumber == 54 + 650) pContext->setBackgourndSurface(m_oTheExtraSurface22);
+	else if (m_iCurrentSurfaceNumber == 58 + 650) pContext->setBackgourndSurface(m_oTheExtraSurface21);
+	else if (m_iCurrentSurfaceNumber == 600 + 650) pContext->setBackgourndSurface(m_oTheExtraSurface22);
+	else if (m_iCurrentSurfaceNumber == 604 + 650) pContext->setBackgourndSurface(m_oTheExtraSurface23);
+	else if (m_iCurrentSurfaceNumber == 608 + 650) pContext->setBackgourndSurface(&(pContext->getTheDefaultBackgroundSurface()));
+	else if (m_iCurrentSurfaceNumber == 50 + 1300) pContext->setBackgourndSurface(m_oTheExtraSurface33);
+	else if (m_iCurrentSurfaceNumber == 54 + 1300) pContext->setBackgourndSurface(m_oTheExtraSurface32);
+	else if (m_iCurrentSurfaceNumber == 58 + 1300) pContext->setBackgourndSurface(m_oTheExtraSurface31);
+	else if (m_iCurrentSurfaceNumber == 600 + 1300) pContext->setBackgourndSurface(m_oTheExtraSurface32);
+	else if (m_iCurrentSurfaceNumber == 604 + 1300) pContext->setBackgourndSurface(m_oTheExtraSurface33);
+	else if (m_iCurrentSurfaceNumber == 608 + 1300) pContext->setBackgourndSurface(&(pContext->getTheDefaultBackgroundSurface()));
 	pContext->redrawDisplay();
 }
 
@@ -175,14 +199,22 @@ void StartState::virtCreateSurfaces(Scyyz12Engine2* pContext)
 {
 	pContext->BaseEngine::virtCreateSurfaces();
 
-	m_oTheExtraSurface1 = new DrawingSurface(pContext);
-	m_oTheExtraSurface2 = new DrawingSurface(pContext);
-	m_oTheExtraSurface3 = new DrawingSurface(pContext);
-	m_oTheExtraSurface4 = new DrawingSurface(pContext);
-	m_oTheExtraSurface5 = new DrawingSurface(pContext);
-	m_oTheExtraSurface1->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
-	m_oTheExtraSurface2->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
-	m_oTheExtraSurface3->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
-	m_oTheExtraSurface4->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
-	m_oTheExtraSurface5->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
+	m_oTheExtraSurface11 = new DrawingSurface(pContext);
+	m_oTheExtraSurface12 = new DrawingSurface(pContext);
+	m_oTheExtraSurface13 = new DrawingSurface(pContext);
+	m_oTheExtraSurface21 = new DrawingSurface(pContext);
+	m_oTheExtraSurface22 = new DrawingSurface(pContext);
+	m_oTheExtraSurface23 = new DrawingSurface(pContext);
+	m_oTheExtraSurface31 = new DrawingSurface(pContext);
+	m_oTheExtraSurface32 = new DrawingSurface(pContext);
+	m_oTheExtraSurface33 = new DrawingSurface(pContext);
+	m_oTheExtraSurface11->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
+	m_oTheExtraSurface12->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
+	m_oTheExtraSurface13->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
+	m_oTheExtraSurface21->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
+	m_oTheExtraSurface22->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
+	m_oTheExtraSurface23->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
+	m_oTheExtraSurface31->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
+	m_oTheExtraSurface32->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
+	m_oTheExtraSurface33->createSurface(pContext->getWindowWidth(), pContext->getWindowHeight());
 }

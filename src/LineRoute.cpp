@@ -62,18 +62,44 @@ void LineRoute::setCarriageStateOnTurn(CarriageCollection* c)
 	}
 }
 
-bool LineRoute::exchangePassengers(TrainCollection* t, StationCollection* s)
+bool LineRoute::exchangePassengers(int index, TrainCollection* t, StationCollection* s, std::vector<LineRoute*>& vecLr)
 {
 	if (!isCooldown()) {
-		int index = t->getTrain()->findFirstPassengerByType(s->getType());
-		if (index != -1) {
-			t->getTrain()->removePassenger(index);
+		// passenger : train -> station (destination)
+		int firstPassengerOnTrain = t->getTrain()->findFirstPassengerByType(s->getType());
+		if (firstPassengerOnTrain != -1) {
+			printf("- Destination\n");
+			t->getTrain()->removePassenger(firstPassengerOnTrain);
 			resetCooldown();
 			return true;
 		}
+		// passenger : train -> station (transfer)
+		if (aiIsExchangeStation(s, this, vecLr)) {
+			std::vector<bool> hasStationTypeExchange = aiGetStationTypeAfterExchange(3, s, this, vecLr);
+			std::vector<bool> hasStationTypeNonExchange = aiGetStationTypeNonExchange(3, s);
+			for (int i = 0; i < 6; i++) {
+				hasStationTypeExchange[i] = hasStationTypeExchange[i] && !hasStationTypeNonExchange[i];
+			}
+			int iIndex = t->getTrain()->findFirstPassengerByTypes(hasStationTypeExchange);
+			int sType = t->getTrain()->findFirstPassengerTypeByTypes(hasStationTypeExchange);
+			if (iIndex != -1) {
+				printf("- Transfer: passenger index in train: %d, passenger type: %d\n", iIndex, sType);
+				t->getTrain()->removePassenger(iIndex);
+				s->getStation()->addPassenger(new PassengerCollection(sType, m_pEngine));
+				resetCooldown();
+				return false;
+			}
+		}
+		// passenger : station -> train (board)
 		while (!t->getTrain()->isFull() && !s->getStation()->isEmpty()) {
-			short sType = s->getStation()->removeFirstPassenger();
-			t->getTrain()->addPassenger(new PassengerCollection(sType, m_pEngine));
+			if (aiRemovePassenger(index, t, s, vecLr)) {}
+			else {
+				if (rand() % 10 <= 1) {
+					short sType = s->getStation()->removeFirstPassenger();
+					t->getTrain()->addPassenger(new PassengerCollection(sType, m_pEngine));
+					printf("- Boarding: passenger type: %d\n", sType);
+				}
+			}
 			resetCooldown();
 			return false;
 		}
@@ -81,8 +107,9 @@ bool LineRoute::exchangePassengers(TrainCollection* t, StationCollection* s)
 	return false;
 }
 
-bool LineRoute::exchangePassengers(TrainCollection* t)
+bool LineRoute::exchangePassengers(int index, std::vector<LineRoute*>& vecLr)
 {
+	TrainCollection* t = m_vecTrain[index];
 	CarriageCollection* head = t->getTrain()->getCarriageList()[0];
 	int headX = head->getCarriage()->getXCentre();
 	int headY = head->getCarriage()->getYCentre();
@@ -90,11 +117,161 @@ bool LineRoute::exchangePassengers(TrainCollection* t)
 	for (int i = -speed; i < speed; i++) {
 		for (int j = -speed; j <= speed; j++) {
 			if (m_mapStation.count((headX + i) * 10000 + (headY + j)) > 0) {
-				return exchangePassengers(t, m_mapStation.at((headX + i) * 10000 + (headY + j)));
+				return exchangePassengers(index, t, m_mapStation.at((headX + i) * 10000 + (headY + j)), vecLr);
 			}
 		}
 	}
 	return false;
+}
+
+bool LineRoute::aiRemovePassenger(int index, TrainCollection* t, StationCollection* s, std::vector<LineRoute*>& vecLr)
+{
+	aiUpdateThisPrevStationId(index, s);
+	std::vector<int> stationIndexAndDirection = aiFindCurrentStationIndexAndDirection(index);
+	std::vector<bool> hasStationType = aiFindStationTypeOfNextNStations(5, stationIndexAndDirection[0], stationIndexAndDirection[1], vecLr);
+
+	//printf("circle? %d - square? %d - triangle? %d - inv-triangle? %d - diamond? %d - flower? %d\n",
+	//	hasStationType[0] ? 1 : 0, hasStationType[1] ? 1 : 0, hasStationType[2] ? 1 : 0,
+	//	hasStationType[3] ? 1 : 0, hasStationType[4] ? 1 : 0, hasStationType[5] ? 1 : 0);
+
+	short sType = s->getStation()->removeFirstPassengerOfTypes(hasStationType);
+	if (sType != -1) {
+		t->getTrain()->addPassenger(new PassengerCollection(sType, m_pEngine));
+		return true;
+	}
+	return false;
+}
+
+void LineRoute::aiUpdateThisPrevStationId(int index, StationCollection* s)
+{
+	if (m_vecTrainThisStation[index] == 10000) {
+		m_vecTrainThisStation[index] = s->getId();
+	}
+	else {
+		if (m_vecTrainThisStation[index] == s->getId()) return;
+		else {
+			m_vecTrainPrevStation[index] = m_vecTrainThisStation[index];
+			m_vecTrainThisStation[index] = s->getId();
+		}
+	}
+}
+
+std::vector<int> LineRoute::aiFindCurrentStationIndexAndDirection(int index)
+{
+	std::vector<int> ans(2);
+	int stationIndex = -1;
+	int prevStationIndex = -1;
+	for (int i = 0; i < m_vecStation.size(); i++) {
+		if (m_vecTrainThisStation[index] == m_vecStation[i]->getId()) {
+			stationIndex = i;
+		}
+		if (m_vecTrainPrevStation[index] == m_vecStation[i]->getId()) {
+			prevStationIndex = i;
+		}
+	}
+	ans[0] = stationIndex;
+	if (m_vecTrainPrevStation[index] == 10000) ans[1] = 0;
+	else if (stationIndex == -1 || prevStationIndex == -1) {
+		printf("!! Error @ LineRoute::aiFindCurrentStationIndexAndDirection(int index) - 1\n");
+	}
+	else if (stationIndex > prevStationIndex || stationIndex == 0) ans[1] = 0;
+	else ans[1] = 1;
+
+	return ans;
+}
+
+std::vector<bool> LineRoute::aiFindStationTypeOfNextNStations(int n, int stationIndex, short direction, std::vector<LineRoute*>& vecLr)
+{
+	std::vector<bool> hasStationType(6, false);
+	if (direction == 0) {
+		n = std::min(n, ((int)m_vecStation.size() - stationIndex - 1));
+		for (int i = stationIndex + 1; i < stationIndex + 1 + n; i++) {
+			if (aiIsExchangeStation(m_vecStation[i], this, vecLr)) {
+				std::vector<bool> hasStationTypeExchange = aiGetStationTypeAfterExchange(n - (i - stationIndex), m_vecStation[i], this, vecLr);
+				for (int i = 0; i < 6; i++) {
+					hasStationType[i] = hasStationType[i] || hasStationTypeExchange[i];
+				}
+			}
+			hasStationType[m_vecStation[i]->getType()] = true;
+		}
+	}
+	else {
+		n = std::min(n, stationIndex);
+		for (int i = stationIndex - n; i < stationIndex; i++) {
+			if (aiIsExchangeStation(m_vecStation[i], this, vecLr)) {
+				std::vector<bool> hasStationTypeExchange = aiGetStationTypeAfterExchange(n - (stationIndex - i), m_vecStation[i], this, vecLr);
+				for (int i = 0; i < 6; i++) {
+					hasStationType[i] = hasStationType[i] || hasStationTypeExchange[i];
+				}
+			}
+			hasStationType[m_vecStation[i]->getType()] = true;
+		}
+	}
+	return hasStationType;
+}
+
+std::vector<bool> LineRoute::aiFindStationTypeOfNextNStationsInBothDirection(int n, StationCollection* s, std::vector<LineRoute*>& vecLr)
+{
+	int stationIndex = -1;
+	for (int i = 0; i < m_vecStation.size(); i++) {
+		if (m_vecStation[i] == s) {
+			stationIndex = i;
+			break;
+		}
+	}
+	std::vector<bool> hasStationType(6, false);
+	int a = std::min(n, ((int)m_vecStation.size() - stationIndex - 1));
+	for (int i = stationIndex + 1; i < stationIndex + 1 + a; i++) {
+		hasStationType[m_vecStation[i]->getType()] = true;
+	}
+	int b = std::min(n, stationIndex);
+	for (int i = stationIndex - b; i < stationIndex; i++) {
+		hasStationType[m_vecStation[i]->getType()] = true;
+	}
+
+	return hasStationType;
+}
+
+bool LineRoute::aiIsExchangeStation(StationCollection* s, LineRoute* thisLr, std::vector<LineRoute*>& vecLr)
+{
+	for (LineRoute* lr : vecLr) {
+		if (lr == thisLr) continue;
+		for (StationCollection* station : lr->getStationList()) {
+			if (s == station) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+std::vector<bool> LineRoute::aiGetStationTypeAfterExchange(int n, StationCollection* s, LineRoute* thisLr, std::vector<LineRoute*>& vecLr)
+{
+	if (n <= 0) return std::vector<bool>(6, false);
+	else {
+		std::vector<bool> hasStationType(6, false);
+		for (LineRoute* lr : vecLr) {
+			if (lr == thisLr) continue;
+			for (StationCollection* station : lr->getStationList()) {
+				if (s == station) {
+					std::vector<bool> hasStationTypeThisLine = lr->aiFindStationTypeOfNextNStationsInBothDirection(n, station, vecLr);
+					for (int i = 0; i < 6; i++) {
+						hasStationType[i] = hasStationType[i] || hasStationTypeThisLine[i];
+					}
+					break;
+				}
+			}
+		}
+		return hasStationType;
+	}
+}
+
+std::vector<bool> LineRoute::aiGetStationTypeNonExchange(int n, StationCollection* s)
+{
+	if (n <= 0) return std::vector<bool>(6, false);
+	else {
+		return aiFindStationTypeOfNextNStationsInBothDirection(n, s, std::vector<LineRoute*>{});
+	}
 }
 
 bool LineRoute::isCanAddStation(StationCollection* s1, StationCollection* s2)
@@ -106,15 +283,22 @@ bool LineRoute::isCanAddStation(StationCollection* s1, StationCollection* s2)
 	int yEnd = s2->getStation()->getYCentre();
 	Rail* testRail1 = new Rail(0, m_pEngine, xStart, yStart, xEnd, yEnd, true, 0x777777);
 	for (std::vector<int> pixelPoint : testRail1->getImagePixelMap()) {
-		if (m_pEngine->getBackgroundSurface()->rawGetPixel(pixelPoint[0], pixelPoint[1]) != -1) return false;
+		if (m_pEngine->getBackgroundSurface()->rawGetPixel(pixelPoint[0], pixelPoint[1]) != -1) {
+			delete testRail1;
+			return false;
+		}
 	}
+	delete testRail1;
 	Rail* testRail2 = new Rail(0, m_pEngine, xStart, yStart, xEnd, yEnd, false, 0x777777);
 	for (std::vector<int> pixelPoint : testRail2->getImagePixelMap()) {
-		if (m_pEngine->getBackgroundSurface()->rawGetPixel(pixelPoint[0], pixelPoint[1]) != -1) return false;
+		if (m_pEngine->getBackgroundSurface()->rawGetPixel(pixelPoint[0], pixelPoint[1]) != -1) {
+			delete testRail2;
+			return false;
+		}
 	}
-	m_pEngine->getBackgroundSurface()->mySDLUnlockSurface();
-	delete testRail1;
 	delete testRail2;
+	m_pEngine->getBackgroundSurface()->mySDLUnlockSurface();
+
 	return true;
 }
 
@@ -299,6 +483,8 @@ std::vector<Rail*> LineRoute::getRailList()
 void LineRoute::addTrain(TrainCollection* t)
 {
 	m_vecTrain.emplace_back(t);
+	m_vecTrainThisStation.emplace_back(10000);
+	m_vecTrainPrevStation.emplace_back(10000);
 }
 
 void LineRoute::addTrain(int tId, short sType, int iX, int iY)
@@ -318,6 +504,8 @@ void LineRoute::removeTrain(TrainCollection* t)
 			}
 			delete m_vecTrain[i];
 			m_vecTrain.erase(m_vecTrain.begin() + i);
+			m_vecTrainThisStation.erase(m_vecTrainThisStation.begin() + i);
+			m_vecTrainPrevStation.erase(m_vecTrainPrevStation.begin() + i);
 			break;
 		}
 	}
@@ -345,19 +533,19 @@ void LineRoute::drawInitialise()
 	}
 }
 
-int LineRoute::update()
+int LineRoute::update(std::vector<LineRoute*>& vecLr)
 {
 	int passengerCount = 0;
-	for (TrainCollection* train : m_vecTrain) {
-		if (!train->isStopCooldown()) {
-			if (!stopAtStation(train)) {
-				for (CarriageCollection* carriage : train->getTrain()->getCarriageList()) {
+	for (int i = 0; i < m_vecTrain.size(); i++) {
+		if (!m_vecTrain[i]->isStopCooldown()) {
+			if (!stopAtStation(m_vecTrain[i])) {
+				for (CarriageCollection* carriage : m_vecTrain[i]->getTrain()->getCarriageList()) {
 					setCarriageStateOnTurn(carriage);
 				}
 			}
 		}
 		else {
-			if (exchangePassengers(train)) passengerCount++;
+			if (exchangePassengers(i, vecLr)) passengerCount++;
 		}
 	}
 	return passengerCount;

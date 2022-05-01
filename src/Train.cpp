@@ -259,6 +259,26 @@ int Carriage::findFirstPassengerByType(short sType)
 	return -1;
 }
 
+int Carriage::findFirstPassengerByTypes(std::vector<bool> sType)
+{
+	for (int i = 0; i < m_iMaxNumOfPassengers; i++) {
+		if (m_vecPassenger[i] != nullptr && sType[m_vecPassenger[i]->getType()]) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+short Carriage::findFirstPassengerTypeByTypes(std::vector<bool> sType)
+{
+	for (int i = 0; i < m_iMaxNumOfPassengers; i++) {
+		if (m_vecPassenger[i] != nullptr && sType[m_vecPassenger[i]->getType()]) {
+			return m_vecPassenger[i]->getType();
+		}
+	}
+	return -1;
+}
+
 std::vector<int> Carriage::findPassengerByType(short sType)
 {
 	std::vector<int> vecPassenger;
@@ -691,6 +711,26 @@ int Train::findFirstPassengerByType(short sType)
 		int iPassengerInCarriage = m_vecCarriage[i]->getCarriage()->findFirstPassengerByType(sType);
 		if (iPassengerInCarriage != -1) return iPassengerInCarriage + iNumOfPassengersInPrevCarriages;
 		iNumOfPassengersInPrevCarriages += m_vecCarriage[i]->getCarriage()->getMaxNumOfPassengers();
+	}
+	return -1;
+}
+
+int Train::findFirstPassengerByTypes(std::vector<bool> sType)
+{
+	int iNumOfPassengersInPrevCarriages = 0;
+	for (int i = 0; i < size(m_vecCarriage); i++) {
+		int iPassengerInCarriage = m_vecCarriage[i]->getCarriage()->findFirstPassengerByTypes(sType);
+		if (iPassengerInCarriage != -1) return iPassengerInCarriage + iNumOfPassengersInPrevCarriages;
+		iNumOfPassengersInPrevCarriages += m_vecCarriage[i]->getCarriage()->getMaxNumOfPassengers();
+	}
+	return -1;
+}
+
+short Train::findFirstPassengerTypeByTypes(std::vector<bool> sType)
+{
+	for (int i = 0; i < size(m_vecCarriage); i++) {
+		int iPassengerInCarriage = m_vecCarriage[i]->getCarriage()->findFirstPassengerTypeByTypes(sType);
+		if (iPassengerInCarriage != -1) return iPassengerInCarriage;
 	}
 	return -1;
 }

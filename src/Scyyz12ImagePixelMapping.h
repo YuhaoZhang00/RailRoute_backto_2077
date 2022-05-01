@@ -8,13 +8,21 @@ class Scyyz12ImagePixelMapping :
 private:
 	int m_iTransparencyColour = -1;
 	double m_dTransparencyPercentage = 0.5;
+	bool m_bIsShrink;
 
 public:
-	Scyyz12ImagePixelMapping(int iTransparencyColour, double dTransparencyPercentage)
-		: m_iTransparencyColour(iTransparencyColour), m_dTransparencyPercentage(dTransparencyPercentage)
+	Scyyz12ImagePixelMapping(int iTransparencyColour, double dTransparencyPercentage, bool bIsShrink = false)
+		: m_iTransparencyColour(iTransparencyColour), m_dTransparencyPercentage(dTransparencyPercentage), m_bIsShrink(bIsShrink)
 	{}
 
 	virtual bool mapCoordinates(double& x, double& y, const SimpleImage& image) override {
+		if (m_bIsShrink) {
+			int w = image.getWidth() / 2;
+			int h = image.getHeight() / 2;
+			x = (x - w) * 1.3 + w;
+			y = (y - h) * 1.3 + h;
+		}
+
 		return true;
 	}
 

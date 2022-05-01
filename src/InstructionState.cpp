@@ -83,7 +83,7 @@ void InstructionState::virtMouseWheel(Scyyz12Engine2* pContext, int x, int y, in
 
 void InstructionState::virtMainLoopDoBeforeUpdate(Scyyz12Engine2* pContext)
 {
-	m_lr1->update();
+	//m_lr1->update(NULL);
 	m_sm1->update();
 }
 

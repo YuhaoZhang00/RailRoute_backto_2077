@@ -19,6 +19,8 @@ private:
 	std::vector<Rail*> m_vecRail;
 	std::unordered_map<int, short> m_mapTurnPoints;
 	std::unordered_map<int, StationCollection*> m_mapStation;
+	std::vector<int> m_vecTrainThisStation;
+	std::vector<int> m_vecTrainPrevStation;
 
 	int m_cooldown = 0;
 
@@ -29,8 +31,21 @@ private:
 
 	bool stopAtStation(TrainCollection* t);
 	void setCarriageStateOnTurn(CarriageCollection* c);
-	bool exchangePassengers(TrainCollection* t, StationCollection* s);
-	bool exchangePassengers(TrainCollection* t);
+	bool exchangePassengers(int index, TrainCollection* t, StationCollection* s, std::vector<LineRoute*>& vecLr);
+	bool exchangePassengers(int index, std::vector<LineRoute*>& vecLr);
+
+	// ---------------
+	bool aiRemovePassenger(int index, TrainCollection* t, StationCollection* s, std::vector<LineRoute*>& vecLr);
+	void aiUpdateThisPrevStationId(int index, StationCollection* s);
+	std::vector<int> aiFindCurrentStationIndexAndDirection(int index);
+	std::vector<bool> aiFindStationTypeOfNextNStations(int n, int stationIndex, short direction, std::vector<LineRoute*>& vecLr);
+public:
+	std::vector<bool> aiFindStationTypeOfNextNStationsInBothDirection(int n, StationCollection* s, std::vector<LineRoute*>& vecLr);
+private:
+	bool aiIsExchangeStation(StationCollection* s, LineRoute* thisLr, std::vector<LineRoute*>& vecLr);
+	std::vector<bool> aiGetStationTypeAfterExchange(int n, StationCollection* s, LineRoute* thisLr, std::vector<LineRoute*>& vecLr);
+	std::vector<bool> aiGetStationTypeNonExchange(int n, StationCollection* s);
+	// ---------------
 
 public:
 	LineRoute(BaseEngine* pEngine, unsigned int uiColor)
@@ -64,7 +79,7 @@ public:
 	void addCarriage(int index);
 
 	void drawInitialise();
-	int update();
+	int update(std::vector<LineRoute*>& vecLr);
 
 	bool isPosAStationInLine(int iX, int iY);
 	int isPosATrainInLine(int iX, int iY);

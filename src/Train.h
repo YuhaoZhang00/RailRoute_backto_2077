@@ -66,6 +66,10 @@ public:
 	void addPassenger(PassengerCollection* oPassenger);
 	// returns the index of the first passenger of given type; return -1 if not found
 	int findFirstPassengerByType(short sType);
+	// returns the index of the first passenger of given type; return -1 if not found
+	int findFirstPassengerByTypes(std::vector<bool> sType);
+	// returns the type of the first passenger of given types; return -1 if not found
+	short findFirstPassengerTypeByTypes(std::vector<bool> sType);
 	std::vector<int> findPassengerByType(short sType);
 	void removePassenger(int iIndex);
 	bool isFull();
@@ -255,6 +259,10 @@ public:
 	void addPassenger(PassengerCollection* oPassenger);
 	// returns the index of the first passenger of given type; return -1 if not found
 	int findFirstPassengerByType(short sType);
+	// returns the index of the first passenger of given types; return -1 if not found
+	int findFirstPassengerByTypes(std::vector<bool> sType);
+	// returns the type of the first passenger of given types; return -1 if not found
+	short findFirstPassengerTypeByTypes(std::vector<bool> sType);
 	std::vector<int> findPassengerByType(short sType);
 	void removePassenger(int iIndex);
 	bool isFull();
