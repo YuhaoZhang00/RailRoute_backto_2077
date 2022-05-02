@@ -16,7 +16,6 @@ void HighScoreState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 	pContext->fillBackground(0xffffff);
 
 	// Title
-	// TODO: the recrangle is for justifying position of string, please delete in release, or use a better / more beautiful way
 	pContext->drawBackgroundRectangle(650 - 115, 70, 650 + 115, 75, 0xF94144);
 	pContext->drawBackgroundString(650 - 100, 30, "High Score", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 40));
 

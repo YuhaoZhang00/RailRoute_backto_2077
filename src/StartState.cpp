@@ -39,8 +39,6 @@ void StartState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 	m_oTheExtraSurface33->mySDLLockSurface();
 	// ---------------------------------------------------
 
-	// TODO : beautify them
-
 	SimpleImage bg1 = ImageManager::loadImage("resources/bg-1-y.png", true);
 	bg1.renderImage(m_oTheExtraSurface11, 0, 0, 70, 100, bg1.getWidth(), bg1.getHeight());
 	bg1.renderImageWithMaskAndTransparency(m_oTheExtraSurface12, 0, 0, 70, 100, bg1.getWidth(), bg1.getHeight(), -1, 66);

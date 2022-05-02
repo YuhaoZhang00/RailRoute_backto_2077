@@ -75,12 +75,10 @@ void GameOverState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 	pContext->fillBackground(0xffffff);
 
 	// Title
-	// TODO: the recrangle is for justifying position of string, please delete in release, or use a better / more beautiful way
 	pContext->drawBackgroundRectangle(650 - 115, 70, 650 + 115, 75, 0xF94144);
 	pContext->drawBackgroundString(650 - 105, 30, "Game Over", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 40));
 
 	// Status & text field to enter name
-	// TODO: 显示第几关的相关信息
 	pContext->drawBackgroundString(200, 160, "Overcrouding at your stations has forced your railway to close.",
 		0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 	char strScore[100]; sprintf(strScore, "%d passengers traveled on your railway over %d days.", m_iNumOfPassengers, m_iNumOfDays);

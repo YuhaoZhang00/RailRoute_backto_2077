@@ -8,6 +8,8 @@ class ChooseLevelState :
 private:
 	int m_iOffset;
 
+	short m_sMouseAt = -1;
+
 public:
 	int virtInitialise(Scyyz12Engine2* pContext) override;
 	void virtSetupBackgroundBuffer(Scyyz12Engine2* pContext) override;

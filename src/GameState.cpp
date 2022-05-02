@@ -268,7 +268,7 @@ short GameState::directionToStation(int iX, int iY, int iStationX, int iStationY
 int GameState::virtInitialise(Scyyz12Engine2* pContext)
 {
 	m_filterScaling = Scyyz12FilterPointsScaling(1, 1, 80, 1299, 720, pContext);
-	m_filterTranslation = Scyyz12FilterPointsTranslation(0, 0, &m_filterScaling); // TODO: 增加拖拽移动的监听
+	m_filterTranslation = Scyyz12FilterPointsTranslation(0, 0, &m_filterScaling);
 	m_filterMask = Scyyz12FilterPointsRectangularMask(1, 80, 1299, 720, &m_filterTranslation);
 	pContext->getForegroundSurface()->setDrawPointsFilter(&m_filterMask);
 	pContext->getBackgroundSurface()->setDrawPointsFilter(&m_filterMask);
@@ -628,7 +628,7 @@ void GameState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 	switch (m_mouseState)
 	{
 	case 0:
-		pContext->drawForegroundString(650 - 450, 100, "Click a asset / line end", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		//pContext->drawForegroundString(650 - 450, 100, "Click a asset / line end", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 1:
 		pContext->drawForegroundString(650 - 450, 100, "Click a station (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));

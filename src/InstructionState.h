@@ -12,17 +12,20 @@ class InstructionState :
 	public State
 {
 private:
-	StationMap* m_sm1;
-	LineRoute* m_lr1;
+	TrainCollection* c1;
+	StationCollection* s1;
+	StationCollection* s2;
+	int iFakeInnerTimer = 101;
 
 public:
 	InstructionState()
-		: m_lr1(nullptr), m_sm1(nullptr)
+		: c1(nullptr), s1(nullptr), s2(nullptr)
 	{}
 
 	~InstructionState() {
-		delete m_sm1;
-		delete m_lr1;
+		delete c1;
+		delete s1;
+		delete s2;
 	}
 
 	int virtInitialise(Scyyz12Engine2* pContext) override;

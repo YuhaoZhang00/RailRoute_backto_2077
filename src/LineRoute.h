@@ -67,7 +67,6 @@ public:
 	void addStationHead(StationCollection* s, bool bIs45, int rId);
 	void addStationTail(StationCollection* s, bool bIs45, int rId);
 	void addStation(int index, StationCollection* s, bool bIs45_1, bool bIs45_2, int r2Id);
-	void removeStation(); // TODO: NOTE: no delete of station
 	std::vector<StationCollection*> getStationList();
 	std::vector<Rail*> getRailList();
 

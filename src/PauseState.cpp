@@ -11,11 +11,12 @@ void PauseState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 
 	pContext->fillBackground(0xffffff);
 
-	pContext->drawBackgroundString(650 - 40, 100, "pause", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 40));
+	pContext->drawBackgroundRectangle(650 - 55, 70, 650 + 55, 75, 0xF94144);
+	pContext->drawBackgroundString(650 - 54, 30, "Pause", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 40));
 
 	// Exit btn
 	pContext->drawBackgroundRectangle(550, 680, 750, 730, 0xF94144);
-	pContext->drawBackgroundString(650 - 28, 685, "back to game", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawBackgroundString(650 - 32, 685, "Back", 0xFFFFFF, pContext->getFont("Ubuntu-Medium.ttf", 30));
 }
 
 void PauseState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
