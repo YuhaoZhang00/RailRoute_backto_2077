@@ -274,7 +274,7 @@ std::vector<bool> LineRoute::aiGetStationTypeNonExchange(int n, StationCollectio
 	}
 }
 
-bool LineRoute::isCanAddStation(StationCollection* s1, StationCollection* s2)
+bool LineRoute::isCanAddStation(StationCollection* s1, StationCollection* s2) // pixel-perfect
 {
 	m_pEngine->getBackgroundSurface()->mySDLLockSurface();
 	int xStart = s1->getStation()->getXCentre();
@@ -489,9 +489,9 @@ void LineRoute::addTrain(TrainCollection* t)
 
 void LineRoute::addTrain(int tId, short sType, int iX, int iY)
 {
-	TrainCollection* train = new TrainCollection(tId, sType, m_pEngine, iX, iY, m_uiColor);
+	TrainCollection* train = new TrainCollection(tId, sType, m_pEngine, iX, iY + 2, m_uiColor);
 	addTrain(train);
-	train->getTrain()->addHead(); // next: add a ³µÏá
+	train->getTrain()->addHead();
 	m_pEngine->appendObjectToArray(train->getTrain()->getCarriageList()[0]->getCarriage());
 }
 

@@ -1,5 +1,7 @@
 ## RailRoute <- (back to) 2077
 
+![logo](src\resources\title-ver1.png)
+
 ### COMP2006 CPP Coursework (2122SPR @ UoN) by Yuhao Zhang
 
 - A stratage game that allows the user to respond to the increasing demand for passenger transportation by arranging and assigning railway lines and trains so that the city does not become overcrowded

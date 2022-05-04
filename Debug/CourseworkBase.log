@@ -1,8 +1,11 @@
-﻿  InstructionState.cpp
+﻿  LineRoute.cpp
 E:\Desktop\CPPCoursework2021\src\Passenger.h(17,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 E:\Desktop\CPPCoursework2021\src\Passenger.h(17,23): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 E:\Desktop\CPPCoursework2021\src\Train.h(37,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 E:\Desktop\CPPCoursework2021\src\Train.h(37,23): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 E:\Desktop\CPPCoursework2021\src\Train.h(275,10): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
 E:\Desktop\CPPCoursework2021\src\Train.h(278,10): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\LineRoute.cpp(23,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\LineRoute.cpp(42,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+E:\Desktop\CPPCoursework2021\src\LineRoute.cpp(116,12): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   CourseworkBase.vcxproj -> E:\Desktop\CPPCoursework2021\Debug\CourseworkBase2020.exe

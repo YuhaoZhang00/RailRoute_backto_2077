@@ -5,6 +5,9 @@
 class PauseState :
 	public State
 {
+private:
+	int m_iRnd = 0;
+	int m_iLevelId = 0;
 public:
 	int virtInitialise(Scyyz12Engine2* pContext) override;
 	void virtSetupBackgroundBuffer(Scyyz12Engine2* pContext) override;
@@ -17,5 +20,9 @@ public:
 	void copyAllBackgroundBuffer(Scyyz12Engine2* pContext) override;
 	void virtKeyDown(Scyyz12Engine2* pContext, int iKeyCode) override;
 	void virtCreateSurfaces(Scyyz12Engine2* pContext) override;
+
+	void virtSetSelfDefinedValue(int i1, int i2) override {
+		m_iLevelId = i2;
+	}
 };
 

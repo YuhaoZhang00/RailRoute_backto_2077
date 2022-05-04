@@ -493,6 +493,10 @@ int GameState::virtInitialise(Scyyz12Engine2* pContext)
 			m_scoreCount = frContinue.readNumber();
 			temp = frContinue.readNumber();
 			if (temp != 100009) printf("E-final\n");
+
+			for (LineRoute* lr : m_lr) {
+				lr->update(m_lr);
+			}
 		}
 		else {
 			std::string fileName("resources/level-");
@@ -613,68 +617,88 @@ void GameState::virtSetupBackgroundBuffer(Scyyz12Engine2* pContext)
 
 void GameState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 {
-	char strDay[10]; sprintf(strDay, "Day %d", m_dayCount);
-	pContext->drawForegroundString(650 - 350, 33, strDay, 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawForegroundString(650 - 300, 38, "Day", 0x777777, pContext->getFont("Ubuntu-Medium.ttf", 20));
+	char strDay[10]; sprintf(strDay, "%d", m_dayCount);
+	pContext->drawForegroundString(650 - 250, 33, strDay, 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 
-	pContext->drawForegroundRectangle(650 - 150, 48, 650 + 350, 52, 0xDDDDDD);
-	pContext->drawForegroundRectangle(650 - 150, 40, 650 - 146, 60, 0x777777);
-	pContext->drawForegroundRectangle(650 + 346, 40, 650 + 350, 60, 0x777777);
+	pContext->drawForegroundRectangle(650 - 150, 38, 650 + 350, 42, 0xDDDDDD);
+	pContext->drawForegroundRectangle(650 - 150, 30, 650 - 146, 50, 0x777777);
+	pContext->drawForegroundRectangle(650 + 346, 30, 650 + 350, 50, 0x777777);
 	int x = 500 + m_timeCount;
-	pContext->drawForegroundRectangle(x, 40, x + 4, 60, 0x000000);
+	pContext->drawForegroundRectangle(x, 30, x + 4, 50, 0x000000);
 
-	char strPassenger[20]; sprintf(strPassenger, "Passenger %d", m_scoreCount);
-	pContext->drawForegroundString(650 + 400, 33, strPassenger, 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+	pContext->drawForegroundString(650 + 400, 38, "Passenger", 0x777777, pContext->getFont("Ubuntu-Medium.ttf", 20));
+	char strPassenger[20]; sprintf(strPassenger, "%d", m_scoreCount);
+	pContext->drawForegroundString(650 + 505, 33, strPassenger, 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 
+	char strPrompt[1000];
 	switch (m_mouseState)
 	{
 	case 0:
+		sprintf(strPrompt, "Add a line / Extend a line / Add a train / Add a carriage");
 		//pContext->drawForegroundString(650 - 450, 100, "Click a asset / line end", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 1:
-		pContext->drawForegroundString(650 - 450, 100, "Click a station (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		sprintf(strPrompt, "Click a station (right click to cancel)");
+		//pContext->drawForegroundString(650 - 150, 100, "Click a station (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 2:
-		pContext->drawForegroundString(650 - 450, 100, "Click another station (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		sprintf(strPrompt, "Click another station (right click to cancel)");
+		//pContext->drawForegroundString(650 - 150, 100, "Click another station (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 3:
-		pContext->drawForegroundString(650 - 450, 100, "Click a line (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		sprintf(strPrompt, "Click a line (right click to cancel)");
+		//pContext->drawForegroundString(650 - 450, 100, "Click a line (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 4:
-		pContext->drawForegroundString(650 - 450, 100, "Click a station /train on that line (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		sprintf(strPrompt, "Click a station /train on that line (right click to cancel)");
+		//pContext->drawForegroundString(650 - 450, 100, "Click a station /train on that line (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 100:
-		pContext->drawForegroundString(650 - 450, 100, "E - line not discovered (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		sprintf(strPrompt, "E - line not discovered (right click to cancel)");
+		//pContext->drawForegroundString(650 - 450, 100, "E - line not discovered (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 101:
-		pContext->drawForegroundString(650 - 450, 100, "E - line already in use (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		sprintf(strPrompt, "E - line already in use (right click to cancel)");
+		//pContext->drawForegroundString(650 - 450, 100, "E - line already in use (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 102:
-		pContext->drawForegroundString(650 - 450, 100, "E - not click at station (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		sprintf(strPrompt, "E - not click at station (right click to cancel)");
+		//pContext->drawForegroundString(650 - 450, 100, "E - not click at station (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 103:
-		pContext->drawForegroundString(650 - 450, 100, "E - click at the same station twice (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		sprintf(strPrompt, "E - click at the same station twice (right click to cancel)");
+		//pContext->drawForegroundString(650 - 450, 100, "E - click at the same station twice (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 104:
-		pContext->drawForegroundString(650 - 450, 100, "E - line not in use (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		sprintf(strPrompt, "E - line not in use (right click to cancel)");
+		//pContext->drawForegroundString(650 - 450, 100, "E - line not in use (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 105:
-		pContext->drawForegroundString(650 - 450, 100, "E - the station not in given line (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		sprintf(strPrompt, "E - the station not in given line (right click to cancel)");
+		//pContext->drawForegroundString(650 - 450, 100, "E - the station not in given line (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 106:
-		pContext->drawForegroundString(650 - 450, 100, "E - the station already in given line (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		sprintf(strPrompt, "E - the station already in given line (right click to cancel)");
+		//pContext->drawForegroundString(650 - 450, 100, "E - the station already in given line (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 107:
-		pContext->drawForegroundString(650 - 450, 100, "E - not clicking at a train at given line (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		sprintf(strPrompt, "E - not clicking at a train at given line (right click to cancel)");
+		//pContext->drawForegroundString(650 - 450, 100, "E - not clicking at a train at given line (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 108:
-		pContext->drawForegroundString(650 - 450, 100, "E - no enough bridges (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		sprintf(strPrompt, "E - no enough bridges (right click to cancel)");
+		//pContext->drawForegroundString(650 - 450, 100, "E - no enough bridges (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	case 200:
-		pContext->drawForegroundString(650 - 450, 100, "TEST (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
+		sprintf(strPrompt, "TEST (right click to cancel)");
+		//pContext->drawForegroundString(650 - 450, 100, "TEST (right click to cancel)", 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
 		break;
 	default:
+		sprintf(strPrompt, "");
 		break;
 	}
+	pContext->drawForegroundString(650 - 150, 60, strPrompt, 0x777777, pContext->getFont("Ubuntu-Medium.ttf", 20));
 
 	if (m_bRunToStop || m_bSelectionNotMade) {
 		m_filterTranslation.setOffset(0, 0);
@@ -763,7 +787,7 @@ void GameState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 		else if (m_iLevelId == 2) {
 			if (m_sa->isAllLineDiscovered()) {
 				train.renderImage(pContext->getForegroundSurface(), 0, 0, 430, 390, 80, 80);
-				trainFast.renderImage(pContext->getForegroundSurface(), 0, 0, 550, 390, 80, 80);
+				trainIntelligent.renderImage(pContext->getForegroundSurface(), 0, 0, 550, 390, 80, 80);
 				carriage.renderImage(pContext->getForegroundSurface(), 0, 0, 670, 390, 80, 80);
 				bridge.renderImage(pContext->getForegroundSurface(), 0, 0, 790, 390, 80, 80);
 
@@ -779,7 +803,7 @@ void GameState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 			else {
 				rail.renderImage(pContext->getForegroundSurface(), 0, 0, 370, 390, 80, 80);
 				train.renderImage(pContext->getForegroundSurface(), 0, 0, 490, 390, 80, 80);
-				trainFast.renderImage(pContext->getForegroundSurface(), 0, 0, 610, 390, 80, 80);
+				trainIntelligent.renderImage(pContext->getForegroundSurface(), 0, 0, 610, 390, 80, 80);
 				carriage.renderImage(pContext->getForegroundSurface(), 0, 0, 730, 390, 80, 80);
 				bridge.renderImage(pContext->getForegroundSurface(), 0, 0, 850, 390, 80, 80);
 
@@ -834,7 +858,6 @@ void GameState::virtDrawStringsOnTop(Scyyz12Engine2* pContext)
 				pContext->drawForegroundString(923 - 12, 385, "2", 0x666666, pContext->getFont("Ubuntu-Medium.ttf", 25));
 			}
 		}
-
 
 		char strDay[100]; sprintf(strDay, "And get ready for more passengers in Day %d", m_dayCount);
 		pContext->drawForegroundString(650 - 310, 550, strDay, 0x000000, pContext->getFont("Ubuntu-Medium.ttf", 30));
@@ -970,7 +993,7 @@ void GameState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int
 						m_bSelectionNotMade = false;
 					}
 					else if (iXClicked >= 550 && iXClicked <= 630 && iYClicked >= 390 && iYClicked <= 470) {
-						m_sa->incProperty(-4);
+						m_sa->incProperty(-3);
 						m_bSelectionNotMade = false;
 					}
 					else if (iXClicked >= 670 && iXClicked <= 750 && iYClicked >= 390 && iYClicked <= 470) {
@@ -996,57 +1019,7 @@ void GameState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int
 						m_bSelectionNotMade = false;
 					}
 					else if (iXClicked >= 610 && iXClicked <= 690 && iYClicked >= 390 && iYClicked <= 470) {
-						m_sa->incProperty(-4);
-						m_bSelectionNotMade = false;
-					}
-					else if (iXClicked >= 730 && iXClicked <= 810 && iYClicked >= 390 && iYClicked <= 470) {
-						m_sa->incProperty(-6);
-						m_sa->incProperty(-6);
-						m_bSelectionNotMade = false;
-					}
-					else if (iXClicked >= 850 && iXClicked <= 930 && iYClicked >= 390 && iYClicked <= 470) {
-						m_sa->incProperty(-1);
-						m_sa->incProperty(-1);
-						m_sa->incProperty(-1);
-						m_bSelectionNotMade = false;
-					}
-				}
-			}
-			else if (m_iLevelId == 2) {
-				if (m_sa->isAllLineDiscovered()) {
-					if (iXClicked >= 430 && iXClicked <= 510 && iYClicked >= 390 && iYClicked <= 470) {
-						m_sa->incProperty(-5);
-						m_sa->incProperty(-5);
-						m_bSelectionNotMade = false;
-					}
-					else if (iXClicked >= 550 && iXClicked <= 630 && iYClicked >= 390 && iYClicked <= 470) {
-						m_sa->incProperty(-4);
-						m_bSelectionNotMade = false;
-					}
-					else if (iXClicked >= 670 && iXClicked <= 750 && iYClicked >= 390 && iYClicked <= 470) {
-						m_sa->incProperty(-6);
-						m_sa->incProperty(-6);
-						m_bSelectionNotMade = false;
-					}
-					else if (iXClicked >= 790 && iXClicked <= 870 && iYClicked >= 390 && iYClicked <= 470) {
-						m_sa->incProperty(-1);
-						m_sa->incProperty(-1);
-						m_sa->incProperty(-1);
-						m_bSelectionNotMade = false;
-					}
-				}
-				else {
-					if (iXClicked >= 370 && iXClicked <= 450 && iYClicked >= 390 && iYClicked <= 470) {
-						m_sa->addNewLineState2Discovered();
-						m_bSelectionNotMade = false;
-					}
-					else if (iXClicked >= 490 && iXClicked <= 570 && iYClicked >= 390 && iYClicked <= 470) {
-						m_sa->incProperty(-5);
-						m_sa->incProperty(-5);
-						m_bSelectionNotMade = false;
-					}
-					else if (iXClicked >= 610 && iXClicked <= 690 && iYClicked >= 390 && iYClicked <= 470) {
-						m_sa->incProperty(-4);
+						m_sa->incProperty(-3);
 						m_bSelectionNotMade = false;
 					}
 					else if (iXClicked >= 730 && iXClicked <= 810 && iYClicked >= 390 && iYClicked <= 470) {
@@ -1132,7 +1105,7 @@ void GameState::virtMouseDown(Scyyz12Engine2* pContext, int iButton, int iX, int
 				}
 				else if (iXClicked > 100 && iXClicked < 150) {
 					if (iYClicked > 30 && iYClicked < 80) {
-						pContext->changeState("pause");
+						pContext->changeState("pause", 0, m_iLevelId);
 					}
 				}
 			}
